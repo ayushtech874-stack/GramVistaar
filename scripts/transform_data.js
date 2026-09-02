@@ -13,6 +13,19 @@ const OUTPUT_FILE = path.join(process.cwd(), 'data', 'village_metrics.json');
 
 const SIH_EXCEL_PATH = path.join(RAW_DIR, 'sih_data_collection.xlsx');
 
+/**
+ * Helper to match object keys case-insensitively with flexible whitespace
+ */
+function getValueByPattern(row, regex) {
+  for (const key of Object.keys(row)) {
+    const cleanedKey = key.trim().replace(/\s+/g, ' ');
+    if (regex.test(cleanedKey)) {
+      return row[key];
+    }
+  }
+  return undefined;
+}
+
 function transformData() {
   console.log(`[Transform] Reading ${SIH_EXCEL_PATH}...`);
   if (!fs.existsSync(SIH_EXCEL_PATH)) {
@@ -20,7 +33,7 @@ function transformData() {
   }
 
   const workbook = XLSX.readFile(SIH_EXCEL_PATH);
-  
+
   if (!workbook.SheetNames.includes('village_amenities')) {
     throw new Error(`Sheet 'village_amenities' not found in workbook. Found: ${workbook.SheetNames.join(', ')}`);
   }
@@ -33,17 +46,19 @@ function transformData() {
   const villageMetrics = [];
 
   for (const row of rawRows) {
-    const rawVillageId = row['Village Code'] || row['village_code'] || row['Village_Code'];
-    const villageName = row['Village Name'] || row['village_name'];
-    const block = row['Sub District Name'] || row['sub_district_name'] || row['Block'];
-    const district = row['District Name'] || row['district_name'] || row['District'];
+    const rawVillageId = getValueByPattern(row, /^village code$/i) || getValueByPattern(row, /^village_code$/i);
+    const villageName = getValueByPattern(row, /^village name$/i) || getValueByPattern(row, /^village_name$/i);
+    const block = getValueByPattern(row, /^sub district name$/i) || getValueByPattern(row, /^block$/i);
+    const district = getValueByPattern(row, /^district name$/i) || getValueByPattern(row, /^district$/i);
 
     if (!villageName) continue;
 
-    const popRaw = row['Total Population of Village'] ?? row['total_population'] ?? row['Population'];
+    // Population matching
+    const popRaw = getValueByPattern(row, /^total population of village$/i) || getValueByPattern(row, /^total population$/i);
     const pop = (popRaw !== undefined && popRaw !== null && popRaw !== '' && !isNaN(popRaw)) ? parseInt(popRaw, 10) : null;
 
-    const hhRaw = row['Total   Households'] ?? row['Total Households'] ?? row['total_households'] ?? row['Households'];
+    // Households matching (matches 'Total Households', 'Total Households ', 'Total   Households ', etc.)
+    const hhRaw = getValueByPattern(row, /^total households$/i) || getValueByPattern(row, /^households$/i);
     const hh = (hhRaw !== undefined && hhRaw !== null && hhRaw !== '' && !isNaN(hhRaw)) ? parseInt(hhRaw, 10) : null;
 
     const villageId = rawVillageId ? String(rawVillageId).trim() : `v_${villageMetrics.length + 1}`;
@@ -81,22 +96,29 @@ function transformData() {
   console.log(`- Aurai Block Villages: ${auraiCount}`);
   console.log(`- Sherghati Block Villages: ${sherghatiCount}`);
 
-  // Print 3 sample records per user request
-  // 1. One large village
-  const largeVillage = [...villageMetrics].sort((a, b) => (b.population || 0) - (a.population || 0))[0];
-  // 2. One small village (with population > 0)
-  const smallVillage = [...villageMetrics].filter(v => v.population > 0).sort((a, b) => (a.population || 0) - (b.population || 0))[0];
-  // 3. One Sherghati village
-  const sherghatiVillage = villageMetrics.find(v => v.block.toLowerCase().includes('sherghati'));
+  // Print 3 requested sample records
+  const ratwaraRecord = villageMetrics.find(v => v.village_name.toLowerCase().includes('ratwara bindwara'));
+  const deokaliRecord = villageMetrics.find(v => v.village_name.toLowerCase().includes('deokali khurd'));
+  const bhujaulRecord = villageMetrics.find(v => v.village_name.toLowerCase().includes('bhujaul'));
 
-  console.log(`\n--- SAMPLE RECORD 1 (Large Village: ${largeVillage.village_name}) ---`);
-  console.log(JSON.stringify(largeVillage, null, 2));
+  console.log(`\n--- SAMPLE RECORD 1 (Ratwara Bindwara Deoria - Aurai) ---`);
+  console.log(JSON.stringify(ratwaraRecord, null, 2));
 
-  console.log(`\n--- SAMPLE RECORD 2 (Small Village: ${smallVillage.village_name}) ---`);
-  console.log(JSON.stringify(smallVillage, null, 2));
+  console.log(`\n--- SAMPLE RECORD 2 (Deokali Khurd - Aurai) ---`);
+  console.log(JSON.stringify(deokaliRecord, null, 2));
 
-  console.log(`\n--- SAMPLE RECORD 3 (Sherghati Block Village: ${sherghatiVillage ? sherghatiVillage.village_name : 'N/A'}) ---`);
-  console.log(JSON.stringify(sherghatiVillage, null, 2));
+  console.log(`\n--- SAMPLE RECORD 3 (Bhujaul - Sherghati) ---`);
+  console.log(JSON.stringify(bhujaulRecord, null, 2));
+
+  // Spot-check 2 random additional villages (1 Aurai, 1 Sherghati)
+  const spotCheckAurai = villageMetrics.find(v => v.block.toLowerCase().includes('aurai') && v.village_name !== ratwaraRecord?.village_name && v.village_name !== deokaliRecord?.village_name);
+  const spotCheckSherghati = villageMetrics.find(v => v.block.toLowerCase().includes('sherghati') && v.village_name !== bhujaulRecord?.village_name);
+
+  console.log(`\n--- SPOT CHECK 1 (Aurai Block: ${spotCheckAurai?.village_name}) ---`);
+  console.log(JSON.stringify(spotCheckAurai, null, 2));
+
+  console.log(`\n--- SPOT CHECK 2 (Sherghati Block: ${spotCheckSherghati?.village_name}) ---`);
+  console.log(JSON.stringify(spotCheckSherghati, null, 2));
 
   return villageMetrics;
 }
