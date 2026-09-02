@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { lookupLocalMetrics } from '../src/modules/localMetrics.js';
 
 describe('Local-Metrics Module Tests (Deterministic & Rule R2 Compliant)', () => {
-  it('should return Verified population and Insufficient Data for establishments for Saghari Rampur', () => {
-    const result = lookupLocalMetrics('123456', 'dairy');
+  it('should return Verified population and Insufficient Data for establishments for Saghari', () => {
+    const result = lookupLocalMetrics('229088', 'dairy');
 
-    assert.equal(result.village_name, 'Saghari Rampur');
+    assert.equal(result.village_name, 'Saghari');
     assert.equal(result.block, 'Aurai');
 
     // Population Verified
@@ -26,17 +26,14 @@ describe('Local-Metrics Module Tests (Deterministic & Rule R2 Compliant)', () =>
     assert.equal(result.market_reach.tag, 'Derived');
   });
 
-  it('should return Verified population and households for Khandail', () => {
-    const result = lookupLocalMetrics('654321', 'retail');
+  it('should return Verified population for Khandail', () => {
+    const result = lookupLocalMetrics('256296', 'retail');
 
     assert.equal(result.village_name, 'Khandail');
     assert.equal(result.block, 'Sherghati');
 
     assert.equal(result.population.value, 3040);
     assert.equal(result.population.tag, 'Verified');
-
-    assert.equal(result.households.value, 484);
-    assert.equal(result.households.tag, 'Verified');
 
     assert.equal(result.establishments.value, null);
     assert.equal(result.establishments.tag, 'Insufficient Data');

@@ -64,6 +64,21 @@ describe('Financial Calculator Module Tests (Deterministic)', () => {
     assert.equal(result.scheme_name, 'Micro Finance Scheme');
   });
 
+  it('should route to Term Loan Scheme for project cost just above ₹1,40,000 (Project Cost ₹1,40,010)', () => {
+    const input = {
+      available_capital: 14001,
+      corporation: 'NSFDC'
+    };
+
+    const result = calculateFinancialPlan(input);
+
+    assert.equal(result.project_cost, 140010);
+    assert.equal(result.scheme_name, 'Term Loan Scheme');
+    assert.equal(result.interest_rate, 0.08);
+    assert.equal(result.tenure_years, 7);
+    assert.equal(result.moratorium_months, 6);
+  });
+
   it('should return COST_EXCEEDS_CEILING error when project cost > ₹50,00,000', () => {
     const input = {
       available_capital: 600000,

@@ -24,15 +24,15 @@ after(async () => {
 });
 
 describe('API Integration Endpoints Tests', () => {
-  it('GET /api/villages should return list of pre-loaded villages', async () => {
+  it('GET /api/villages should return list of pre-loaded 202 villages', async () => {
     const res = await fetch(`${baseUrl}/api/villages`);
     const data = await res.json();
 
     assert.equal(res.status, 200);
     assert.equal(data.district, 'Muzaffarpur & Gaya');
     assert.ok(Array.isArray(data.villages));
-    assert.equal(data.villages.length, 2);
-    assert.equal(data.villages[0].village_name, 'Saghari Rampur');
+    assert.equal(data.villages.length, 202);
+    assert.equal(data.villages[0].village_name, 'Dharharwa urf Parri Dharharwa');
   });
 
   it('POST /api/eligibility should return pass for Rekha SC persona', async () => {
@@ -71,7 +71,7 @@ describe('API Integration Endpoints Tests', () => {
     assert.equal(data.interest_rate, 0.08);
   });
 
-  it('POST /api/assess should return complete assessment with Affordability Risk Flag', async () => {
+  it('POST /api/assess should return complete assessment with Affordability Risk Flag when eligibility passes', async () => {
     const res = await fetch(`${baseUrl}/api/assess`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -81,7 +81,7 @@ describe('API Integration Endpoints Tests', () => {
         state: 'Bihar',
         prior_default: false,
         available_capital: 100000,
-        village_id: '123456',
+        village_id: '229088',
         business_category: 'dairy'
       })
     });
@@ -91,6 +91,31 @@ describe('API Integration Endpoints Tests', () => {
     assert.equal(data.eligibility.status, 'pass');
     assert.equal(data.financial.loan_eligibility, 900000);
     assert.ok(data.financial.affordability_flag);
-    assert.equal(data.feasibility.village_name, 'Saghari Rampur');
+    assert.equal(data.feasibility.village_name, 'Saghari');
+  });
+
+  it('POST /api/assess should return feasibility-only response when eligibility fails (decisions.md D4 / app-flow.md Screen 4b)', async () => {
+    const res = await fetch(`${baseUrl}/api/assess`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        category: 'SC',
+        family_income_annual: 400000, // exceeds 3L ceiling
+        state: 'Bihar',
+        prior_default: false,
+        available_capital: 100000,
+        village_id: '229088',
+        business_category: 'dairy'
+      })
+    });
+    const data = await res.json();
+
+    assert.equal(res.status, 200);
+    assert.equal(data.eligibility.status, 'fail');
+    assert.equal(data.eligibility.unmet_criterion, 'income_ceiling');
+    assert.equal(data.eligibility.can_still_see_feasibility, true);
+    assert.equal(data.financial, null); // Financial Card skipped
+    assert.ok(data.feasibility); // Feasibility Card rendered!
+    assert.equal(data.feasibility.village_name, 'Saghari');
   });
 });

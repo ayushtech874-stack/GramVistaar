@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SIH26091 — PS Understanding</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root{
+    --ink:#1c2521; --paper:#f7f5ef; --panel:#ffffff; --line:#dcd6c6;
+    --accent:#2f5d4f; --accent-soft:#e6ede9; --gold:#a8763e; --muted:#6b6a5e;
+    --go:#2f6b3f; --caution:#a8622a;
+    --code-bg:#161b1e; --code-fg:#d7dcd3; --code-bar:#20262a;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:"Iowan Old Style","Georgia",serif; line-height:1.6;}
+  .wrap{max-width:960px; margin:0 auto; padding:56px 24px 120px;}
+  header.masthead{border-bottom:3px solid var(--ink); padding-bottom:22px; margin-bottom:30px;}
+  .eyebrow{font-family:"Courier New",monospace; letter-spacing:.12em; text-transform:uppercase; font-size:12px; color:var(--gold); font-weight:700; margin-bottom:10px;}
+  h1{font-size:32px; margin:0 0 10px; line-height:1.18;}
+  .subtitle{color:var(--muted); font-size:15.5px; max-width:700px;}
+
+  nav.toc{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:18px 22px; margin:28px 0 44px;}
+  nav.toc h3{margin:0 0 10px; font-size:14px; color:var(--accent); font-family:"Courier New",monospace; text-transform:uppercase;}
+  nav.toc ol{margin:0; padding-left:20px; columns:2; column-gap:28px; font-size:13.5px;}
+  nav.toc li{margin-bottom:6px;}
+  nav.toc a{color:var(--accent); text-decoration:none;}
+  @media(max-width:640px){nav.toc ol{columns:1;}}
+
+  section{margin:46px 0;}
+  .q-label{font-family:"Courier New",monospace; font-size:11.5px; letter-spacing:.08em; color:var(--gold); text-transform:uppercase; font-weight:700; margin-bottom:8px;}
+  h2{font-size:23px; margin:0 0 8px; border-bottom:1px solid var(--line); padding-bottom:10px;}
+  .the-question{font-style:italic; color:var(--muted); font-size:14.5px; margin:0 0 18px;}
+  h3{font-size:16px; margin:20px 0 8px; color:var(--accent);}
+  p{margin:0 0 12px;}
+  ul, ol{margin:0 0 14px; padding-left:22px;}
+  li{margin-bottom:6px;}
+  a{color:var(--accent);}
+  strong{color:var(--ink);}
+
+  table{width:100%; border-collapse:collapse; margin:14px 0 22px; font-size:13.6px;}
+  th, td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-family:"Courier New",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
+  tr:last-child td{border-bottom:1px solid var(--ink);}
+
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:20px 22px; margin:16px 0;}
+  .panel.warn{border-left:4px solid var(--caution); background:#fbf3ea;}
+  .panel.gold{border-left:4px solid var(--gold);}
+  .panel.go{border-left:4px solid var(--go); background:var(--accent-soft);}
+
+  .verdict{display:inline-block; font-family:"Courier New",monospace; font-weight:700; padding:4px 12px; border-radius:3px; font-size:13px;}
+  .verdict.decided{background:var(--accent-soft); color:var(--go); border:1px solid var(--go);}
+
+  .file-window{border-radius:8px; overflow:hidden; border:1px solid #33393c; margin:14px 0; box-shadow:0 3px 12px rgba(0,0,0,.1);}
+  .file-titlebar{background:var(--code-bar); color:#cfd8d3; display:flex; align-items:center; gap:10px; padding:9px 16px; font-family:"Courier New",monospace; font-size:12px;}
+  .dots{display:flex; gap:6px;}
+  .dot{width:9px; height:9px; border-radius:50%;}
+  .dot.red{background:#e0605a;} .dot.yellow{background:#e0b95a;} .dot.green{background:#5ec46a;}
+  pre.file-content{margin:0; background:var(--code-bg); color:var(--code-fg); padding:20px 22px; font-family:"SFMono-Regular","Consolas","Courier New",monospace; font-size:12.6px; line-height:1.65; overflow-x:auto; white-space:pre-wrap; word-wrap:break-word;}
+
+  .badge{display:inline-block; font-family:"Courier New",monospace; font-size:10.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; padding:2px 8px; border-radius:3px; margin-left:4px; vertical-align:middle;}
+  .badge.verified{background:#e6ede9; color:var(--go); border:1px solid var(--go);}
+  .badge.derived{background:#eef1e3; color:#5a6b3e; border:1px solid #5a6b3e;}
+  .badge.estimate{background:#fbf3ea; color:var(--caution); border:1px solid var(--caution);}
+  .badge.insufficient{background:#f2ece8; color:#8a4a4a; border:1px solid #8a4a4a;}
+
+  footer{margin-top:50px; padding-top:20px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); font-family:"Courier New",monospace;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">SIH 2026 · SIH26091 · PS Understanding</div>
+    <h1>PS-Understanding.html</h1>
+    <p class="subtitle">Every "why," "who," "how," and "on what basis" question the team raised, answered in one place — from first principles, not restated jargon. This is the document to re-read whenever the build starts drifting from what the problem statement is actually asking for.</p>
+  </header>
+
+  <nav class="toc">
+    <h3>Sections</h3>
+    <ol>
+      <li><a href="#s1">1. Why does this need to exist?</a></li>
+      <li><a href="#s2">2. What does 1 block per district actually prove?</a></li>
+      <li><a href="#s3">3. Who is this for?</a></li>
+      <li><a href="#s4">4. The four requirements, restated plainly</a></li>
+      <li><a href="#s5">5. How AI + database work — why it's not a chatbot</a></li>
+      <li><a href="#s6">6. The complete scheme &amp; eligibility structure</a></li>
+      <li><a href="#s7">7. The PS, sentence by sentence</a></li>
+      <li><a href="#s8">8. On what basis does the LLM write the SWOT?</a></li>
+      <li><a href="#s9">9. The exact financial calculation</a></li>
+      <li><a href="#s10">10. Eligibility — the exact qualifying factors</a></li>
+      <li><a href="#s11">11. Local-market specificity — where the numbers come from</a></li>
+      <li><a href="#s12">12. The bank-ready output (parked for later)</a></li>
+      <li><a href="#s13">13. Should the platform pick the business for them?</a></li>
+      <li><a href="#s14">14. Implementing in Antigravity — database, data-feeding, RAG question</a></li>
+      <li><a href="#s15">15. One-page build checklist</a></li>
+    </ol>
+  </nav>
+
+  <!-- S1 -->
+  <section id="s1">
+    <div class="q-label">Part 1</div>
+    <h2>Why does this need to exist?</h2>
+    <p>Read the problem statement's own closing clause again: an EMI/moratorium schedule generated <em>before</em> the person applies. That "before" is the whole justification.</p>
+    <p>Concessional schemes like NSFDC's are genuinely generous — 90% financed at low interest, once someone contributes their 10% margin. The failures happen <strong>after disbursement</strong>, not because the money wasn't available, but because of two decisions made badly at the very start:</p>
+    <ul>
+      <li>The business was picked on instinct, not on whether the specific village/block could actually support it.</li>
+      <li>The applicant didn't understand their own numbers — exact eligible loan amount, correct scheme tier, real repayment burden once the moratorium ends.</li>
+    </ul>
+    <p>Both are <strong>decision failures</strong>, not funding failures. The need is narrow and real: catch bad decisions once, at the start, with better information — not build a broader fintech or lending platform.</p>
+  </section>
+
+  <!-- S2 -->
+  <section id="s2">
+    <div class="q-label">Part 2</div>
+    <h2>What does 1 block per district actually prove?</h2>
+    <p class="the-question">"If I get datasets for 1 block each in 2 districts, what change will it actually work?"</p>
+    <p>It doesn't help the whole country — and it isn't supposed to. It proves three narrower, checkable things to a jury:</p>
+    <ol>
+      <li><strong>The mechanism works.</strong> A real village, real numbers, a real result on screen — not a mockup.</li>
+      <li><strong>The pipeline generalizes.</strong> If Muzaffarpur and Gaya both run on the same code with just different data files, adding a third district later is a data-import task, not a rewrite. That's the scalability argument, demonstrated instead of asserted.</li>
+      <li><strong>You can defend your numbers.</strong> "How do you know that" gets answered with an actual Census citation for an actual village, not a gesture at "our AI analyzes local data."</li>
+    </ol>
+    <p>Think of it as a working scale model, not a toy — a judge isn't expecting rural credit access solved nationally in 36 hours; they're checking whether what exists is real and whether it plausibly scales if funded further.</p>
+  </section>
+
+  <!-- S3 -->
+  <section id="s3">
+    <div class="q-label">Part 3</div>
+    <h2>Who is this for?</h2>
+    <p><strong>Primary:</strong> a first-time rural/semi-urban applicant — has savings, is eligible for a concessional scheme, doesn't know which scheme applies or whether their business idea is sound.</p>
+    <p><strong>Worth designing for honestly:</strong> many people in this exact situation go through a facilitator — a Common Service Centre operator, an NGO worker, a Haqdarshak-style local agent — who runs the tool <em>for</em> them. A guided, form-based flow naturally supports both self-service and facilitator-operated use. Don't assume the end beneficiary always types it in themselves.</p>
+  </section>
+
+  <!-- S4 -->
+  <section id="s4">
+    <div class="q-label">Part 4</div>
+    <h2>The four requirements, restated plainly</h2>
+    <p>Strip the jargon and there are only four things this product must do — everything else (languages, PDF styling, flags) exists in service of these four:</p>
+    <table>
+      <tr><th>#</th><th>Requirement</th><th>Answered in</th></tr>
+      <tr><td>1</td><td>Check they actually qualify before showing a number</td><td>Section 10</td></tr>
+      <tr><td>2</td><td>Calculate the exact loan they're eligible for</td><td>Section 9</td></tr>
+      <tr><td>3</td><td>Tell them something real and specific about their local market</td><td>Section 11</td></tr>
+      <tr><td>4</td><td>Give them something to carry to the bank</td><td>Section 12</td></tr>
+    </table>
+  </section>
+
+  <!-- S5 -->
+  <section id="s5">
+    <div class="q-label">Part 5</div>
+    <h2>How AI + database actually work — and why it's not a chatbot</h2>
+    <p>The database is not "live" in any sense — it's a small table built once, offline, before the app runs: one row per village, with the real population/establishment numbers already being collected (see datacollection.html). At runtime the app does a plain lookup — "give me the row for Saghari Rampur" — the same way a spreadsheet VLOOKUP works. No live scraping, no external calls mid-demo.</p>
+    <h3>The AI's job is narrow and one-shot, not conversational</h3>
+    <ol>
+      <li>User fills a <strong>form</strong> (village, capital, category, eligibility fields) — not a chat message.</li>
+      <li>Backend looks up real numbers for that village and runs the deterministic math.</li>
+      <li>Those real numbers get inserted into <strong>one fixed prompt template</strong> and sent to the LLM <strong>once</strong>.</li>
+      <li>The response renders as a <strong>report on a results screen</strong> — not chat bubbles the user replies to.</li>
+    </ol>
+    <p>No back-and-forth, no conversation memory, no "ask me anything." The AI is a report-writing engine invoked behind the scenes — like mail-merge, just smart enough to write good sentences instead of filling blanks. A chatbot is a <em>conversation interface</em>; this is a <em>form-in, report-out</em> tool where AI is one internal step, invisible to the user as "chat."</p>
+  </section>
+
+  <!-- S6 -->
+  <section id="s6">
+    <div class="q-label">Part 6</div>
+    <h2>The complete scheme &amp; eligibility structure</h2>
+    <p class="the-question">"Give me all the schemes like what I'm going to look for."</p>
+    <p>Two separate layers — worth keeping distinct:</p>
+    <h3>Layer 1 — which corporation, based on category</h3>
+    <table>
+      <tr><th>Corporation</th><th>Category served</th><th>Bihar's SCA (for this build)</th></tr>
+      <tr><td>NSFDC</td><td>Scheduled Castes (SC)</td><td>Bihar State Scheduled Castes Co-op. Development Corporation Ltd. <span class="badge verified">Verified</span></td></tr>
+      <tr><td>NSTFDC</td><td>Scheduled Tribes (ST)</td><td>Confirm current SCA name via nstfdc.tribal.gov.in before hardcoding <span class="badge insufficient">Unverified</span></td></tr>
+      <tr><td>NBCFDC</td><td>Other Backward Classes (OBC)</td><td>Confirm current SCA name via nbcfdc.gov.in/scas before hardcoding <span class="badge insufficient">Unverified</span></td></tr>
+      <tr><td>NMDFC</td><td>Minorities</td><td>Confirm before hardcoding <span class="badge insufficient">Unverified</span></td></tr>
+      <tr><td>NSKFDC</td><td>Safai Karamcharis</td><td>Confirm before hardcoding <span class="badge insufficient">Unverified</span></td></tr>
+    </table>
+    <h3>Layer 2 — which tier, based on capital (identical structure across corporations)</h3>
+    <table>
+      <tr><th>Tier</th><th>Project cost range</th><th>Loan (max)</th><th>Interest</th><th>Tenure</th><th>Moratorium</th></tr>
+      <tr><td>Micro Finance Scheme</td><td>up to ₹1.40 lakh</td><td>90% (max ₹1.25 lakh)</td><td>6.5% p.a.</td><td>3 years</td><td>3 months</td></tr>
+      <tr><td>Term Loan Scheme</td><td>₹1.40 lakh – ₹50 lakh</td><td>90% (max ₹45 lakh)</td><td>8% p.a.</td><td>7 years</td><td>6 months</td></tr>
+    </table>
+    <p>So "which subsidiary" really resolves in two steps: category → corporation (Layer 1), then capital → tier (Layer 2). Your eligibility gate resolves Layer 1; your calculator resolves Layer 2.</p>
+    <div class="panel warn">
+      <p style="margin:0;"><b>Only NSFDC's ₹3.00 lakh/year family income ceiling is confirmed from a live source so far.</b> NBCFDC/NSTFDC/NMDFC/NSKFDC figures must be pulled and verified directly before hardcoding — do not assume they match NSFDC's ceiling.</p>
+    </div>
+  </section>
+
+  <!-- S7 -->
+  <section id="s7">
+    <div class="q-label">Part 7</div>
+    <h2>The PS, sentence by sentence</h2>
+    <table>
+      <tr><th>PS phrase</th><th>What it actually means for the build</th></tr>
+      <tr><td>"NLP-powered, multilingual AI assistant"</td><td>Describes a <em>capability</em> (understands/generates language, works in multiple languages) — not an interface shape. A form that outputs an AI-written report still qualifies; it does not mandate a chat UI.</td></tr>
+      <tr><td>"Takes location, available margin capital, and business category as input"</td><td>The entire input surface — three fields, plus the eligibility fields you've added. Deliberately minimal.</td></tr>
+      <tr><td>"(1) a hyper-local feasibility report"</td><td>Module 1 — market reach, opportunity gaps, SWOT, threats, competitor density, pricing guidance. Backed by Census/SHRUG data.</td></tr>
+      <tr><td>"(2) an automatic financial structuring plan"</td><td>Module 2 — project cost, loan eligibility, correct scheme tier, EMI/moratorium schedule. Pure deterministic math, no AI.</td></tr>
+    </table>
+    <p>The PS's own structure already tells you: two modules, one AI-narrative, one pure-calculation — exactly the split already locked into the architecture.</p>
+  </section>
+
+  <!-- S8 -->
+  <section id="s8">
+    <div class="q-label">Part 8</div>
+    <h2>On what basis does the LLM write the SWOT / feasibility report?</h2>
+    <p class="the-question">"On what basis is the LLM going to decide the SWOT analysis and what all things are required?"</p>
+    <p>The LLM is combining two different kinds of input, and it's important to be precise about which is which:</p>
+    <ul>
+      <li><strong>Real local numbers, given to it directly</strong> — population, establishment counts per category, consumption estimate, all pulled from the pre-built village table. These are facts, not something the LLM is asked to figure out.</li>
+      <li><strong>General business-domain reasoning already in the model from training</strong> — how a dairy business's SWOT typically looks, what threats a small retail unit typically faces, general pricing logic. This is pattern knowledge the LLM already has, applied <em>on top of</em> the real numbers.</li>
+    </ul>
+    <p>The instruction to the LLM is explicit about the boundary between these two: use the real numbers as ground truth, apply general business reasoning around them, and never invent a <em>specific local number</em> that wasn't given. This is why every sentence in the output gets tagged — Verified (from the table), Derived (calculated from the table), or AI-Estimated (the LLM's own reasoning layered on top) — so the two kinds of input stay visibly distinguishable in the final report rather than blurring into one undifferentiated block of text.</p>
+    <div class="panel">
+      <p style="margin:0;"><b>Concretely, the LLM is told:</b> "Here is real population X, real establishment count Y for this category, real consumption estimate Z. Using only these as fact, write a SWOT, opportunity gaps, threats, and pricing guidance for this business category at this location. Tag every sentence by source. Do not state any specific number not given to you above."</p>
+    </div>
+  </section>
+
+  <!-- S9 -->
+  <section id="s9">
+    <div class="q-label">Part 9</div>
+    <h2>The exact financial calculation</h2>
+    <p class="the-question">"What type of calculation do I need to do?"</p>
+    <div class="file-window">
+      <div class="file-titlebar"><div class="dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>calculation-logic.txt</div>
+      <pre class="file-content">project_cost = available_capital / 0.10
+loan_eligibility = project_cost * 0.90
+
+if project_cost <= 140000:
+    scheme = "Micro Finance Scheme"; rate = 6.5%; tenure = 3 yrs; moratorium = 3 mo
+    loan_eligibility = min(loan_eligibility, 125000)
+elif project_cost <= 5000000:
+    scheme = "Term Loan Scheme"; rate = 8%; tenure = 7 yrs; moratorium = 6 mo
+    loan_eligibility = min(loan_eligibility, 4500000)
+else:
+    # outside any tier - show nearest tier and what would need to change,
+    # never silently default
+
+emi_schedule = standard reducing-balance EMI, moratorium period excluded
+              from principal repayment (confirm interest-only vs capitalized
+              treatment from the scheme document before hardcoding)</pre>
+    </div>
+    <p>Zero AI involvement here — pure arithmetic against the hardcoded scheme terms from Section 6. This is the piece that must be exactly correct, since it's the credibility anchor of the whole pitch (unit-test it against the PS's own worked example plus a few hand-computed cases).</p>
+  </section>
+
+  <!-- S10 -->
+  <section id="s10">
+    <div class="q-label">Part 10</div>
+    <h2>Eligibility — the exact qualifying factors</h2>
+    <p class="the-question">"On what factor are we going to judge the qualification?"</p>
+    <table>
+      <tr><th>Factor</th><th>What's checked</th></tr>
+      <tr><td>Category match</td><td>SC/ST/OBC/Minority/Safai Karamchari → routed to the correct corporation (Section 6, Layer 1)</td></tr>
+      <tr><td>Family income ceiling</td><td>Declared annual family income checked against that corporation's ceiling (e.g. ₹3.00 lakh for NSFDC — confirmed; others pending verification)</td></tr>
+      <tr><td>State/SCA domicile</td><td>Applicant's state must have an active SCA for that corporation</td></tr>
+      <tr><td>Prior-default status</td><td>Self-declared — existing default under a government scheme typically disqualifies further concessional credit</td></tr>
+    </table>
+    <p>On a fail, the flow doesn't dead-end — it still offers the feasibility report while stating plainly which criterion wasn't met (business viability is useful information regardless of loan eligibility).</p>
+  </section>
+
+  <!-- S11 -->
+  <section id="s11">
+    <div class="q-label">Part 11</div>
+    <h2>Local-market specificity — where the numbers actually come from</h2>
+    <p class="the-question">"Tell them something specific about their local market — from where am I going to get this data?"</p>
+    <p>Already answered in practice, not just in theory — see <code>datacollection.html</code> Section 13 for real, cited village-level numbers already pulled for Aurai (Muzaffarpur) and Sherghati (Gaya): population, households, literacy, sourced from Census 2011. Establishment/competitor-density data still needs the SHRUG bulk-file download your team runs directly (search tools can't reach it). That gap is honestly labeled <span class="badge insufficient">Insufficient Data</span> rather than filled with a guess — the same standard the product itself enforces on its own output.</p>
+  </section>
+
+  <!-- S12 -->
+  <section id="s12">
+    <div class="q-label">Part 12</div>
+    <h2>The bank-ready output (parked for later)</h2>
+    <p>Confirmed as fine, build-later: a single-page PDF/shareable summary combining the financial card, feasibility card, a document checklist, and a plain-language "why this scheme" explanation — the artifact the user physically carries to the SCA/bank. Full layout spec already exists in design.md §5 from the Antigravity context pack; no new decisions needed here, just sequencing (build this after the core loop works, per the MVP scope in the earlier drafting brief).</p>
+  </section>
+
+  <!-- S13 -->
+  <section id="s13">
+    <div class="q-label">Part 13</div>
+    <h2>Should the platform pick the business for them?</h2>
+    <p class="the-question">"They picked a business on gut feeling, not on their village's market — so should our platform decide for them which business is suitable?"</p>
+    <span class="verdict decided">Decided: no full recommendation engine — but the gut-feeling problem is still addressed</span>
+    <h3>Why not a full recommendation engine</h3>
+    <ul>
+      <li>The PS's own input schema requires business category as an <strong>input</strong>, not an output — a full recommendation engine flips that core assumption and roughly doubles your AI/prompt-design surface area (you'd need to score and rank every possible category, not just narrate one).</li>
+      <li>This was already logged as deferred Future Scope, not rejected outright — strong evidence exists that this is a real market gap (see the earlier competitor research), so it's a good post-hackathon direction.</li>
+    </ul>
+    <h3>What actually solves the "gut feeling" problem without needing that build</h3>
+    <p>The feasibility report itself already does this. If a user picks Dairy and the report shows a saturated local market and a weak SWOT, that's already steering them away from a bad decision — without the platform needing to prescribe what to pick instead. The failure mode named in the PS ("picked on anecdote, not data") is fixed by <em>showing them real data about their chosen category</em>, not by replacing their choice.</p>
+    <div class="panel go">
+      <p style="margin:0;"><b>Optional middle-ground stretch feature, if time allows:</b> let the user run the feasibility check for 2–3 categories side by side, so they can compare fit themselves. This is user-initiated comparison, not an automatic ranking/recommendation — it stays inside the PS's own input-driven design while still addressing the underlying "gut feeling" concern. Build this only after the single-category core loop works end-to-end.</p>
+    </div>
+  </section>
+
+  <!-- S14 -->
+  <section id="s14">
+    <div class="q-label">Part 14</div>
+    <h2>Implementing in Antigravity — database, data-feeding, and the RAG question</h2>
+    <p class="the-question">"How am I going to implement this using Antigravity — the database, the data I've already collected, where do I feed it, should I use RAG, how does the LLM fetch and work on it?"</p>
+    <h3>Short answer on RAG</h3>
+    <p><strong>No — not real RAG.</strong> RAG (vector embeddings + semantic search) is for retrieving relevant text out of a large, messy, unstructured document pile. What you have is a small, structured table with a clear lookup key (village name/ID) — that's a database lookup problem, not a search problem. A plain <code>WHERE village_id = X</code> query finds the right row instantly and with zero risk of retrieving the wrong thing, which vector search can occasionally do. Building a vector database here would be solving a problem you don't have.</p>
+    <h3>What actually happens, step by step</h3>
+    <ol>
+      <li><strong>Format the already-collected data.</strong> Take the real Aurai/Sherghati figures from datacollection.html Section 13 and turn them into the flat <code>village_metrics</code> table shape defined in schema.md — a CSV or JSON file, one row per village.</li>
+      <li><strong>Load it once, at backend startup</strong> — into Postgres, or just read from the JSON/CSV file directly (decisions.md D10 — flexible, pick whichever your Data/Database owner is fastest with).</li>
+      <li><strong>On each user request</strong>, the backend does a plain lookup by village_id, gets back real numbers (or nulls for missing fields).</li>
+      <li><strong>Those numbers get inserted into the fixed prompt template</strong> from Section 8 and sent to the LLM API <strong>once</strong> per request.</li>
+      <li><strong>The response is parsed</strong>, each sentence checked for a tag, and rendered on the results screen.</li>
+    </ol>
+    <h3>What to tell Antigravity explicitly</h3>
+    <p>Feed it the existing context pack (PRD.md, tech-spec.md, schema.md, rules.md, app-flow.md) as project files, plus this document and datacollection.html. Then be explicit in your first prompt to the agent:</p>
+    <div class="file-window">
+      <div class="file-titlebar"><div class="dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>first-prompt-to-antigravity.txt</div>
+      <pre class="file-content">Build the backend exactly per tech-spec.md and schema.md.
+Local data retrieval is a direct table/JSON lookup by village_id -
+do NOT implement vector search, embeddings, or a RAG pipeline for this.
+The LLM is called once per request, only after the deterministic
+eligibility, financial, and local-metrics modules have already run.
+Enforce rules.md R2 (no-invention rule) at the code level: any null field
+in village_metrics must return "Insufficient Data" explicitly, never a
+generated substitute.</pre>
+    </div>
+    <h3>What to actually take care of during the build</h3>
+    <ul>
+      <li>Keep the DB schema matching schema.md exactly — if a field changes, update schema.md first, then code.</li>
+      <li>Null-check before every LLM call — the module that does the lookup must decide "insufficient" status itself, before the prompt is even built.</li>
+      <li>Validate LLM output tags after the fact — don't trust the model to tag every sentence correctly; default any untagged sentence to AI-Estimated, never Verified.</li>
+      <li>Keep the financial/eligibility modules untouched by any AI call — those stay pure functions end to end.</li>
+    </ul>
+  </section>
+
+  <!-- S15 -->
+  <section id="s15">
+    <div class="q-label">Part 15</div>
+    <h2>One-page build checklist</h2>
+    <table>
+      <tr><th>Piece</th><th>Type</th><th>Status</th></tr>
+      <tr><td>Eligibility gate</td><td>Deterministic function</td><td>Factors defined (Section 10) — build against schema.md</td></tr>
+      <tr><td>Financial calculator</td><td>Deterministic function</td><td>Formula defined (Section 9) — needs unit tests against PS worked example</td></tr>
+      <tr><td>Local-metrics lookup</td><td>Deterministic function (table lookup, not RAG)</td><td>Data partially collected — Aurai/Sherghati population done, establishment counts pending SHRUG download</td></tr>
+      <tr><td>Feasibility narrative</td><td>Single LLM call per request, grounded on real numbers</td><td>Prompt template defined (Section 8) — build tag-validation step</td></tr>
+      <tr><td>Business-recommendation engine</td><td>—</td><td>Deferred (Section 13) — optional side-by-side comparison stretch feature only</td></tr>
+      <tr><td>Shareable PDF output</td><td>Frontend/export step</td><td>Build after the core loop works (Section 12)</td></tr>
+    </table>
+  </section>
+
+  <footer>
+    <p>PS-Understanding.html · Companion to PRD.md, tech-spec.md, schema.md, rules.md, and datacollection.html · Compiled 30 Aug 2026</p>
+  </footer>
+
+</div>
+</body>
+</html>
