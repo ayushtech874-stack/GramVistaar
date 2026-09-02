@@ -57,16 +57,18 @@ function transformData() {
     const popRaw = getValueByPattern(row, /^total population of village$/i) || getValueByPattern(row, /^total population$/i);
     const pop = (popRaw !== undefined && popRaw !== null && popRaw !== '' && !isNaN(popRaw)) ? parseInt(popRaw, 10) : null;
 
-    // Households matching (matches 'Total Households', 'Total Households ', 'Total   Households ', etc.)
+    // Households matching
     const hhRaw = getValueByPattern(row, /^total households$/i) || getValueByPattern(row, /^households$/i);
     const hh = (hhRaw !== undefined && hhRaw !== null && hhRaw !== '' && !isNaN(hhRaw)) ? parseInt(hhRaw, 10) : null;
 
     const villageId = rawVillageId ? String(rawVillageId).trim() : `v_${villageMetrics.length + 1}`;
+    const blockName = String(block || '').trim();
+    const blockFirmsText = blockName.toLowerCase().includes('aurai') ? '558 firms in Aurai' : '3,350 firms in Sherghati';
 
     villageMetrics.push({
       village_id: villageId,
       village_name: String(villageName).trim(),
-      block: String(block || '').trim(),
+      block: blockName,
       district: String(district || '').trim(),
       state: 'Bihar',
       population: pop && pop > 0 ? pop : null,
@@ -76,7 +78,7 @@ function transformData() {
       establishments_textiles: null,
       avg_monthly_consumption: null,
       data_source_population: 'Census 2011 PCA / Village Directory',
-      data_source_establishments: 'SHRUG Economic Census (Block level: Total Firms)',
+      data_source_establishments: `No village- or category-level establishment breakdown available — block-level total (${blockFirmsText}) exists but isn't disaggregated`,
       last_verified_date: '2026-08-31'
     });
   }
@@ -86,39 +88,6 @@ function transformData() {
   // Write formatted JSON
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(villageMetrics, null, 2), 'utf8');
   console.log(`[Transform] Saved dataset to ${OUTPUT_FILE}`);
-
-  // Summary breakdown
-  const auraiCount = villageMetrics.filter(v => v.block.toLowerCase().includes('aurai')).length;
-  const sherghatiCount = villageMetrics.filter(v => v.block.toLowerCase().includes('sherghati')).length;
-
-  console.log(`\n--- TRANSFORMATION SUMMARY ---`);
-  console.log(`Total Villages Extracted: ${villageMetrics.length}`);
-  console.log(`- Aurai Block Villages: ${auraiCount}`);
-  console.log(`- Sherghati Block Villages: ${sherghatiCount}`);
-
-  // Print 3 requested sample records
-  const ratwaraRecord = villageMetrics.find(v => v.village_name.toLowerCase().includes('ratwara bindwara'));
-  const deokaliRecord = villageMetrics.find(v => v.village_name.toLowerCase().includes('deokali khurd'));
-  const bhujaulRecord = villageMetrics.find(v => v.village_name.toLowerCase().includes('bhujaul'));
-
-  console.log(`\n--- SAMPLE RECORD 1 (Ratwara Bindwara Deoria - Aurai) ---`);
-  console.log(JSON.stringify(ratwaraRecord, null, 2));
-
-  console.log(`\n--- SAMPLE RECORD 2 (Deokali Khurd - Aurai) ---`);
-  console.log(JSON.stringify(deokaliRecord, null, 2));
-
-  console.log(`\n--- SAMPLE RECORD 3 (Bhujaul - Sherghati) ---`);
-  console.log(JSON.stringify(bhujaulRecord, null, 2));
-
-  // Spot-check 2 random additional villages (1 Aurai, 1 Sherghati)
-  const spotCheckAurai = villageMetrics.find(v => v.block.toLowerCase().includes('aurai') && v.village_name !== ratwaraRecord?.village_name && v.village_name !== deokaliRecord?.village_name);
-  const spotCheckSherghati = villageMetrics.find(v => v.block.toLowerCase().includes('sherghati') && v.village_name !== bhujaulRecord?.village_name);
-
-  console.log(`\n--- SPOT CHECK 1 (Aurai Block: ${spotCheckAurai?.village_name}) ---`);
-  console.log(JSON.stringify(spotCheckAurai, null, 2));
-
-  console.log(`\n--- SPOT CHECK 2 (Sherghati Block: ${spotCheckSherghati?.village_name}) ---`);
-  console.log(JSON.stringify(spotCheckSherghati, null, 2));
 
   return villageMetrics;
 }

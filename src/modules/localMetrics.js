@@ -35,9 +35,13 @@ export function lookupLocalMetrics(villageId, category, dataset) {
     };
   }
 
-  // Category establishment key mapping (e.g. 'dairy' -> 'establishments_dairy')
+  // Category establishment key mapping
   const categoryKey = category ? `establishments_${category.toLowerCase()}` : null;
   const establishmentVal = categoryKey && village[categoryKey] !== undefined ? village[categoryKey] : null;
+
+  const blockFirmsText = village.block && village.block.toLowerCase().includes('aurai')
+    ? '558 firms in Aurai'
+    : '3,350 firms in Sherghati';
 
   return {
     village_id: village.village_id,
@@ -56,12 +60,12 @@ export function lookupLocalMetrics(villageId, category, dataset) {
 
     establishments: establishmentVal !== null && establishmentVal !== undefined
       ? { value: establishmentVal, tag: 'Verified', source: village.data_source_establishments || 'SHRUG' }
-      : { value: null, tag: 'Insufficient Data', reason: 'Establishment counts pending SHRUG download' },
+      : { value: null, tag: 'Insufficient Data', reason: `No village- or category-level establishment breakdown available — block-level total (${blockFirmsText}) exists but isn't disaggregated` },
 
     market_reach: village.population !== null && village.population !== undefined
-      ? { value: village.population, tag: 'Derived', source: `Market reach for ${village.village_name} cluster` }
+      ? { value: village.population, tag: 'Derived', source: 'Single-village population baseline; 5–10km cluster radius aggregation not yet implemented' }
       : { value: null, tag: 'Insufficient Data', reason: 'Cannot calculate market reach without population figure' },
 
-    last_verified_date: village.last_verified_date || '2026-08-30'
+    last_verified_date: village.last_verified_date || '2026-08-31'
   };
 }
