@@ -3,61 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GramVistaar — SIH26091 AI-Driven Rural Advisory & Credit Structuring</title>
+  <title>GramVistaar — Rural Enterprise Credit & Feasibility Advisory Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- App Header -->
+  <!-- Official Top Navigation Header -->
   <header class="app-header">
     <div class="header-container">
-      <div class="logo-group">
-        <div class="logo-icon">G</div>
-        <div>
-          <div class="brand-title" data-i18n="brandTitle">GramVistaar</div>
-          <div class="brand-sub" data-i18n="brandSub">MoSJE · SIH26091 · Hyper-Local Advisory</div>
+      <div class="brand-group" id="header-brand-logo" style="cursor: pointer;" title="Return to Home">
+        <img src="logo.jpg" alt="GramVistaar Emblem" class="brand-emblem">
+        <div class="brand-text">
+          <div class="brand-title">GramVistaar</div>
+          <div class="brand-sub">Rural Enterprise Credit & Feasibility Advisory Portal</div>
         </div>
       </div>
-      <button id="lang-toggle-btn" class="lang-btn">हिंदी</button>
+
+      <div class="header-actions">
+        <button id="new-assessment-header-btn" class="btn-secondary-sm">↺ New Assessment</button>
+        <button id="lang-toggle-btn" class="lang-btn">हिंदी</button>
+      </div>
     </div>
   </header>
 
-  <!-- Stepper Bar -->
-  <div class="stepper-bar">
+  <!-- Progress Stepper -->
+  <nav class="stepper-bar">
     <div class="stepper-container">
       <div class="step-item active" data-step="0">
         <div class="step-num">1</div>
-        <span data-i18n="stepHome">Home</span>
+        <span class="step-label" data-i18n="stepHome">Home</span>
       </div>
       <div class="step-item" data-step="2">
         <div class="step-num">2</div>
-        <span data-i18n="stepInput">Input Form</span>
+        <span class="step-label" data-i18n="stepInput">Details & Location</span>
       </div>
       <div class="step-item" data-step="3">
         <div class="step-num">3</div>
-        <span data-i18n="stepGate">Eligibility</span>
+        <span class="step-label" data-i18n="stepGate">Eligibility Gate</span>
       </div>
       <div class="step-item" data-step="4">
         <div class="step-num">4</div>
-        <span data-i18n="stepResults">Results</span>
+        <span class="step-label" data-i18n="stepResults">Advisory Plan</span>
       </div>
     </div>
-  </div>
+  </nav>
 
-  <!-- Main Container -->
+  <!-- Main Application Body -->
   <main class="main-wrapper">
 
-    <!-- View 0: Hero / Start Assessment -->
+    <!-- View 0: Home / Welcome Portal -->
     <section id="view-step-0" class="view-section active">
       <div class="hero-card">
-        <div class="hero-eyebrow" data-i18n="heroEyebrow">Smart India Hackathon 2026</div>
-        <h1 class="hero-title" data-i18n="heroTitle">Check if your business idea works here, and how much you can borrow — before you apply.</h1>
-        <p class="hero-subtitle" data-i18n="heroSub">Zero anecdote business selection. Real village data, exact NSFDC credit limits, and moratorium-aware EMI structuring.</p>
-        <button id="hero-start-btn" class="btn-primary" data-i18n="heroCta">Start My Assessment →</button>
-        <div class="hero-trust-line" data-i18n="heroTrust">Uses official Census 2011, government scheme terms, and district data — every figure labeled by source.</div>
+        <div class="hero-badge">Government Concessional Credit & Village Advisory</div>
+        <h1 class="hero-title" data-i18n="heroTitle">Structured Credit Planning & Village Feasibility for Rural Entrepreneurs</h1>
+        <p class="hero-subtitle" data-i18n="heroSub">Evaluate enterprise feasibility against Census 2011 village metrics and calculate moratorium-aware scheme credit limits before applying.</p>
+        
+        <div class="hero-actions">
+          <button id="hero-start-btn" class="btn-primary" data-i18n="heroCta">Start Business Assessment →</button>
+        </div>
+
+        <div class="feature-strip">
+          <div class="feature-item">
+            <span class="feature-icon">📊</span>
+            <div>
+              <strong data-i18n="feat1Title">202 Verified Villages</strong>
+              <div data-i18n="feat1Sub">Census 2011 population & household data</div>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🏛️</span>
+            <div>
+              <strong data-i18n="feat2Title">Concessional Schemes</strong>
+              <div data-i18n="feat2Sub">Exact NSFDC term loan & micro finance rates</div>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">🛡️</span>
+            <div>
+              <strong data-i18n="feat3Title">4-Tier Data Trust</strong>
+              <div data-i18n="feat3Sub">Clear provenance badges on every figure</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -65,10 +95,13 @@
     <section id="view-step-2" class="view-section">
       <form id="assessment-form">
         <div class="card-panel">
-          <div class="panel-title" data-i18n="inputTitle">Enter Your Details & Location</div>
+          <div class="panel-header">
+            <h2 class="panel-title" data-i18n="inputTitle">Entrepreneur Details & Location Selection</h2>
+            <p class="panel-sub">Select target village and available margin capital to structure your loan and feasibility plan.</p>
+          </div>
           
           <div class="form-grid">
-            <!-- Location: State & District -->
+            <!-- District & Block -->
             <div class="form-group">
               <label data-i18n="districtLabel">District</label>
               <select id="district-select">
@@ -87,23 +120,26 @@
 
             <!-- Searchable Typeahead Village Selection -->
             <div class="form-group full-width">
-              <label data-i18n="villageLabel">Village (Search over 202 villages)</label>
+              <label data-i18n="villageLabel">Village Name (Search over 202 Villages)</label>
               <div class="typeahead-wrapper">
-                <input type="text" id="village-search-input" placeholder="Type village name (e.g. Saghari, Ratwara, Khandail)..." autocomplete="off">
+                <input type="text" id="village-search-input" placeholder="Type village name (e.g., Saghari, Ratwara, Khandail)..." autocomplete="off">
                 <div id="typeahead-results" class="typeahead-results"></div>
               </div>
             </div>
 
-            <!-- Capital Input -->
+            <!-- Available Capital -->
             <div class="form-group full-width">
               <label data-i18n="capitalLabel">Available Margin Capital (₹)</label>
-              <input type="number" id="capital-input" value="100000" min="5000" step="5000">
-              <span id="capital-lakh-help" style="font-size: 0.8rem; color: var(--muted); font-weight: 600;">(1.00 Lakhs)</span>
+              <div class="input-with-help">
+                <input type="number" id="capital-input" value="100000" min="5000" step="5000">
+                <span id="capital-lakh-help" class="lakh-help">(1.00 Lakhs)</span>
+              </div>
+              <span class="field-hint" data-i18n="capitalHelp">Represents your 10% borrower contribution under concessional credit terms.</span>
             </div>
 
             <!-- Business Category Cards -->
             <div class="form-group full-width">
-              <label data-i18n="categoryLabel">Business Category</label>
+              <label data-i18n="categoryLabel">Proposed Business Category</label>
               <div class="category-cards">
                 <div class="cat-card selected" data-cat="dairy">
                   <div class="cat-icon">🥛</div>
@@ -120,33 +156,33 @@
               </div>
             </div>
 
-            <!-- Eligibility Gate Fields -->
+            <!-- Social Category / Eligibility -->
             <div class="form-group">
-              <label data-i18n="scLabel">Category / Community</label>
+              <label data-i18n="scLabel">Social Category</label>
               <select id="category-status">
-                <option value="SC">Scheduled Castes (SC) — NSFDC</option>
-                <option value="OBC">Other Backward Classes (OBC) — NBCFDC</option>
-                <option value="ST">Scheduled Tribes (ST) — NSTFDC</option>
+                <option value="SC">Scheduled Castes (SC) — NSFDC Scheme</option>
+                <option value="OBC">Other Backward Classes (OBC) — NBCFDC Scheme</option>
+                <option value="ST">Scheduled Tribes (ST) — NSTFDC Scheme</option>
               </select>
             </div>
 
             <div class="form-group">
               <label data-i18n="incomeLabel">Annual Family Income (₹)</label>
               <input type="number" id="income-input" value="60000" step="5000">
-              <span style="font-size: 0.78rem; color: var(--muted);" data-i18n="incomeHelp">NSFDC ceiling: ₹3,00,000/year</span>
+              <span class="field-hint" data-i18n="incomeHelp">Concessional ceiling: ₹3,00,000 / year</span>
             </div>
 
             <div class="form-group full-width">
-              <label data-i18n="defaultLabel">Prior Default under Govt Scheme?</label>
+              <label data-i18n="defaultLabel">Prior Government Scheme Default Status</label>
               <select id="prior-default-select">
-                <option value="false" data-i18n="noDefault">No Default</option>
-                <option value="true" data-i18n="hasDefault">Yes, Has Default</option>
+                <option value="false" data-i18n="noDefault">No Prior Default (Declared)</option>
+                <option value="true" data-i18n="hasDefault">Has Prior Default</option>
               </select>
             </div>
           </div>
 
-          <div style="margin-top: 1.75rem; text-align: right;">
-            <button type="submit" class="btn-primary" data-i18n="submitBtn">Check My Eligibility & Feasibility →</button>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" data-i18n="submitBtn">Evaluate Eligibility & Generate Advisory Plan →</button>
           </div>
         </div>
       </form>
@@ -156,71 +192,91 @@
     <section id="view-step-3" class="view-section">
       <!-- PASS Banner -->
       <div id="gate-pass-banner" class="banner pass" style="display: none;">
-        <div class="banner-title" data-i18n="passTitle">Eligibility Gate PASSED</div>
-        <div class="banner-body">
-          <p><span data-i18n="passSub">You qualify for concessional credit under</span> <strong id="gate-corp-name">NSFDC</strong>.</p>
-          <div style="margin-top: 1rem;">
-            <button id="gate-continue-btn" class="btn-primary" data-i18n="viewPlanBtn">View Financial & Local Feasibility Plan →</button>
+        <div class="banner-icon">✓</div>
+        <div class="banner-content">
+          <div class="banner-title" data-i18n="passTitle">Eligibility Gate Passed</div>
+          <div class="banner-body">
+            <p><span data-i18n="passSub">You qualify for concessional scheme financing under</span> <strong id="gate-corp-name">NSFDC</strong>.</p>
+          </div>
+          <div class="banner-cta">
+            <button id="gate-continue-btn" class="btn-primary" data-i18n="viewPlanBtn">Proceed to Financial & Feasibility Advisory Plan →</button>
           </div>
         </div>
       </div>
 
       <!-- FAIL Banner -->
       <div id="gate-fail-banner" class="banner fail" style="display: none;">
-        <div class="banner-title" data-i18n="failTitle">Eligibility Gate UNMET</div>
-        <div class="banner-body">
-          <p id="gate-fail-reason" style="margin-bottom: 0.75rem;"></p>
-          <button id="gate-feasibility-only-btn" class="btn-primary" style="background-color: var(--caution);" data-i18n="seeFeasibilityBtn">See Local Business Feasibility Report Anyway →</button>
+        <div class="banner-icon">⚠️</div>
+        <div class="banner-content">
+          <div class="banner-title" data-i18n="failTitle">Concessional Scheme Criteria Unmet</div>
+          <div class="banner-body">
+            <p id="gate-fail-reason"></p>
+          </div>
+          <div class="banner-cta">
+            <button id="gate-feasibility-only-btn" class="btn-secondary" data-i18n="seeFeasibilityBtn">View Village Business Feasibility Report Anyway →</button>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- View 4 / 4b: Results Dashboard -->
     <section id="view-step-4" class="view-section">
+      <div class="dashboard-header">
+        <div>
+          <h2 class="dashboard-title" data-i18n="dashTitle">Business Credit & Feasibility Plan</h2>
+          <div class="dashboard-sub" id="res-village-header"></div>
+        </div>
+        <button id="reset-new-assessment-btn" class="btn-secondary-sm">↺ New Assessment</button>
+      </div>
+
       <div class="results-grid">
         
-        <!-- LEFT: Financial Card -->
-        <div id="financial-card-container" class="card-panel" style="display: block;">
-          <div class="panel-title" data-i18n="financialTitle">YOUR FINANCIAL PLAN</div>
-
-          <div class="metric-row">
-            <span class="metric-label" data-i18n="projectCostLabel">Project Cost Ceiling</span>
-            <span class="metric-val">
-              <span id="res-project-cost">₹0</span>
-              <span id="res-project-cost-tag"></span>
-            </span>
+        <!-- LEFT: Financial Structuring Card -->
+        <div id="financial-card-container" class="card-panel">
+          <div class="panel-header">
+            <h3 class="panel-card-title" data-i18n="financialTitle">CONCESSIONAL CREDIT PLAN</h3>
           </div>
 
-          <div class="metric-row">
-            <span class="metric-label" data-i18n="loanEligibleLabel">Loan Eligibility (90%)</span>
-            <span class="metric-val">
-              <span id="res-loan-eligibility">₹0</span>
-              <span id="res-loan-eligibility-tag"></span>
-            </span>
-          </div>
+          <div class="metric-list">
+            <div class="metric-row">
+              <span class="metric-label" data-i18n="projectCostLabel">Project Cost Ceiling</span>
+              <span class="metric-val">
+                <span id="res-project-cost">₹0</span>
+                <span id="res-project-cost-tag"></span>
+              </span>
+            </div>
 
-          <div class="metric-row">
-            <span class="metric-label" data-i18n="matchedSchemeLabel">Matched Scheme</span>
-            <span class="metric-val">
-              <span id="res-scheme-name">NSFDC Term Loan</span>
-              <span id="res-scheme-tag"></span>
-            </span>
-          </div>
+            <div class="metric-row">
+              <span class="metric-label" data-i18n="loanEligibleLabel">Loan Eligibility (90%)</span>
+              <span class="metric-val">
+                <span id="res-loan-eligibility">₹0</span>
+                <span id="res-loan-eligibility-tag"></span>
+              </span>
+            </div>
 
-          <div class="metric-row">
-            <span class="metric-label" data-i18n="interestLabel">Interest Rate</span>
-            <span class="metric-val">
-              <span id="res-interest-rate">8.0% p.a.</span>
-              <span id="res-interest-tag"></span>
-            </span>
-          </div>
+            <div class="metric-row">
+              <span class="metric-label" data-i18n="matchedSchemeLabel">Matched Scheme</span>
+              <span class="metric-val">
+                <span id="res-scheme-name">NSFDC Term Loan</span>
+                <span id="res-scheme-tag"></span>
+              </span>
+            </div>
 
-          <div class="metric-row">
-            <span class="metric-label" data-i18n="tenureLabel">Tenure & Moratorium</span>
-            <span class="metric-val">
-              <span id="res-tenure">7 Years (6-Month Moratorium)</span>
-              <span id="res-tenure-tag"></span>
-            </span>
+            <div class="metric-row">
+              <span class="metric-label" data-i18n="interestLabel">Concessional Interest Rate</span>
+              <span class="metric-val">
+                <span id="res-interest-rate">8.0% p.a.</span>
+                <span id="res-interest-tag"></span>
+              </span>
+            </div>
+
+            <div class="metric-row">
+              <span class="metric-label" data-i18n="tenureLabel">Tenure & Moratorium</span>
+              <span class="metric-val">
+                <span id="res-tenure">7 Years (6-Month Moratorium)</span>
+                <span id="res-tenure-tag"></span>
+              </span>
+            </div>
           </div>
 
           <!-- Affordability Risk Flag -->
@@ -231,21 +287,21 @@
             <div class="affordability-bar-bg">
               <div id="aff-bar-fill" class="affordability-bar-fill green" style="width: 45%;"></div>
             </div>
-            <div id="aff-flag-text" style="font-weight: 700; font-size: 0.9rem;">Moderate risk</div>
-            <div id="aff-explanation" style="font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem;"></div>
+            <div id="aff-flag-text" class="aff-flag-status">Moderate risk</div>
+            <div id="aff-explanation" class="aff-explanation-text"></div>
           </div>
 
-          <!-- Expandable EMI Table -->
-          <div class="table-responsive">
-            <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;" data-i18n="viewEmiBtn">84-Month EMI Schedule Preview</div>
+          <!-- EMI Table -->
+          <div class="table-container">
+            <div class="table-title" data-i18n="viewEmiBtn">84-Month Repayment EMI Schedule Preview</div>
             <table class="data-table">
               <thead>
                 <tr>
-                  <th data-i18n="thPeriod">Period</th>
-                  <th data-i18n="thEmi">EMI</th>
-                  <th data-i18n="thInterest">Interest</th>
-                  <th data-i18n="thPrincipal">Principal</th>
-                  <th data-i18n="thBalance">Balance</th>
+                  <th data-i18n="thPeriod">Month</th>
+                  <th data-i18n="thEmi">EMI (₹)</th>
+                  <th data-i18n="thInterest">Interest (₹)</th>
+                  <th data-i18n="thPrincipal">Principal (₹)</th>
+                  <th data-i18n="thBalance">Balance (₹)</th>
                   <th data-i18n="thNote">Note</th>
                 </tr>
               </thead>
@@ -255,51 +311,56 @@
         </div>
 
         <!-- LEFT (Skipped Explanation Card if Eligibility Failed) -->
-        <div id="financial-skipped-card" class="card-panel" style="display: none; background: #faf5ef; border-left: 4px solid var(--caution);">
-          <div class="panel-title" style="color: var(--caution);" data-i18n="skippedTitle">FINANCIAL PLAN SKIPPED</div>
-          <p style="font-size: 0.9rem; margin-bottom: 0.75rem;" id="skipped-reason-text">Eligibility requirements not met.</p>
-          <p style="font-size: 0.85rem; color: var(--muted);" data-i18n="skippedSub">Per SIH26091 design guidelines (decisions.md D4), loan figures are gated behind eligibility to avoid showing unsupportable borrowing numbers. Your local business feasibility report is shown on the right.</p>
+        <div id="financial-skipped-card" class="card-panel skipped-card" style="display: none;">
+          <div class="panel-header">
+            <h3 class="panel-card-title" style="color: var(--caution);" data-i18n="skippedTitle">CREDIT PLAN GATED</h3>
+          </div>
+          <p id="skipped-reason-text" style="font-weight: 600; margin-bottom: 0.5rem;"></p>
+          <p class="skipped-sub" data-i18n="skippedSub">Loan calculations are hidden when eligibility requirements are unmet to avoid presenting unsupportable credit terms. Village feasibility insights are shown on the right.</p>
         </div>
 
         <!-- RIGHT: Feasibility Card -->
         <div id="feasibility-card-container" class="card-panel">
-          <div class="panel-title" data-i18n="feasibilityTitle">YOUR LOCAL BUSINESS SNAPSHOT</div>
-          <div id="res-village-header" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--gold); margin-bottom: 1rem; font-weight: 700;"></div>
-
-          <div class="metric-row">
-            <span class="metric-label" data-i18n="popLabel">Village Population</span>
-            <span class="metric-val">
-              <span id="res-pop-val">3,026</span>
-              <span id="res-pop-tag"></span>
-            </span>
+          <div class="panel-header">
+            <h3 class="panel-card-title" data-i18n="feasibilityTitle">VILLAGE FEASIBILITY SNAPSHOT</h3>
           </div>
 
-          <div class="metric-row">
-            <span class="metric-label" data-i18n="hhLabel">Households</span>
-            <span class="metric-val">
-              <span id="res-hh-val">585</span>
-              <span id="res-hh-tag"></span>
-            </span>
-          </div>
+          <div class="metric-list">
+            <div class="metric-row">
+              <span class="metric-label" data-i18n="popLabel">Village Population</span>
+              <span class="metric-val">
+                <span id="res-pop-val">0</span>
+                <span id="res-pop-tag"></span>
+              </span>
+            </div>
 
-          <div class="metric-row">
-            <span class="metric-label" data-i18n="estLabel">Nearby Establishment Density</span>
-            <span class="metric-val">
-              <span id="res-est-val">N/A</span>
-              <span id="res-est-tag"></span>
-            </span>
+            <div class="metric-row">
+              <span class="metric-label" data-i18n="hhLabel">Households</span>
+              <span class="metric-val">
+                <span id="res-hh-val">0</span>
+                <span id="res-hh-tag"></span>
+              </span>
+            </div>
+
+            <div class="metric-row">
+              <span class="metric-label" data-i18n="estLabel">Nearby Establishment Density</span>
+              <span class="metric-val">
+                <span id="res-est-val">N/A</span>
+                <span id="res-est-tag"></span>
+              </span>
+            </div>
           </div>
 
           <!-- SWOT List -->
-          <div style="margin-top: 1.25rem;">
-            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;" data-i18n="swotHeader">SWOT & Opportunity Analysis (Placeholder Template)</div>
-            <ul id="res-swot-list" style="list-style: none; padding-left: 0; font-size: 0.88rem;"></ul>
+          <div class="section-block">
+            <div class="section-heading" data-i18n="swotHeader">SWOT & Business Opportunity Analysis</div>
+            <ul id="res-swot-list" class="swot-list"></ul>
           </div>
 
           <!-- Pricing Guidance -->
-          <div style="margin-top: 1.25rem; background: var(--accent-soft); padding: 1rem; border-radius: 6px;">
-            <div style="font-weight: 700; font-size: 0.85rem; color: var(--accent);" data-i18n="reachLabel">Pricing & Revenue Guidance (Placeholder Template)</div>
-            <p id="res-pricing-text" style="font-size: 0.85rem; margin-top: 0.35rem; margin-bottom: 0;"></p>
+          <div class="pricing-box">
+            <div class="section-heading" data-i18n="reachLabel">Pricing & Monthly Revenue Guidance</div>
+            <p id="res-pricing-text" class="pricing-text"></p>
           </div>
         </div>
 
@@ -308,9 +369,12 @@
 
   </main>
 
-  <!-- Footer -->
+  <!-- Official Footer -->
   <footer class="app-footer">
-    GramVistaar — Smart India Hackathon 2026 · Ministry of Social Justice & Empowerment (MoSJE) · Code & Data Verified
+    <div class="footer-container">
+      <div>GramVistaar Rural Enterprise Advisory Portal · Official Government Credit Scheme Calculator</div>
+      <div class="footer-sub">Verified Census 2011 Data · Concessional Corporation Rules · Provenance Tagged</div>
+    </div>
   </footer>
 
   <script src="app.js"></script>

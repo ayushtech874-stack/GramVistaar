@@ -1,13 +1,13 @@
 /**
- * GramVistaar Frontend App - SIH26091
+ * GramVistaar Frontend App - SIH26091 / Official Banking Advisory Portal
  * Single Page Application (SPA) with 5-Screen guided flow,
  * 202-village searchable type-ahead dropdown, 4-tier data tags,
- * full English & Hindi translation support, and eligibility gate rendering.
+ * English & Hindi translation support, and complete New Assessment reset navigation.
  */
 
 // Application State
 const state = {
-  currentStep: 0, // 0: Home, 1: Lang, 2: Input, 3: Gate, 4: Results, 5: Share
+  currentStep: 0, // 0: Home, 2: Input, 3: Gate, 4: Results
   language: 'en',
   villagesList: [],
   filteredVillages: [],
@@ -25,121 +25,129 @@ const state = {
 const translations = {
   en: {
     brandTitle: "GramVistaar",
-    brandSub: "MoSJE · SIH26091 · Hyper-Local Advisory",
+    brandSub: "Rural Enterprise Credit & Feasibility Advisory Portal",
     stepHome: "Home",
-    stepInput: "Input Form",
-    stepGate: "Eligibility",
-    stepResults: "Results",
-    heroEyebrow: "Smart India Hackathon 2026",
-    heroTitle: "Check if your business idea works here, and how much you can borrow — before you apply.",
-    heroSub: "Zero anecdote business selection. Real village data, exact NSFDC credit limits, and moratorium-aware EMI structuring.",
-    heroCta: "Start My Assessment →",
-    heroTrust: "Uses official Census 2011, government scheme terms, and district data — every figure labeled by source.",
-    inputTitle: "Enter Your Details & Location",
+    stepInput: "Details & Location",
+    stepGate: "Eligibility Gate",
+    stepResults: "Advisory Plan",
+    heroTitle: "Structured Credit Planning & Village Feasibility for Rural Entrepreneurs",
+    heroSub: "Evaluate enterprise feasibility against Census 2011 village metrics and calculate moratorium-aware scheme credit limits before applying.",
+    heroCta: "Start Business Assessment →",
+    feat1Title: "202 Verified Villages",
+    feat1Sub: "Census 2011 population & household data",
+    feat2Title: "Concessional Schemes",
+    feat2Sub: "Exact NSFDC term loan & micro finance rates",
+    feat3Title: "4-Tier Data Trust",
+    feat3Sub: "Clear provenance badges on every figure",
+    inputTitle: "Entrepreneur Details & Location Selection",
     districtLabel: "District",
     blockLabel: "Block",
-    villageLabel: "Village (Search over 202 villages)",
-    villagePlaceholder: "Type village name (e.g. Saghari, Ratwara, Khandail)...",
+    villageLabel: "Village Name (Search over 202 Villages)",
+    villagePlaceholder: "Type village name (e.g., Saghari, Ratwara, Khandail)...",
     capitalLabel: "Available Margin Capital (₹)",
-    capitalHelp: "Your 10% contribution",
-    categoryLabel: "Business Category",
+    capitalHelp: "Represents your 10% borrower contribution under concessional credit terms.",
+    categoryLabel: "Proposed Business Category",
     catDairy: "Dairy / Milk Unit",
     catRetail: "Retail / Kirana",
     catTextiles: "Textiles / Tailoring",
-    scLabel: "Category / Community",
+    scLabel: "Social Category",
     incomeLabel: "Annual Family Income (₹)",
-    incomeHelp: "NSFDC ceiling: ₹3,00,000/year",
-    defaultLabel: "Prior Default under Govt Scheme?",
-    noDefault: "No Default",
-    hasDefault: "Yes, Has Default",
-    submitBtn: "Check My Eligibility & Feasibility →",
-    passTitle: "Eligibility Gate PASSED",
-    passSub: "You qualify for concessional credit under",
-    failTitle: "Eligibility Gate UNMET",
-    seeFeasibilityBtn: "See Local Business Feasibility Report Anyway →",
-    viewPlanBtn: "View Financial & Local Feasibility Plan →",
-    financialTitle: "YOUR FINANCIAL PLAN",
-    feasibilityTitle: "YOUR LOCAL BUSINESS SNAPSHOT",
+    incomeHelp: "Concessional ceiling: ₹3,00,000 / year",
+    defaultLabel: "Prior Government Scheme Default Status",
+    noDefault: "No Prior Default (Declared)",
+    hasDefault: "Has Prior Default",
+    submitBtn: "Evaluate Eligibility & Generate Advisory Plan →",
+    passTitle: "Eligibility Gate Passed",
+    passSub: "You qualify for concessional scheme financing under",
+    failTitle: "Concessional Scheme Criteria Unmet",
+    seeFeasibilityBtn: "View Village Business Feasibility Report Anyway →",
+    viewPlanBtn: "Proceed to Financial & Feasibility Advisory Plan →",
+    dashTitle: "Business Credit & Feasibility Plan",
+    financialTitle: "CONCESSIONAL CREDIT PLAN",
+    feasibilityTitle: "VILLAGE FEASIBILITY SNAPSHOT",
     projectCostLabel: "Project Cost Ceiling",
     loanEligibleLabel: "Loan Eligibility (90%)",
     matchedSchemeLabel: "Matched Scheme",
-    interestLabel: "Interest Rate",
+    interestLabel: "Concessional Interest Rate",
     tenureLabel: "Tenure & Moratorium",
     affordabilityTitle: "EMI Affordability Risk Flag",
-    viewEmiBtn: "84-Month EMI Schedule Preview",
-    thPeriod: "Period",
-    thEmi: "EMI",
-    thInterest: "Interest",
-    thPrincipal: "Principal",
-    thBalance: "Balance",
+    viewEmiBtn: "84-Month Repayment EMI Schedule Preview",
+    thPeriod: "Month",
+    thEmi: "EMI (₹)",
+    thInterest: "Interest (₹)",
+    thPrincipal: "Principal (₹)",
+    thBalance: "Balance (₹)",
     thNote: "Note",
     popLabel: "Village Population",
     hhLabel: "Households",
     estLabel: "Nearby Establishment Density",
-    reachLabel: "Pricing & Revenue Guidance",
-    swotHeader: "SWOT & Opportunity Analysis",
-    skippedTitle: "FINANCIAL PLAN SKIPPED",
-    skippedSub: "Per SIH26091 design guidelines (decisions.md D4), loan figures are gated behind eligibility to avoid showing unsupportable borrowing numbers. Your local business feasibility report is shown on the right.",
-    exportBtn: "Download Bank-Ready Summary (PDF) →"
+    reachLabel: "Pricing & Monthly Revenue Guidance",
+    swotHeader: "SWOT & Business Opportunity Analysis",
+    skippedTitle: "CREDIT PLAN GATED",
+    skippedSub: "Loan calculations are hidden when eligibility requirements are unmet to avoid presenting unsupportable credit terms. Village feasibility insights are shown on the right."
   },
   hi: {
     brandTitle: "ग्राम विस्तार",
-    brandSub: "सामाजिक न्याय और अधिकारिता मंत्रालय · एसआईएच 26091",
+    brandSub: "ग्रामीण उद्यम ऋण एवं व्यवहार्यता सलाहकार पोर्टल",
     stepHome: "मुख्य पृष्ठ",
-    stepInput: "इनपुट फॉर्म",
+    stepInput: "विवरण एवं स्थान",
     stepGate: "पात्रता जाँच",
-    stepResults: "मूल्यांकन परिणाम",
-    heroEyebrow: "स्मार्ट इंडिया हैकाथॉन 2026",
-    heroTitle: "आवेदन करने से पहले जानें कि क्या आपका व्यवसाय गाँव में चलेगा और कितना ऋण मिलेगा।",
-    heroSub: "वास्तविक 2011 जनगणना डेटा, सटीक एनएसएफडीसी ऋण सीमा और ईएमआई संरचना।",
-    heroCta: "अपना मूल्यांकन शुरू करें →",
-    heroTrust: "आधिकारिक 2011 जनगणना और सरकारी योजना नियमों पर आधारित — हर डेटा स्रोत के साथ।",
-    inputTitle: "अपना विवरण और स्थान दर्ज करें",
+    stepResults: "सलाहकार योजना",
+    heroTitle: "ग्रामीण उद्यमियों के लिए संरचित ऋण योजना एवं गाँव व्यवहार्यता",
+    heroSub: "आवेदन करने से पहले 2011 जनगणना गाँव डेटा के विरुद्ध व्यवहार्यता जांचें और रियायती ऋण सीमा की गणना करें।",
+    heroCta: "उद्यम मूल्यांकन शुरू करें →",
+    feat1Title: "202 सत्यापित गाँव",
+    feat1Sub: "2011 जनगणना जनसंख्या और घरेलू डेटा",
+    feat2Title: "रियायती ऋण योजनाएं",
+    feat2Sub: "सटीक एनएसएफडीसी टर्म लोन और माइक्रो फाइनेंस दरें",
+    feat3Title: "4-स्तरीय डेटा भरोसा",
+    feat3Sub: "हर आंकड़े पर स्पष्ट डेटा स्रोत टैग",
+    inputTitle: "उद्यमी विवरण और स्थान चयन",
     districtLabel: "जिला",
     blockLabel: "ब्लॉक",
-    villageLabel: "गाँव (202 गाँवों में खोजें)",
+    villageLabel: "गाँव का नाम (202 गाँवों में खोजें)",
     villagePlaceholder: "गाँव का नाम लिखें (जैसे सघारी, रतवारा, खंडैल)...",
     capitalLabel: "उपलब्ध पूंजी (₹)",
-    capitalHelp: "आपका 10% अंशदान",
-    categoryLabel: "व्यवसाय श्रेणी",
+    capitalHelp: "रियायती ऋण शर्तों के तहत आपका 10% अंशदान।",
+    categoryLabel: "प्रस्तावित व्यवसाय श्रेणी",
     catDairy: "डेयरी / दुग्ध इकाई",
     catRetail: "किराना / रिटेल स्टोर",
     catTextiles: "कपड़ा / सिलाई केंद्र",
     scLabel: "सामाजिक श्रेणी",
     incomeLabel: "वार्षिक पारिवारिक आय (₹)",
-    incomeHelp: "एनएसएफडीसी सीमा: ₹3,00,000/वर्ष",
-    defaultLabel: "क्या पहले कोई डिफ़ॉल्ट हुआ है?",
-    noDefault: "कोई डिफ़ॉल्ट नहीं",
-    hasDefault: "हाँ, डिफ़ॉल्ट हुआ है",
-    submitBtn: "मेरी पात्रता और व्यवहार्यता जांचें →",
+    incomeHelp: "रियायती आय सीमा: ₹3,00,000 / वर्ष",
+    defaultLabel: "पूर्व सरकारी योजना डिफ़ॉल्ट स्थिति",
+    noDefault: "कोई पूर्व डिफ़ॉल्ट नहीं (घोषित)",
+    hasDefault: "पूर्व डिफ़ॉल्ट मौजूद है",
+    submitBtn: "पात्रता जांचें और योजना तैयार करें →",
     passTitle: "पात्रता जाँच उत्तीर्ण (PASSED)",
     passSub: "आप इसके तहत रियायती ऋण के लिए पात्र हैं:",
-    failTitle: "पात्रता मापदंड अपूर्ण (UNMET)",
-    seeFeasibilityBtn: "फिर भी स्थानीय व्यवसाय व्यवहार्यता रिपोर्ट देखें →",
-    viewPlanBtn: "वित्तीय और स्थानीय व्यवहार्यता योजना देखें →",
-    financialTitle: "आपकी वित्तीय योजना",
-    feasibilityTitle: "आपका स्थानीय व्यवसाय स्नैपशॉट",
+    failTitle: "रियायती ऋण मापदंड अपूर्ण (UNMET)",
+    seeFeasibilityBtn: "फिर भी गाँव व्यवसाय व्यवहार्यता रिपोर्ट देखें →",
+    viewPlanBtn: "वित्तीय और व्यवहार्यता सलाहकार योजना देखें →",
+    dashTitle: "व्यवसाय ऋण एवं व्यवहार्यता योजना",
+    financialTitle: "आपकी रियायती ऋण योजना",
+    feasibilityTitle: "गाँव व्यवहार्यता स्नैपशॉट",
     projectCostLabel: "परियोजना लागत सीमा",
     loanEligibleLabel: "ऋण पात्रता (90%)",
     matchedSchemeLabel: "योजना का नाम",
-    interestLabel: "ब्याज दर",
+    interestLabel: "रियायती ब्याज दर",
     tenureLabel: "अवधि और मोरेटोरियम",
     affordabilityTitle: "ईएमआई वहन क्षमता जोखिम संकेतक",
-    viewEmiBtn: "84-महीने का ईएमआई शेड्यूल पूर्वावलोकन",
+    viewEmiBtn: "84-महीने का ईएमआई भुगतान शेड्यूल",
     thPeriod: "महीना",
-    thEmi: "ईएमआई",
-    thInterest: "ब्याज",
-    thPrincipal: "मूलधन",
-    thBalance: "शेष राशि",
+    thEmi: "ईएमआई (₹)",
+    thInterest: "ब्याज (₹)",
+    thPrincipal: "मूलधन (₹)",
+    thBalance: "शेष राशि (₹)",
     thNote: "विवरण",
     popLabel: "गाँव की जनसंख्या",
     hhLabel: "कुल घर (Households)",
     estLabel: "आस-पास व्यावसायिक घनत्व",
-    reachLabel: "मूल्य निर्धारण और राजस्व मार्गदर्शन",
-    swotHeader: "स्वाट और अवसर विश्लेषण",
-    skippedTitle: "वित्तीय योजना को छोड़ दिया गया",
-    skippedSub: "निर्णय दिशानिर्देशों (decisions.md D4) के अनुसार, अमान्य ऋण आंकड़ों को दिखाने से बचने के लिए वित्तीय कार्ड को छिपाया गया है। स्थानीय व्यवहार्यता रिपोर्ट दाईं ओर दिखाई गई है।",
-    exportBtn: "बैंक-रेडी सारांश (पीडीएफ) डाउनलोड करें →"
+    reachLabel: "मूल्य निर्धारण एवं मासिक राजस्व मार्गदर्शन",
+    swotHeader: "स्वाट एवं व्यवसाय अवसर विश्लेषण",
+    skippedTitle: "ऋण योजना रोकी गई",
+    skippedSub: "पात्रता मापदंड अपूर्ण होने पर अमान्य आंकड़ों से बचने के लिए ऋण गणना छिपाई गई है। गाँव की व्यवहार्यता दाईं ओर दिखाई गई है।"
   }
 };
 
@@ -151,7 +159,7 @@ function getLocalizedSchemeName(schemeName, lang) {
   return schemeName;
 }
 
-// Helper: Format Numbers in Lakhs / Indian Currency
+// Helper: Format Currency
 function formatINR(val) {
   if (val === null || val === undefined || isNaN(val)) return 'N/A';
   return '₹' + Number(val).toLocaleString('en-IN');
@@ -163,14 +171,14 @@ function formatLakhHelper(val) {
   return `(${lakhs} Lakhs / लाख)`;
 }
 
-// DOM Elements Initialization
+// Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
   initEvents();
   fetchVillages();
   renderLanguageText();
 });
 
-// Fetch Villages API
+// Fetch Villages List
 async function fetchVillages() {
   try {
     const res = await fetch('/api/villages');
@@ -187,7 +195,7 @@ async function fetchVillages() {
   }
 }
 
-// Render UI Language Strings
+// Render Language Text
 function renderLanguageText() {
   const t = translations[state.language];
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -201,28 +209,64 @@ function renderLanguageText() {
     searchInput.placeholder = t.villagePlaceholder;
   }
 
-  // Re-render assessment results if present
   if (state.assessmentData) {
     renderEligibilityGate(state.assessmentData.eligibility);
     renderResultsScreen(state.assessmentData);
   }
 }
 
-// Event Listeners
+// Reset Assessment State (New Candidate Navigation)
+function resetAssessmentState() {
+  state.assessmentData = null;
+  state.selectedCategory = 'dairy';
+  state.availableCapital = 100000;
+  
+  document.getElementById('capital-input').value = 100000;
+  document.getElementById('capital-lakh-help').textContent = formatLakhHelper(100000);
+  document.getElementById('income-input').value = 60000;
+  document.getElementById('category-status').value = 'SC';
+  document.getElementById('prior-default-select').value = 'false';
+
+  if (state.villagesList.length > 0) {
+    state.selectedVillage = state.villagesList[0];
+    document.getElementById('village-search-input').value = '';
+  }
+
+  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector('.cat-card[data-cat="dairy"]').classList.add('selected');
+
+  goToStep(0);
+}
+
+// Event Handlers
 function initEvents() {
+  // Brand Header Click -> Reset to Home
+  document.getElementById('header-brand-logo').addEventListener('click', () => {
+    resetAssessmentState();
+  });
+
+  // Header "New Assessment" button
+  document.getElementById('new-assessment-header-btn').addEventListener('click', () => {
+    resetAssessmentState();
+  });
+
+  // Dashboard "New Assessment" button
+  document.getElementById('reset-new-assessment-btn').addEventListener('click', () => {
+    resetAssessmentState();
+  });
+
   // Language Toggle
   document.getElementById('lang-toggle-btn').addEventListener('click', async () => {
     state.language = state.language === 'en' ? 'hi' : 'en';
     document.getElementById('lang-toggle-btn').textContent = state.language === 'en' ? 'हिंदी' : 'English';
     renderLanguageText();
 
-    // Re-run assessment to get Hindi narrative if assessment has run
     if (state.assessmentData && state.selectedVillage) {
       await runAssessment();
     }
   });
 
-  // Start Assessment Buttons
+  // Hero Start Button -> Go to Step 2
   document.getElementById('hero-start-btn').addEventListener('click', () => goToStep(2));
 
   // Category Selector Cards
@@ -275,12 +319,12 @@ function initEvents() {
     await runAssessment();
   });
 
-  // Screen 3 Gate CTAs
+  // Gate CTAs
   document.getElementById('gate-continue-btn').addEventListener('click', () => goToStep(4));
   document.getElementById('gate-feasibility-only-btn').addEventListener('click', () => goToStep(4));
 }
 
-// Render Typeahead Results Box
+// Render Typeahead Results
 function renderTypeaheadResults(list) {
   const container = document.getElementById('typeahead-results');
   container.innerHTML = '';
@@ -306,12 +350,10 @@ function renderTypeaheadResults(list) {
 function goToStep(step) {
   state.currentStep = step;
 
-  // Toggle active views
   document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
   const targetView = document.getElementById(`view-step-${step}`);
   if (targetView) targetView.classList.add('active');
 
-  // Update Stepper Bar
   document.querySelectorAll('.step-item').forEach(item => {
     const s = Number(item.getAttribute('data-step'));
     if (s <= step) {
@@ -352,11 +394,9 @@ async function runAssessment() {
     const data = await res.json();
     state.assessmentData = data;
 
-    // Render Gate & Results
     renderEligibilityGate(data.eligibility);
     renderResultsScreen(data);
 
-    // Go to Gate View (Step 3) if called from form
     if (state.currentStep < 3) {
       goToStep(3);
     }
@@ -366,18 +406,18 @@ async function runAssessment() {
   }
 }
 
-// Render Screen 3 Eligibility Gate
+// Render Eligibility Gate
 function renderEligibilityGate(eligibility) {
   const passBox = document.getElementById('gate-pass-banner');
   const failBox = document.getElementById('gate-fail-banner');
 
   if (eligibility.status === 'pass') {
-    passBox.style.display = 'block';
+    passBox.style.display = 'flex';
     failBox.style.display = 'none';
     document.getElementById('gate-corp-name').textContent = eligibility.corporation;
   } else {
     passBox.style.display = 'none';
-    failBox.style.display = 'block';
+    failBox.style.display = 'flex';
     document.getElementById('gate-fail-reason').textContent = eligibility.explanation || 'Eligibility requirements not met.';
   }
 }
@@ -404,15 +444,13 @@ function renderDataTag(tagObj) {
   return `<span class="data-tag ${className}">${icon} ${label}${sourceText}</span>`;
 }
 
-// Render Screen 4 / 4b Results Dashboard
+// Render Results Dashboard
 function renderResultsScreen(data) {
   const financialCard = document.getElementById('financial-card-container');
   const financialSkippedCard = document.getElementById('financial-skipped-card');
-  const feasibilityCard = document.getElementById('feasibility-card-container');
 
   const { eligibility, financial, feasibility } = data;
 
-  // 1. Render Financial Card or Skipped Explanation Card
   if (eligibility.status === 'pass' && financial && !financial.error) {
     financialCard.style.display = 'block';
     financialSkippedCard.style.display = 'none';
@@ -433,7 +471,6 @@ function renderResultsScreen(data) {
     document.getElementById('res-tenure').textContent = `${financial.tenure_years} ${state.language === 'hi' ? 'वर्ष' : 'Years'} (${financial.moratorium_months}-${state.language === 'hi' ? 'महीने मोरेटोरियम' : 'Month Moratorium'})`;
     document.getElementById('res-tenure-tag').innerHTML = renderDataTag({ tag: 'Verified', source: financial.corporation });
 
-    // Affordability Flag
     const affBox = document.getElementById('affordability-gauge-box');
     if (financial.affordability_flag) {
       affBox.style.display = 'block';
@@ -448,7 +485,6 @@ function renderResultsScreen(data) {
       affBox.style.display = 'none';
     }
 
-    // EMI Schedule Table
     renderEmiTable(financial.emi_schedule);
   } else {
     financialCard.style.display = 'none';
@@ -456,13 +492,12 @@ function renderResultsScreen(data) {
     document.getElementById('skipped-reason-text').textContent = eligibility.explanation || 'Scheme eligibility criteria not met.';
   }
 
-  // 2. Render Feasibility Card
   if (feasibility) {
     const liveIndicator = feasibility.is_live_llm
-      ? `<span style="color:#10b981; font-size:0.75rem; float:right;">● Live API (${feasibility.latency_ms}ms)</span>`
-      : `<span style="color:#a8763e; font-size:0.75rem; float:right;">● Grounded Template</span>`;
+      ? `<span style="color:#15803d; font-size:0.75rem; font-weight:700;">● Live API (${feasibility.latency_ms}ms)</span>`
+      : `<span style="color:#c59b27; font-size:0.75rem; font-weight:700;">● Grounded Template</span>`;
 
-    document.getElementById('res-village-header').innerHTML = `${feasibility.village_name}, ${feasibility.block} Block (${feasibility.district}) ${liveIndicator}`;
+    document.getElementById('res-village-header').innerHTML = `${feasibility.village_name}, ${feasibility.block} Block (${feasibility.district}) &nbsp;|&nbsp; ${liveIndicator}`;
 
     document.getElementById('res-pop-val').textContent = feasibility.market_reach.value ? Number(feasibility.market_reach.value).toLocaleString('en-IN') : 'N/A';
     document.getElementById('res-pop-tag').innerHTML = renderDataTag(feasibility.market_reach);
@@ -473,19 +508,16 @@ function renderResultsScreen(data) {
     document.getElementById('res-est-val').textContent = feasibility.competitor_density.value ? feasibility.competitor_density.value : 'N/A';
     document.getElementById('res-est-tag').innerHTML = renderDataTag(feasibility.competitor_density);
 
-    // SWOT list
     const swotContainer = document.getElementById('res-swot-list');
     swotContainer.innerHTML = '';
     if (feasibility.swot) {
       feasibility.swot.forEach(item => {
         const li = document.createElement('li');
-        li.style.marginBottom = '0.6rem';
         li.innerHTML = `<strong>${item.type.toUpperCase()}:</strong> ${item.text} ${renderDataTag(item)}`;
         swotContainer.appendChild(li);
       });
     }
 
-    // Pricing Guidance
     if (feasibility.pricing_guidance) {
       document.getElementById('res-pricing-text').innerHTML = `${feasibility.pricing_guidance.text} ${renderDataTag(feasibility.pricing_guidance)}`;
     }
@@ -498,7 +530,6 @@ function renderEmiTable(schedule) {
   tbody.innerHTML = '';
   if (!schedule) return;
 
-  // Show sample 12 periods to avoid DOM overload
   schedule.slice(0, 12).forEach(row => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
