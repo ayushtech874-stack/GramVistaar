@@ -61,6 +61,10 @@
         <div class="step-num">4</div>
         <span class="step-label" data-i18n="stepResults">Advisory Plan</span>
       </div>
+      <div class="step-item" data-step="5">
+        <div class="step-num">5</div>
+        <span class="step-label" data-i18n="stepExport">Export Summary</span>
+      </div>
     </div>
   </nav>
 
@@ -239,7 +243,10 @@
           <h2 class="dashboard-title" data-i18n="dashTitle">Business Credit & Feasibility Plan</h2>
           <div class="dashboard-sub" id="res-village-header"></div>
         </div>
-        <button id="reset-new-assessment-btn" class="btn-secondary-sm">↺ New Assessment</button>
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="go-to-export-btn" class="btn-primary" data-i18n="exportBtn">📄 Export Bank Summary →</button>
+          <button id="reset-new-assessment-btn" class="btn-secondary-sm">↺ New Assessment</button>
+        </div>
       </div>
 
       <div class="results-grid">
@@ -377,6 +384,93 @@
           </div>
         </div>
 
+      </div>
+    </section>
+
+    <!-- View 5: Share / Export PDF Hand-Off -->
+    <section id="view-step-5" class="view-section">
+      <div class="export-actions-bar">
+        <button id="back-to-results-btn" class="btn-secondary">← Back to Results</button>
+        <button id="print-pdf-btn" class="btn-primary" style="background-color: var(--success); border-color: var(--success);">🖨️ Print / Save Bank Application PDF</button>
+      </div>
+
+      <div id="pdf-printable-document" class="printable-doc">
+        
+        <!-- Document Header -->
+        <div class="doc-header">
+          <div class="doc-brand">
+            <img src="logo.jpg" alt="Logo" class="doc-logo">
+            <div>
+              <div class="doc-title">GramVistaar</div>
+              <div class="doc-sub">State Channelizing Agency (SCA) & Bank Application Hand-off Summary</div>
+            </div>
+          </div>
+          <div class="doc-meta">
+            <div>Date: <strong id="pdf-date">2026-09-02</strong></div>
+            <div>Ref Code: <strong id="pdf-ref-code">GV-2026-8841</strong></div>
+          </div>
+        </div>
+
+        <!-- Section 1: Applicant Persona & Location -->
+        <div class="doc-section">
+          <div class="doc-section-title">1. APPLICANT & LOCATION DETAILS</div>
+          <div class="doc-grid-2">
+            <div><strong>Social Category:</strong> <span id="pdf-cat-status">Scheduled Castes (SC)</span></div>
+            <div><strong>Target Village:</strong> <span id="pdf-village-name">Ratwara Bindwara Deoria</span></div>
+            <div><strong>Block & District:</strong> <span id="pdf-block-dist">Aurai, Muzaffarpur (Bihar)</span></div>
+            <div><strong>Declared Annual Income:</strong> <span id="pdf-income">₹60,000 / year</span></div>
+          </div>
+        </div>
+
+        <!-- Section 2: Concessional Financial Plan -->
+        <div class="doc-section">
+          <div class="doc-section-title">2. CONCESSIONAL FINANCIAL PLAN SUMMARY</div>
+          <div class="doc-grid-2">
+            <div><strong>Project Cost Ceiling:</strong> <span id="pdf-project-cost">₹10,00,000</span> [Derived]</div>
+            <div><strong>Loan Eligibility (90%):</strong> <span id="pdf-loan-elig">₹9,00,000</span> [Derived]</div>
+            <div><strong>Matched Corporation:</strong> <span id="pdf-corp">NSFDC Term Loan Scheme</span> [Verified]</div>
+            <div><strong>Concessional Rate:</strong> <span id="pdf-rate">8.0% p.a.</span> [Verified]</div>
+            <div><strong>Tenure & Moratorium:</strong> <span id="pdf-tenure">7 Years (6-Month Moratorium)</span> [Verified]</div>
+            <div><strong>Monthly EMI:</strong> <span id="pdf-emi">₹14,818 / month</span></div>
+          </div>
+        </div>
+
+        <!-- Section 3: Village Feasibility Baseline -->
+        <div class="doc-section">
+          <div class="doc-section-title">3. VILLAGE FEASIBILITY & REVENUE BASELINE</div>
+          <div class="doc-grid-2">
+            <div><strong>Village Population:</strong> <span id="pdf-pop">22,386</span> [Verified, Census 2011]</div>
+            <div><strong>Households:</strong> <span id="pdf-hh">4,633</span> [Verified, Census 2011]</div>
+            <div><strong>Est. Setup Cost:</strong> <span id="pdf-setup-cost">₹80,000–₹1,50,000</span> [AI-Estimated]</div>
+            <div><strong>Est. Monthly Revenue:</strong> <span id="pdf-est-rev">₹32,000 / month</span> [Derived]</div>
+          </div>
+        </div>
+
+        <!-- Section 4: SCA / Bank Application Document Checklist -->
+        <div class="doc-section">
+          <div class="doc-section-title">4. MANDATORY DOCUMENT CHECKLIST FOR BANK APPLICATION</div>
+          <div class="checklist-grid">
+            <div class="checklist-item"><span class="checkbox">☐</span> 1. Aadhaar Card & PAN Card Copy (Self-Attested)</div>
+            <div class="checklist-item"><span class="checkbox">☐</span> 2. Caste / Social Category Certificate (SC/ST/OBC)</div>
+            <div class="checklist-item"><span class="checkbox">☐</span> 3. Bank Account Passbook (Aadhaar Seeded)</div>
+            <div class="checklist-item"><span class="checkbox">☐</span> 4. GramVistaar Business Setup & Feasibility Report</div>
+            <div class="checklist-item"><span class="checkbox">☐</span> 5. Domicile / Residence Certificate (State of Bihar)</div>
+            <div class="checklist-item"><span class="checkbox">☐</span> 6. Affidavit of No Prior Scheme Default</div>
+          </div>
+        </div>
+
+        <!-- Section 5: Why This Scheme Note for Bank Officer -->
+        <div class="doc-section note-box">
+          <div class="doc-section-title" style="color: var(--primary-dark);">5. ADVISORY NOTE FOR BANK / SCA OFFICER</div>
+          <p class="note-text" id="pdf-why-scheme-text">
+            This proposal has been pre-screened against Census 2011 village demographics and concessional scheme limits under NSFDC. The applicant's ₹1,00,000 margin contribution supports a ₹10,00,000 project ceiling. The 6-month moratorium allows initial revenue stabilization before full EMI servicing begins.
+          </p>
+        </div>
+
+        <!-- Document Footer -->
+        <div class="doc-footer">
+          GramVistaar Auto-Generated Summary · Verified Census 2011 Data · Concessional Scheme Rules Tagged
+        </div>
       </div>
     </section>
 

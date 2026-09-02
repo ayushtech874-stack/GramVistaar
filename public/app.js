@@ -2,12 +2,12 @@
  * GramVistaar Frontend App - SIH26091 / Official Banking Advisory Portal
  * Single Page Application (SPA) with 5-Screen guided flow,
  * 202-village searchable type-ahead dropdown, 4-tier data tags,
- * English & Hindi translation support, and complete New Assessment reset navigation.
+ * English & Hindi translation support, and Screen 5 PDF Export summary hand-off.
  */
 
 // Application State
 const state = {
-  currentStep: 0, // 0: Home, 2: Input, 3: Gate, 4: Results
+  currentStep: 0, // 0: Home, 2: Input, 3: Gate, 4: Results, 5: Export
   language: 'en',
   villagesList: [],
   filteredVillages: [],
@@ -30,6 +30,7 @@ const translations = {
     stepInput: "Details & Location",
     stepGate: "Eligibility Gate",
     stepResults: "Advisory Plan",
+    stepExport: "Export Summary",
     heroTitle: "Structured Credit Planning & Village Feasibility for Rural Entrepreneurs",
     heroSub: "Evaluate enterprise feasibility against Census 2011 village metrics and calculate moratorium-aware scheme credit limits before applying.",
     heroCta: "Start Business Assessment →",
@@ -84,7 +85,8 @@ const translations = {
     reachLabel: "Pricing & Monthly Revenue Guidance",
     swotHeader: "SWOT & Business Opportunity Analysis",
     skippedTitle: "CREDIT PLAN GATED",
-    skippedSub: "Loan calculations are hidden when eligibility requirements are unmet to avoid presenting unsupportable credit terms. Village feasibility insights are shown on the right."
+    skippedSub: "Loan calculations are hidden when eligibility requirements are unmet to avoid presenting unsupportable credit terms. Village feasibility insights are shown on the right.",
+    exportBtn: "📄 Export Bank Summary →"
   },
   hi: {
     brandTitle: "ग्राम विस्तार",
@@ -93,6 +95,7 @@ const translations = {
     stepInput: "विवरण एवं स्थान",
     stepGate: "पात्रता जाँच",
     stepResults: "सलाहकार योजना",
+    stepExport: "निर्यात सारांश",
     heroTitle: "ग्रामीण उद्यमियों के लिए संरचित ऋण योजना एवं गाँव व्यवहार्यता",
     heroSub: "आवेदन करने से पहले 2011 जनगणना गाँव डेटा के विरुद्ध व्यवहार्यता जांचें और रियायती ऋण सीमा की गणना करें।",
     heroCta: "उद्यम मूल्यांकन शुरू करें →",
@@ -147,7 +150,8 @@ const translations = {
     reachLabel: "मूल्य निर्धारण एवं मासिक राजस्व मार्गदर्शन",
     swotHeader: "स्वाट एवं व्यवसाय अवसर विश्लेषण",
     skippedTitle: "ऋण योजना रोकी गई",
-    skippedSub: "पात्रता मापदंड अपूर्ण होने पर अमान्य आंकड़ों से बचने के लिए ऋण गणना छिपाई गई है। गाँव की व्यवहार्यता दाईं ओर दिखाई गई है।"
+    skippedSub: "पात्रता मापदंड अपूर्ण होने पर अमान्य आंकड़ों से बचने के लिए ऋण गणना छिपाई गई है। गाँव की व्यवहार्यता दाईं ओर दिखाई गई है।",
+    exportBtn: "📄 बैंक सारांश निर्यात करें →"
   }
 };
 
@@ -253,6 +257,22 @@ function initEvents() {
   // Dashboard "New Assessment" button
   document.getElementById('reset-new-assessment-btn').addEventListener('click', () => {
     resetAssessmentState();
+  });
+
+  // Export Summary Button (Screen 4 -> Screen 5)
+  document.getElementById('go-to-export-btn').addEventListener('click', () => {
+    renderExportDocument();
+    goToStep(5);
+  });
+
+  // Back to Results Button (Screen 5 -> Screen 4)
+  document.getElementById('back-to-results-btn').addEventListener('click', () => {
+    goToStep(4);
+  });
+
+  // Print PDF Button
+  document.getElementById('print-pdf-btn').addEventListener('click', () => {
+    window.print();
   });
 
   // Language Toggle
@@ -521,6 +541,43 @@ function renderResultsScreen(data) {
     if (feasibility.pricing_guidance) {
       document.getElementById('res-pricing-text').innerHTML = `${feasibility.pricing_guidance.text} ${renderDataTag(feasibility.pricing_guidance)}`;
     }
+  }
+}
+
+// Render Screen 5 Printable PDF Document
+function renderExportDocument() {
+  if (!state.assessmentData) return;
+
+  const { eligibility, financial, feasibility } = state.assessmentData;
+  const today = new Date().toISOString().split('T')[0];
+  const refCode = 'GV-2026-' + Math.floor(1000 + Math.random() * 9000);
+
+  document.getElementById('pdf-date').textContent = today;
+  document.getElementById('pdf-ref-code').textContent = refCode;
+
+  // Applicant
+  const catSel = document.getElementById('category-status');
+  document.getElementById('pdf-cat-status').textContent = catSel.options[catSel.selectedIndex].text;
+  document.getElementById('pdf-income').textContent = formatINR(document.getElementById('income-input').value) + ' / year';
+
+  if (feasibility) {
+    document.getElementById('pdf-village-name').textContent = feasibility.village_name;
+    document.getElementById('pdf-block-dist').textContent = `${feasibility.block} Block, ${feasibility.district} District (${feasibility.state})`;
+    document.getElementById('pdf-pop').textContent = feasibility.market_reach.value ? Number(feasibility.market_reach.value).toLocaleString('en-IN') : 'N/A';
+    document.getElementById('pdf-hh').textContent = feasibility.households.value ? Number(feasibility.households.value).toLocaleString('en-IN') : 'N/A';
+    document.getElementById('pdf-est-rev').textContent = formatINR(feasibility.pricing_guidance?.estimated_monthly_revenue || 32000) + ' / month';
+  }
+
+  if (financial && !financial.error) {
+    document.getElementById('pdf-project-cost').textContent = formatINR(financial.project_cost);
+    document.getElementById('pdf-loan-elig').textContent = formatINR(financial.loan_eligibility);
+    document.getElementById('pdf-corp').textContent = `${financial.corporation} ${financial.scheme_name}`;
+    document.getElementById('pdf-rate').textContent = `${(financial.interest_rate * 100).toFixed(1)}% p.a.`;
+    document.getElementById('pdf-tenure').textContent = `${financial.tenure_years} Years (${financial.moratorium_months}-Month Moratorium)`;
+    document.getElementById('pdf-emi').textContent = formatINR(financial.monthly_emi) + ' / month';
+
+    document.getElementById('pdf-why-scheme-text').textContent = 
+      `This proposal has been pre-screened against Census 2011 village demographics and concessional credit terms under ${financial.corporation}. The applicant's ${formatINR(financial.available_capital)} margin contribution supports a ${formatINR(financial.project_cost)} project ceiling. The ${financial.moratorium_months}-month moratorium allows initial business setup and revenue stabilization before full EMI servicing begins.`;
   }
 }
 
