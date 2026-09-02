@@ -76,8 +76,8 @@ const translations = {
     popLabel: "Village Population",
     hhLabel: "Households",
     estLabel: "Nearby Establishment Density",
-    reachLabel: "Pricing & Revenue Guidance (Deterministic Template)",
-    swotHeader: "SWOT & Opportunity Analysis (Deterministic Template)",
+    reachLabel: "Pricing & Revenue Guidance",
+    swotHeader: "SWOT & Opportunity Analysis",
     skippedTitle: "FINANCIAL PLAN SKIPPED",
     skippedSub: "Per SIH26091 design guidelines (decisions.md D4), loan figures are gated behind eligibility to avoid showing unsupportable borrowing numbers. Your local business feasibility report is shown on the right.",
     exportBtn: "Download Bank-Ready Summary (PDF) →"
@@ -135,8 +135,8 @@ const translations = {
     popLabel: "गाँव की जनसंख्या",
     hhLabel: "कुल घर (Households)",
     estLabel: "आस-पास व्यावसायिक घनत्व",
-    reachLabel: "मूल्य निर्धारण और राजस्व मार्गदर्शन (टैम्पलेट)",
-    swotHeader: "स्वाट और अवसर विश्लेषण (टैम्पलेट)",
+    reachLabel: "मूल्य निर्धारण और राजस्व मार्गदर्शन",
+    swotHeader: "स्वाट और अवसर विश्लेषण",
     skippedTitle: "वित्तीय योजना को छोड़ दिया गया",
     skippedSub: "निर्णय दिशानिर्देशों (decisions.md D4) के अनुसार, अमान्य ऋण आंकड़ों को दिखाने से बचने के लिए वित्तीय कार्ड को छिपाया गया है। स्थानीय व्यवहार्यता रिपोर्ट दाईं ओर दिखाई गई है।",
     exportBtn: "बैंक-रेडी सारांश (पीडीएफ) डाउनलोड करें →"
@@ -211,10 +211,15 @@ function renderLanguageText() {
 // Event Listeners
 function initEvents() {
   // Language Toggle
-  document.getElementById('lang-toggle-btn').addEventListener('click', () => {
+  document.getElementById('lang-toggle-btn').addEventListener('click', async () => {
     state.language = state.language === 'en' ? 'hi' : 'en';
     document.getElementById('lang-toggle-btn').textContent = state.language === 'en' ? 'हिंदी' : 'English';
     renderLanguageText();
+
+    // Re-run assessment to get Hindi narrative if assessment has run
+    if (state.assessmentData && state.selectedVillage) {
+      await runAssessment();
+    }
   });
 
   // Start Assessment Buttons
@@ -333,7 +338,8 @@ async function runAssessment() {
     prior_default: document.getElementById('prior-default-select').value === 'true',
     available_capital: Number(document.getElementById('capital-input').value) || 100000,
     village_id: state.selectedVillage.village_id,
-    business_category: state.selectedCategory
+    business_category: state.selectedCategory,
+    language: state.language
   };
 
   try {
@@ -350,8 +356,10 @@ async function runAssessment() {
     renderEligibilityGate(data.eligibility);
     renderResultsScreen(data);
 
-    // Go to Gate View (Step 3)
-    goToStep(3);
+    // Go to Gate View (Step 3) if called from form
+    if (state.currentStep < 3) {
+      goToStep(3);
+    }
   } catch (err) {
     console.error('Failed to run assessment:', err);
     alert('An error occurred while evaluating assessment. Please check API server.');
@@ -450,7 +458,11 @@ function renderResultsScreen(data) {
 
   // 2. Render Feasibility Card
   if (feasibility) {
-    document.getElementById('res-village-header').textContent = `${feasibility.village_name}, ${feasibility.block} Block (${feasibility.district})`;
+    const liveIndicator = feasibility.is_live_llm
+      ? `<span style="color:#10b981; font-size:0.75rem; float:right;">● Live API (${feasibility.latency_ms}ms)</span>`
+      : `<span style="color:#a8763e; font-size:0.75rem; float:right;">● Grounded Template</span>`;
+
+    document.getElementById('res-village-header').innerHTML = `${feasibility.village_name}, ${feasibility.block} Block (${feasibility.district}) ${liveIndicator}`;
 
     document.getElementById('res-pop-val').textContent = feasibility.market_reach.value ? Number(feasibility.market_reach.value).toLocaleString('en-IN') : 'N/A';
     document.getElementById('res-pop-tag').innerHTML = renderDataTag(feasibility.market_reach);

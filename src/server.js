@@ -79,7 +79,7 @@ app.post('/api/calculate', (req, res) => {
  */
 app.post('/api/feasibility', async (req, res) => {
   try {
-    const { village_id, category, available_capital } = req.body;
+    const { village_id, category, available_capital, language } = req.body;
     if (!village_id) {
       return res.status(400).json({ error: true, message: 'village_id is required', code: 'MISSING_PARAM' });
     }
@@ -89,7 +89,7 @@ app.post('/api/feasibility', async (req, res) => {
       return res.status(404).json(metrics);
     }
 
-    const feasibilityReport = await generateFeasibilityNarrative(metrics, category, available_capital || 100000);
+    const feasibilityReport = await generateFeasibilityNarrative(metrics, category, available_capital || 100000, language || 'en');
     return res.json(feasibilityReport);
   } catch (err) {
     return res.status(500).json({ error: true, message: err.message, code: 'SERVER_ERROR' });
@@ -109,7 +109,8 @@ app.post('/api/assess', async (req, res) => {
       prior_default,
       available_capital,
       village_id,
-      business_category
+      business_category,
+      language
     } = req.body;
 
     // 1. Eligibility Check
@@ -133,7 +134,12 @@ app.post('/api/assess', async (req, res) => {
     if (village_id) {
       const metrics = lookupLocalMetrics(village_id, business_category || category);
       if (!metrics.error) {
-        feasibilityResult = await generateFeasibilityNarrative(metrics, business_category || category, available_capital || 100000);
+        feasibilityResult = await generateFeasibilityNarrative(
+          metrics,
+          business_category || category,
+          available_capital || 100000,
+          language || 'en'
+        );
 
         // Dynamically compute Affordability Risk Flag using dynamic revenue from feasibility result
         if (financialResult && !financialResult.error && financialResult.monthly_emi) {
