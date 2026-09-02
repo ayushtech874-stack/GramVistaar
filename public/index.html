@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GramVistaar — SIH26091 AI-Driven Rural Advisory & Credit Structuring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-group">
+        <div class="logo-icon">G</div>
+        <div>
+          <div class="brand-title" data-i18n="brandTitle">GramVistaar</div>
+          <div class="brand-sub" data-i18n="brandSub">MoSJE · SIH26091 · Hyper-Local Advisory</div>
+        </div>
+      </div>
+      <button id="lang-toggle-btn" class="lang-btn">हिंदी</button>
+    </div>
+  </header>
+
+  <!-- Stepper Bar -->
+  <div class="stepper-bar">
+    <div class="stepper-container">
+      <div class="step-item active" data-step="0">
+        <div class="step-num">1</div>
+        <span>Home</span>
+      </div>
+      <div class="step-item" data-step="2">
+        <div class="step-num">2</div>
+        <span>Input Form</span>
+      </div>
+      <div class="step-item" data-step="3">
+        <div class="step-num">3</div>
+        <span>Eligibility</span>
+      </div>
+      <div class="step-item" data-step="4">
+        <div class="step-num">4</div>
+        <span>Results</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- View 0: Hero / Start Assessment -->
+    <section id="view-step-0" class="view-section active">
+      <div class="hero-card">
+        <div class="hero-eyebrow" data-i18n="heroEyebrow">Smart India Hackathon 2026</div>
+        <h1 class="hero-title" data-i18n="heroTitle">Check if your business idea works here, and how much you can borrow — before you apply.</h1>
+        <p class="hero-subtitle" data-i18n="heroSub">Zero anecdote business selection. Real village data, exact NSFDC credit limits, and moratorium-aware EMI structuring.</p>
+        <button id="hero-start-btn" class="btn-primary" data-i18n="heroCta">Start My Assessment →</button>
+        <div class="hero-trust-line" data-i18n="heroTrust">Uses official Census 2011, government scheme terms, and district data — every figure labeled by source.</div>
+      </div>
+    </section>
+
+    <!-- View 2: Form Input -->
+    <section id="view-step-2" class="view-section">
+      <form id="assessment-form">
+        <div class="card-panel">
+          <div class="panel-title" data-i18n="inputTitle">Enter Your Details & Location</div>
+          
+          <div class="form-grid">
+            <!-- Location: State & District -->
+            <div class="form-group">
+              <label data-i18n="districtLabel">District</label>
+              <select id="district-select">
+                <option value="Muzaffarpur">Muzaffarpur</option>
+                <option value="Gaya">Gaya</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="blockLabel">Block</label>
+              <select id="block-select">
+                <option value="Aurai">Aurai</option>
+                <option value="Sherghati">Sherghati</option>
+              </select>
+            </div>
+
+            <!-- Searchable Typeahead Village Selection -->
+            <div class="form-group full-width">
+              <label data-i18n="villageLabel">Village (Search over 202 villages)</label>
+              <div class="typeahead-wrapper">
+                <input type="text" id="village-search-input" placeholder="Type village name (e.g. Saghari, Ratwara, Khandail)..." autocomplete="off">
+                <div id="typeahead-results" class="typeahead-results"></div>
+              </div>
+            </div>
+
+            <!-- Capital Input -->
+            <div class="form-group full-width">
+              <label data-i18n="capitalLabel">Available Margin Capital (₹)</label>
+              <input type="number" id="capital-input" value="100000" min="5000" step="5000">
+              <span id="capital-lakh-help" style="font-size: 0.8rem; color: var(--muted); font-weight: 600;">(1.00 Lakhs)</span>
+            </div>
+
+            <!-- Business Category Cards -->
+            <div class="form-group full-width">
+              <label data-i18n="categoryLabel">Business Category</label>
+              <div class="category-cards">
+                <div class="cat-card selected" data-cat="dairy">
+                  <div class="cat-icon">🥛</div>
+                  <div class="cat-name">Dairy / Milk Unit</div>
+                </div>
+                <div class="cat-card" data-cat="retail">
+                  <div class="cat-icon">🏪</div>
+                  <div class="cat-name">Retail / Kirana</div>
+                </div>
+                <div class="cat-card" data-cat="textiles">
+                  <div class="cat-icon">🧵</div>
+                  <div class="cat-name">Textiles / Tailoring</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Eligibility Gate Fields -->
+            <div class="form-group">
+              <label data-i18n="scLabel">Category / Community</label>
+              <select id="category-status">
+                <option value="SC">Scheduled Castes (SC) — NSFDC</option>
+                <option value="OBC">Other Backward Classes (OBC) — NBCFDC</option>
+                <option value="ST">Scheduled Tribes (ST) — NSTFDC</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="incomeLabel">Annual Family Income (₹)</label>
+              <input type="number" id="income-input" value="60000" step="5000">
+              <span style="font-size: 0.78rem; color: var(--muted);" data-i18n="incomeHelp">NSFDC ceiling: ₹3,00,000/year</span>
+            </div>
+
+            <div class="form-group full-width">
+              <label data-i18n="defaultLabel">Prior Default under Govt Scheme?</label>
+              <select id="prior-default-select">
+                <option value="false" data-i18n="noDefault">No Default</option>
+                <option value="true" data-i18n="hasDefault">Yes, Has Default</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.75rem; text-align: right;">
+            <button type="submit" class="btn-primary" data-i18n="submitBtn">Check My Eligibility & Feasibility →</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- View 3: Eligibility Gate Result -->
+    <section id="view-step-3" class="view-section">
+      <!-- PASS Banner -->
+      <div id="gate-pass-banner" class="banner pass" style="display: none;">
+        <div class="banner-title" data-i18n="passTitle">Eligibility Gate PASSED</div>
+        <div class="banner-body">
+          <p><span data-i18n="passSub">You qualify for concessional credit under</span> <strong id="gate-corp-name">NSFDC</strong>.</p>
+          <div style="margin-top: 1rem;">
+            <button id="gate-continue-btn" class="btn-primary" data-i18n="viewPlanBtn">View Financial & Local Feasibility Plan →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAIL Banner -->
+      <div id="gate-fail-banner" class="banner fail" style="display: none;">
+        <div class="banner-title" data-i18n="failTitle">Eligibility Gate UNMET</div>
+        <div class="banner-body">
+          <p id="gate-fail-reason" style="margin-bottom: 0.75rem;"></p>
+          <button id="gate-feasibility-only-btn" class="btn-primary" style="background-color: var(--caution);" data-i18n="seeFeasibilityBtn">See Local Business Feasibility Report Anyway →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- View 4 / 4b: Results Dashboard -->
+    <section id="view-step-4" class="view-section">
+      <div class="results-grid">
+        
+        <!-- LEFT: Financial Card -->
+        <div id="financial-card-container" class="card-panel" style="display: block;">
+          <div class="panel-title" data-i18n="financialTitle">YOUR FINANCIAL PLAN</div>
+
+          <div class="metric-row">
+            <span class="metric-label" data-i18n="projectCostLabel">Project Cost Ceiling</span>
+            <span id="res-project-cost" class="metric-val">₹0</span>
+          </div>
+
+          <div class="metric-row">
+            <span class="metric-label" data-i18n="loanEligibleLabel">Loan Eligibility (90%)</span>
+            <span id="res-loan-eligibility" class="metric-val">₹0</span>
+          </div>
+
+          <div class="metric-row">
+            <span class="metric-label" data-i18n="matchedSchemeLabel">Matched Scheme</span>
+            <span id="res-scheme-name" class="metric-val">NSFDC Term Loan</span>
+          </div>
+
+          <div class="metric-row">
+            <span class="metric-label" data-i18n="interestLabel">Interest Rate</span>
+            <span class="metric-val">
+              <span id="res-interest-rate">8.0% p.a.</span>
+              <span id="res-interest-tag"></span>
+            </span>
+          </div>
+
+          <div class="metric-row">
+            <span class="metric-label" data-i18n="tenureLabel">Tenure & Moratorium</span>
+            <span id="res-tenure" class="metric-val">7 Years (6-Month Moratorium)</span>
+          </div>
+
+          <!-- Affordability Risk Flag -->
+          <div id="affordability-gauge-box" class="affordability-box" style="display: none;">
+            <div class="affordability-header">
+              <span class="affordability-title" data-i18n="affordabilityTitle">EMI Affordability Risk Flag</span>
+            </div>
+            <div class="affordability-bar-bg">
+              <div id="aff-bar-fill" class="affordability-bar-fill green" style="width: 45%;"></div>
+            </div>
+            <div id="aff-flag-text" style="font-weight: 700; font-size: 0.9rem;">Moderate risk</div>
+            <div id="aff-explanation" style="font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem;"></div>
+          </div>
+
+          <!-- Expandable EMI Table -->
+          <div class="table-responsive">
+            <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem;" data-i18n="viewEmiBtn">84-Month EMI Schedule Preview</div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Period</th>
+                  <th>EMI</th>
+                  <th>Interest</th>
+                  <th>Principal</th>
+                  <th>Balance</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody id="emi-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- LEFT (Skipped Explanation Card if Eligibility Failed) -->
+        <div id="financial-skipped-card" class="card-panel" style="display: none; background: #faf5ef; border-left: 4px solid var(--caution);">
+          <div class="panel-title" style="color: var(--caution);">FINANCIAL PLAN SKIPPED</div>
+          <p style="font-size: 0.9rem; margin-bottom: 0.75rem;" id="skipped-reason-text">Eligibility requirements not met.</p>
+          <p style="font-size: 0.85rem; color: var(--muted);">Per SIH26091 design guidelines (decisions.md D4), loan figures are gated behind eligibility to avoid showing unsupportable borrowing numbers. Your local business feasibility report is shown on the right.</p>
+        </div>
+
+        <!-- RIGHT: Feasibility Card -->
+        <div id="feasibility-card-container" class="card-panel">
+          <div class="panel-title" data-i18n="feasibilityTitle">YOUR LOCAL BUSINESS SNAPSHOT</div>
+          <div id="res-village-header" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--gold); margin-bottom: 1rem; font-weight: 700;"></div>
+
+          <div class="metric-row">
+            <span class="metric-label" data-i18n="popLabel">Village Population</span>
+            <span class="metric-val">
+              <span id="res-pop-val">3,026</span>
+              <span id="res-pop-tag"></span>
+            </span>
+          </div>
+
+          <div class="metric-row">
+            <span class="metric-label" data-i18n="hhLabel">Households</span>
+            <span class="metric-val">
+              <span id="res-hh-val">585</span>
+              <span id="res-hh-tag"></span>
+            </span>
+          </div>
+
+          <div class="metric-row">
+            <span class="metric-label" data-i18n="estLabel">Nearby Establishment Density</span>
+            <span class="metric-val">
+              <span id="res-est-val">N/A</span>
+              <span id="res-est-tag"></span>
+            </span>
+          </div>
+
+          <!-- SWOT List -->
+          <div style="margin-top: 1.25rem;">
+            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;">SWOT & Opportunity Analysis</div>
+            <ul id="res-swot-list" style="list-style: none; padding-left: 0; font-size: 0.88rem;"></ul>
+          </div>
+
+          <!-- Pricing Guidance -->
+          <div style="margin-top: 1.25rem; background: var(--accent-soft); padding: 1rem; border-radius: 6px;">
+            <div style="font-weight: 700; font-size: 0.85rem; color: var(--accent);" data-i18n="reachLabel">Pricing & Revenue Guidance</div>
+            <p id="res-pricing-text" style="font-size: 0.85rem; margin-top: 0.35rem; margin-bottom: 0;"></p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    GramVistaar — Smart India Hackathon 2026 · Ministry of Social Justice & Empowerment (MoSJE) · Code & Data Verified
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
