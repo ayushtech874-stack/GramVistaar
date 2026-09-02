@@ -30,19 +30,19 @@
     <div class="stepper-container">
       <div class="step-item active" data-step="0">
         <div class="step-num">1</div>
-        <span>Home</span>
+        <span data-i18n="stepHome">Home</span>
       </div>
       <div class="step-item" data-step="2">
         <div class="step-num">2</div>
-        <span>Input Form</span>
+        <span data-i18n="stepInput">Input Form</span>
       </div>
       <div class="step-item" data-step="3">
         <div class="step-num">3</div>
-        <span>Eligibility</span>
+        <span data-i18n="stepGate">Eligibility</span>
       </div>
       <div class="step-item" data-step="4">
         <div class="step-num">4</div>
-        <span>Results</span>
+        <span data-i18n="stepResults">Results</span>
       </div>
     </div>
   </div>
@@ -107,15 +107,15 @@
               <div class="category-cards">
                 <div class="cat-card selected" data-cat="dairy">
                   <div class="cat-icon">🥛</div>
-                  <div class="cat-name">Dairy / Milk Unit</div>
+                  <div class="cat-name" data-i18n="catDairy">Dairy / Milk Unit</div>
                 </div>
                 <div class="cat-card" data-cat="retail">
                   <div class="cat-icon">🏪</div>
-                  <div class="cat-name">Retail / Kirana</div>
+                  <div class="cat-name" data-i18n="catRetail">Retail / Kirana</div>
                 </div>
                 <div class="cat-card" data-cat="textiles">
                   <div class="cat-icon">🧵</div>
-                  <div class="cat-name">Textiles / Tailoring</div>
+                  <div class="cat-name" data-i18n="catTextiles">Textiles / Tailoring</div>
                 </div>
               </div>
             </div>
@@ -185,17 +185,26 @@
 
           <div class="metric-row">
             <span class="metric-label" data-i18n="projectCostLabel">Project Cost Ceiling</span>
-            <span id="res-project-cost" class="metric-val">₹0</span>
+            <span class="metric-val">
+              <span id="res-project-cost">₹0</span>
+              <span id="res-project-cost-tag"></span>
+            </span>
           </div>
 
           <div class="metric-row">
             <span class="metric-label" data-i18n="loanEligibleLabel">Loan Eligibility (90%)</span>
-            <span id="res-loan-eligibility" class="metric-val">₹0</span>
+            <span class="metric-val">
+              <span id="res-loan-eligibility">₹0</span>
+              <span id="res-loan-eligibility-tag"></span>
+            </span>
           </div>
 
           <div class="metric-row">
             <span class="metric-label" data-i18n="matchedSchemeLabel">Matched Scheme</span>
-            <span id="res-scheme-name" class="metric-val">NSFDC Term Loan</span>
+            <span class="metric-val">
+              <span id="res-scheme-name">NSFDC Term Loan</span>
+              <span id="res-scheme-tag"></span>
+            </span>
           </div>
 
           <div class="metric-row">
@@ -208,7 +217,10 @@
 
           <div class="metric-row">
             <span class="metric-label" data-i18n="tenureLabel">Tenure & Moratorium</span>
-            <span id="res-tenure" class="metric-val">7 Years (6-Month Moratorium)</span>
+            <span class="metric-val">
+              <span id="res-tenure">7 Years (6-Month Moratorium)</span>
+              <span id="res-tenure-tag"></span>
+            </span>
           </div>
 
           <!-- Affordability Risk Flag -->
@@ -229,12 +241,12 @@
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Period</th>
-                  <th>EMI</th>
-                  <th>Interest</th>
-                  <th>Principal</th>
-                  <th>Balance</th>
-                  <th>Note</th>
+                  <th data-i18n="thPeriod">Period</th>
+                  <th data-i18n="thEmi">EMI</th>
+                  <th data-i18n="thInterest">Interest</th>
+                  <th data-i18n="thPrincipal">Principal</th>
+                  <th data-i18n="thBalance">Balance</th>
+                  <th data-i18n="thNote">Note</th>
                 </tr>
               </thead>
               <tbody id="emi-table-body"></tbody>
@@ -244,9 +256,9 @@
 
         <!-- LEFT (Skipped Explanation Card if Eligibility Failed) -->
         <div id="financial-skipped-card" class="card-panel" style="display: none; background: #faf5ef; border-left: 4px solid var(--caution);">
-          <div class="panel-title" style="color: var(--caution);">FINANCIAL PLAN SKIPPED</div>
+          <div class="panel-title" style="color: var(--caution);" data-i18n="skippedTitle">FINANCIAL PLAN SKIPPED</div>
           <p style="font-size: 0.9rem; margin-bottom: 0.75rem;" id="skipped-reason-text">Eligibility requirements not met.</p>
-          <p style="font-size: 0.85rem; color: var(--muted);">Per SIH26091 design guidelines (decisions.md D4), loan figures are gated behind eligibility to avoid showing unsupportable borrowing numbers. Your local business feasibility report is shown on the right.</p>
+          <p style="font-size: 0.85rem; color: var(--muted);" data-i18n="skippedSub">Per SIH26091 design guidelines (decisions.md D4), loan figures are gated behind eligibility to avoid showing unsupportable borrowing numbers. Your local business feasibility report is shown on the right.</p>
         </div>
 
         <!-- RIGHT: Feasibility Card -->
@@ -280,13 +292,13 @@
 
           <!-- SWOT List -->
           <div style="margin-top: 1.25rem;">
-            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;">SWOT & Opportunity Analysis</div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;" data-i18n="swotHeader">SWOT & Opportunity Analysis (Placeholder Template)</div>
             <ul id="res-swot-list" style="list-style: none; padding-left: 0; font-size: 0.88rem;"></ul>
           </div>
 
           <!-- Pricing Guidance -->
           <div style="margin-top: 1.25rem; background: var(--accent-soft); padding: 1rem; border-radius: 6px;">
-            <div style="font-weight: 700; font-size: 0.85rem; color: var(--accent);" data-i18n="reachLabel">Pricing & Revenue Guidance</div>
+            <div style="font-weight: 700; font-size: 0.85rem; color: var(--accent);" data-i18n="reachLabel">Pricing & Revenue Guidance (Placeholder Template)</div>
             <p id="res-pricing-text" style="font-size: 0.85rem; margin-top: 0.35rem; margin-bottom: 0;"></p>
           </div>
         </div>

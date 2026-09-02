@@ -2,7 +2,7 @@
  * GramVistaar Frontend App - SIH26091
  * Single Page Application (SPA) with 5-Screen guided flow,
  * 202-village searchable type-ahead dropdown, 4-tier data tags,
- * and eligibility gate / assessment rendering.
+ * full English & Hindi translation support, and eligibility gate rendering.
  */
 
 // Application State
@@ -21,11 +21,15 @@ const state = {
   assessmentData: null
 };
 
-// Language Dictionary
+// Language Dictionary (English & Hindi)
 const translations = {
   en: {
     brandTitle: "GramVistaar",
     brandSub: "MoSJE · SIH26091 · Hyper-Local Advisory",
+    stepHome: "Home",
+    stepInput: "Input Form",
+    stepGate: "Eligibility",
+    stepResults: "Results",
     heroEyebrow: "Smart India Hackathon 2026",
     heroTitle: "Check if your business idea works here, and how much you can borrow — before you apply.",
     heroSub: "Zero anecdote business selection. Real village data, exact NSFDC credit limits, and moratorium-aware EMI structuring.",
@@ -39,6 +43,9 @@ const translations = {
     capitalLabel: "Available Margin Capital (₹)",
     capitalHelp: "Your 10% contribution",
     categoryLabel: "Business Category",
+    catDairy: "Dairy / Milk Unit",
+    catRetail: "Retail / Kirana",
+    catTextiles: "Textiles / Tailoring",
     scLabel: "Category / Community",
     incomeLabel: "Annual Family Income (₹)",
     incomeHelp: "NSFDC ceiling: ₹3,00,000/year",
@@ -47,7 +54,7 @@ const translations = {
     hasDefault: "Yes, Has Default",
     submitBtn: "Check My Eligibility & Feasibility →",
     passTitle: "Eligibility Gate PASSED",
-    passSub: "You qualify for concessional credit under NSFDC.",
+    passSub: "You qualify for concessional credit under",
     failTitle: "Eligibility Gate UNMET",
     seeFeasibilityBtn: "See Local Business Feasibility Report Anyway →",
     viewPlanBtn: "View Financial & Local Feasibility Plan →",
@@ -59,19 +66,32 @@ const translations = {
     interestLabel: "Interest Rate",
     tenureLabel: "Tenure & Moratorium",
     affordabilityTitle: "EMI Affordability Risk Flag",
-    viewEmiBtn: "View 84-Month EMI Schedule",
+    viewEmiBtn: "84-Month EMI Schedule Preview",
+    thPeriod: "Period",
+    thEmi: "EMI",
+    thInterest: "Interest",
+    thPrincipal: "Principal",
+    thBalance: "Balance",
+    thNote: "Note",
     popLabel: "Village Population",
     hhLabel: "Households",
     estLabel: "Nearby Establishment Density",
-    reachLabel: "Market Reach Estimate",
+    reachLabel: "Pricing & Revenue Guidance (Deterministic Template)",
+    swotHeader: "SWOT & Opportunity Analysis (Deterministic Template)",
+    skippedTitle: "FINANCIAL PLAN SKIPPED",
+    skippedSub: "Per SIH26091 design guidelines (decisions.md D4), loan figures are gated behind eligibility to avoid showing unsupportable borrowing numbers. Your local business feasibility report is shown on the right.",
     exportBtn: "Download Bank-Ready Summary (PDF) →"
   },
   hi: {
     brandTitle: "ग्राम विस्तार",
     brandSub: "सामाजिक न्याय और अधिकारिता मंत्रालय · एसआईएच 26091",
+    stepHome: "मुख्य पृष्ठ",
+    stepInput: "इनपुट फॉर्म",
+    stepGate: "पात्रता जाँच",
+    stepResults: "मूल्यांकन परिणाम",
     heroEyebrow: "स्मार्ट इंडिया हैकाथॉन 2026",
     heroTitle: "आवेदन करने से पहले जानें कि क्या आपका व्यवसाय गाँव में चलेगा और कितना ऋण मिलेगा।",
-    heroSub: "वास्तविक जनगणना डेटा, सटीक एनएसएफडीसी ऋण सीमा और ईएमआई संरचना।",
+    heroSub: "वास्तविक 2011 जनगणना डेटा, सटीक एनएसएफडीसी ऋण सीमा और ईएमआई संरचना।",
     heroCta: "अपना मूल्यांकन शुरू करें →",
     heroTrust: "आधिकारिक 2011 जनगणना और सरकारी योजना नियमों पर आधारित — हर डेटा स्रोत के साथ।",
     inputTitle: "अपना विवरण और स्थान दर्ज करें",
@@ -82,6 +102,9 @@ const translations = {
     capitalLabel: "उपलब्ध पूंजी (₹)",
     capitalHelp: "आपका 10% अंशदान",
     categoryLabel: "व्यवसाय श्रेणी",
+    catDairy: "डेयरी / दुग्ध इकाई",
+    catRetail: "किराना / रिटेल स्टोर",
+    catTextiles: "कपड़ा / सिलाई केंद्र",
     scLabel: "सामाजिक श्रेणी",
     incomeLabel: "वार्षिक पारिवारिक आय (₹)",
     incomeHelp: "एनएसएफडीसी सीमा: ₹3,00,000/वर्ष",
@@ -90,7 +113,7 @@ const translations = {
     hasDefault: "हाँ, डिफ़ॉल्ट हुआ है",
     submitBtn: "मेरी पात्रता और व्यवहार्यता जांचें →",
     passTitle: "पात्रता जाँच उत्तीर्ण (PASSED)",
-    passSub: "आप एनएसएफडीसी के तहत रियायती ऋण के लिए पात्र हैं।",
+    passSub: "आप इसके तहत रियायती ऋण के लिए पात्र हैं:",
     failTitle: "पात्रता मापदंड अपूर्ण (UNMET)",
     seeFeasibilityBtn: "फिर भी स्थानीय व्यवसाय व्यवहार्यता रिपोर्ट देखें →",
     viewPlanBtn: "वित्तीय और स्थानीय व्यवहार्यता योजना देखें →",
@@ -102,14 +125,31 @@ const translations = {
     interestLabel: "ब्याज दर",
     tenureLabel: "अवधि और मोरेटोरियम",
     affordabilityTitle: "ईएमआई वहन क्षमता जोखिम संकेतक",
-    viewEmiBtn: "84-महीने का ईएमआई शेड्यूल देखें",
+    viewEmiBtn: "84-महीने का ईएमआई शेड्यूल पूर्वावलोकन",
+    thPeriod: "महीना",
+    thEmi: "ईएमआई",
+    thInterest: "ब्याज",
+    thPrincipal: "मूलधन",
+    thBalance: "शेष राशि",
+    thNote: "विवरण",
     popLabel: "गाँव की जनसंख्या",
     hhLabel: "कुल घर (Households)",
     estLabel: "आस-पास व्यावसायिक घनत्व",
-    reachLabel: "बाजार पहुँच अनुमान",
+    reachLabel: "मूल्य निर्धारण और राजस्व मार्गदर्शन (टैम्पलेट)",
+    swotHeader: "स्वाट और अवसर विश्लेषण (टैम्पलेट)",
+    skippedTitle: "वित्तीय योजना को छोड़ दिया गया",
+    skippedSub: "निर्णय दिशानिर्देशों (decisions.md D4) के अनुसार, अमान्य ऋण आंकड़ों को दिखाने से बचने के लिए वित्तीय कार्ड को छिपाया गया है। स्थानीय व्यवहार्यता रिपोर्ट दाईं ओर दिखाई गई है।",
     exportBtn: "बैंक-रेडी सारांश (पीडीएफ) डाउनलोड करें →"
   }
 };
+
+// Dynamic Scheme Name Translator
+function getLocalizedSchemeName(schemeName, lang) {
+  if (lang === 'hi') {
+    return schemeName.replace('Term Loan Scheme', 'टर्म लोन योजना').replace('Micro Finance Scheme', 'माइक्रो फाइनेंस योजना');
+  }
+  return schemeName;
+}
 
 // Helper: Format Numbers in Lakhs / Indian Currency
 function formatINR(val) {
@@ -120,7 +160,7 @@ function formatINR(val) {
 function formatLakhHelper(val) {
   if (!val || isNaN(val)) return '';
   const lakhs = (val / 100000).toFixed(2);
-  return `(${lakhs} Lakhs)`;
+  return `(${lakhs} Lakhs / लाख)`;
 }
 
 // DOM Elements Initialization
@@ -138,7 +178,6 @@ async function fetchVillages() {
     if (data && data.villages) {
       state.villagesList = data.villages;
       state.filteredVillages = data.villages;
-      // Pre-select first village as default
       if (data.villages.length > 0) {
         state.selectedVillage = data.villages[0];
       }
@@ -160,6 +199,12 @@ function renderLanguageText() {
   const searchInput = document.getElementById('village-search-input');
   if (searchInput) {
     searchInput.placeholder = t.villagePlaceholder;
+  }
+
+  // Re-render assessment results if present
+  if (state.assessmentData) {
+    renderEligibilityGate(state.assessmentData.eligibility);
+    renderResultsScreen(state.assessmentData);
   }
 }
 
@@ -365,11 +410,20 @@ function renderResultsScreen(data) {
     financialSkippedCard.style.display = 'none';
 
     document.getElementById('res-project-cost').textContent = formatINR(financial.project_cost);
+    document.getElementById('res-project-cost-tag').innerHTML = renderDataTag({ tag: 'Derived', source: 'Capital / 0.10' });
+
     document.getElementById('res-loan-eligibility').textContent = formatINR(financial.loan_eligibility);
-    document.getElementById('res-scheme-name').textContent = `${financial.corporation} ${financial.scheme_name}`;
+    document.getElementById('res-loan-eligibility-tag').innerHTML = renderDataTag({ tag: 'Derived', source: '90% of Project Cost' });
+
+    const schemeNameDisplay = getLocalizedSchemeName(`${financial.corporation} ${financial.scheme_name}`, state.language);
+    document.getElementById('res-scheme-name').textContent = schemeNameDisplay;
+    document.getElementById('res-scheme-tag').innerHTML = renderDataTag(financial.interest_rate_tag);
+
     document.getElementById('res-interest-rate').textContent = `${(financial.interest_rate * 100).toFixed(1)}% p.a.`;
     document.getElementById('res-interest-tag').innerHTML = renderDataTag(financial.interest_rate_tag);
-    document.getElementById('res-tenure').textContent = `${financial.tenure_years} Years (${financial.moratorium_months}-Month Moratorium)`;
+
+    document.getElementById('res-tenure').textContent = `${financial.tenure_years} ${state.language === 'hi' ? 'वर्ष' : 'Years'} (${financial.moratorium_months}-${state.language === 'hi' ? 'महीने मोरेटोरियम' : 'Month Moratorium'})`;
+    document.getElementById('res-tenure-tag').innerHTML = renderDataTag({ tag: 'Verified', source: financial.corporation });
 
     // Affordability Flag
     const affBox = document.getElementById('affordability-gauge-box');
@@ -397,7 +451,7 @@ function renderResultsScreen(data) {
   // 2. Render Feasibility Card
   if (feasibility) {
     document.getElementById('res-village-header').textContent = `${feasibility.village_name}, ${feasibility.block} Block (${feasibility.district})`;
-    
+
     document.getElementById('res-pop-val').textContent = feasibility.market_reach.value ? Number(feasibility.market_reach.value).toLocaleString('en-IN') : 'N/A';
     document.getElementById('res-pop-tag').innerHTML = renderDataTag(feasibility.market_reach);
 
@@ -436,7 +490,7 @@ function renderEmiTable(schedule) {
   schedule.slice(0, 12).forEach(row => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>Month ${row.period}</td>
+      <td>${state.language === 'hi' ? 'महीना' : 'Month'} ${row.period}</td>
       <td>${formatINR(row.emi)}</td>
       <td>${formatINR(row.interest_payment)}</td>
       <td>${formatINR(row.principal_payment)}</td>
