@@ -1,19 +1,30 @@
 /**
  * Local-Metrics Module - SIH26091 (GramVistaar)
- * Pure deterministic local village data lookup with strict 4-tier provenance tagging
- * and strict null -> Insufficient Data enforcement (rules.md R2).
+ * Pure deterministic local village data lookup with strict 4-tier provenance tagging,
+ * memory caching for Vercel serverless deployment, and strict null -> Insufficient Data enforcement (rules.md R2).
  */
 
 import fs from 'fs';
 import path from 'path';
 
+let inMemoryVillageMetrics = null;
+
 /**
- * Load default village metrics from JSON file if not provided
+ * Load default village metrics from JSON file with memory caching for serverless lambdas
  */
 export function loadVillageMetrics(filePath) {
+  if (inMemoryVillageMetrics && !filePath) {
+    return inMemoryVillageMetrics;
+  }
+
   const resolvedPath = filePath || path.join(process.cwd(), 'data', 'village_metrics.json');
   const rawData = fs.readFileSync(resolvedPath, 'utf8');
-  return JSON.parse(rawData);
+  const parsed = JSON.parse(rawData);
+
+  if (!filePath) {
+    inMemoryVillageMetrics = parsed;
+  }
+  return parsed;
 }
 
 /**
