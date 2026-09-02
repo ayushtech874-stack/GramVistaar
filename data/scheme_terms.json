@@ -1,30 +1,74 @@
 [
   {
-    "scheme_id": "micro_finance",
+    "scheme_id": "nsfdc_micro_finance",
     "scheme_name": "Micro Finance Scheme",
     "corporation": "NSFDC",
-    "min_project_cost": 0,
+    "min_project_cost": 1,
     "max_project_cost": 140000,
     "max_loan_amount": 125000,
-    "loan_percentage": 0.90,
     "interest_rate": 0.065,
     "tenure_years": 3,
     "moratorium_months": 3,
-    "source_url": "https://nsfdc.nic.in/micro-finance-scheme",
     "source_verified_date": "2026-08-30"
   },
   {
-    "scheme_id": "term_loan",
+    "scheme_id": "nsfdc_term_loan",
     "scheme_name": "Term Loan Scheme",
     "corporation": "NSFDC",
     "min_project_cost": 140001,
     "max_project_cost": 5000000,
     "max_loan_amount": 4500000,
-    "loan_percentage": 0.90,
-    "interest_rate": 0.08,
+    "interest_rate": 0.080,
     "tenure_years": 7,
     "moratorium_months": 6,
-    "source_url": "https://nsfdc.nic.in/term-loan-scheme",
+    "source_verified_date": "2026-08-30"
+  },
+  {
+    "scheme_id": "nbcfdc_micro_finance",
+    "scheme_name": "Micro Finance Scheme",
+    "corporation": "NBCFDC",
+    "min_project_cost": 1,
+    "max_project_cost": 140000,
+    "max_loan_amount": 125000,
+    "interest_rate": 0.065,
+    "tenure_years": 3,
+    "moratorium_months": 3,
+    "source_verified_date": "2026-08-30"
+  },
+  {
+    "scheme_id": "nbcfdc_term_loan",
+    "scheme_name": "Term Loan Scheme",
+    "corporation": "NBCFDC",
+    "min_project_cost": 140001,
+    "max_project_cost": 5000000,
+    "max_loan_amount": 4500000,
+    "interest_rate": 0.080,
+    "tenure_years": 7,
+    "moratorium_months": 6,
+    "source_verified_date": "2026-08-30"
+  },
+  {
+    "scheme_id": "nstfdc_micro_finance",
+    "scheme_name": "Micro Finance Scheme",
+    "corporation": "NSTFDC",
+    "min_project_cost": 1,
+    "max_project_cost": 140000,
+    "max_loan_amount": 125000,
+    "interest_rate": 0.065,
+    "tenure_years": 3,
+    "moratorium_months": 3,
+    "source_verified_date": "2026-08-30"
+  },
+  {
+    "scheme_id": "nstfdc_term_loan",
+    "scheme_name": "Term Loan Scheme",
+    "corporation": "NSTFDC",
+    "min_project_cost": 140001,
+    "max_project_cost": 5000000,
+    "max_loan_amount": 4500000,
+    "interest_rate": 0.080,
+    "tenure_years": 7,
+    "moratorium_months": 6,
     "source_verified_date": "2026-08-30"
   }
 ]

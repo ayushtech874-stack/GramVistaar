@@ -1,13 +1,14 @@
 /**
  * Eligibility Module - SIH26091 (GramVistaar)
- * Pure deterministic eligibility gate checking category, income ceiling, domicile, and prior-default status.
+ * Pure deterministic rule engine evaluating applicant social category, family income,
+ * state domicile, and prior default status against NSFDC, NBCFDC, and NSTFDC scheme rules.
  */
 
 import fs from 'fs';
 import path from 'path';
 
 /**
- * Load default eligibility rules from JSON file if not provided
+ * Load eligibility rules configuration from JSON file
  */
 export function loadEligibilityRules(filePath) {
   const resolvedPath = filePath || path.join(process.cwd(), 'data', 'eligibility_rules.json');
@@ -16,78 +17,84 @@ export function loadEligibilityRules(filePath) {
 }
 
 /**
- * Check user eligibility against corporation rules
- * @param {Object} input - { category, family_income_annual, state, prior_default }
- * @param {Array} [rules] - Optional array of eligibility rule objects
- * @returns {Object} Result object per schema.md
+ * Evaluate applicant eligibility
+ * @param {Object} applicant - Applicant profile
+ * @param {string} applicant.category - 'SC', 'OBC', or 'ST'
+ * @param {number} applicant.family_income_annual - Annual family income in INR
+ * @param {string} applicant.state - Applicant state of domicile (e.g. 'Bihar')
+ * @param {boolean} applicant.prior_default - Self-declared prior default status
+ * @param {Object} [rulesData] - Optional injected rules object for testing
+ * @returns {Object} Eligibility evaluation result
  */
-export function checkEligibility(input, rules) {
-  const eligibilityRules = rules || loadEligibilityRules();
+export function checkEligibility(applicant, rulesData) {
+  const rules = rulesData || loadEligibilityRules();
+  const { category, family_income_annual, state, prior_default } = applicant;
 
-  if (!input || typeof input !== 'object') {
+  // 1. Check Category Match to Corporation
+  let matchedCorpKey = null;
+  let corpConfig = null;
+
+  for (const [key, corp] of Object.entries(rules.corporations)) {
+    if (corp.target_category.toUpperCase() === String(category).toUpperCase()) {
+      matchedCorpKey = key;
+      corpConfig = corp;
+      break;
+    }
+  }
+
+  if (!matchedCorpKey || !corpConfig) {
     return {
       status: 'fail',
-      unmet_criterion: 'invalid_input',
-      explanation: 'Input parameters are missing or invalid.',
-      can_still_see_feasibility: true
+      corporation: null,
+      unmet_criteria: ['category'],
+      explanation: `No active concessional corporation scheme found for category '${category}'. Concessional rules exist for SC (NSFDC), OBC (NBCFDC), and ST (NSTFDC).`
     };
   }
 
-  const { category, family_income_annual, state, prior_default } = input;
+  const unmetCriteria = [];
 
-  // 1. Category match -> Corporation
-  const matchingRule = eligibilityRules.find(r => r.category_match === category);
-  if (!matchingRule) {
-    return {
-      status: 'fail',
-      unmet_criterion: 'category',
-      explanation: `No matching corporation scheme found for category '${category}'.`,
-      can_still_see_feasibility: true
-    };
+  // 2. Check Annual Income Ceiling (₹3,00,000 / year)
+  if (family_income_annual > corpConfig.income_ceiling_annual) {
+    unmetCriteria.push('family_income_annual');
   }
 
-  const corporation = matchingRule.corporation;
+  // 3. Check Domicile State (Must be Bihar for current active SCA)
+  if (!corpConfig.state_scas[state]) {
+    unmetCriteria.push('state');
+  }
 
-  // 2. Check prior default self-declaration
+  // 4. Check Self-declared Prior Default
   if (prior_default === true) {
+    unmetCriteria.push('prior_default');
+  }
+
+  if (unmetCriteria.length > 0) {
+    let explanation = `Eligibility criteria unmet for ${corpConfig.name} (${matchedCorpKey}). `;
+    if (unmetCriteria.includes('family_income_annual')) {
+      explanation += `Annual family income (₹${family_income_annual.toLocaleString('en-IN')}) exceeds the ceiling of ₹${corpConfig.income_ceiling_annual.toLocaleString('en-IN')}/year. `;
+    }
+    if (unmetCriteria.includes('state')) {
+      explanation += `State '${state}' does not have an active channelizing agency (SCA) configured for ${matchedCorpKey}. `;
+    }
+    if (unmetCriteria.includes('prior_default')) {
+      explanation += `Applicant self-declared a prior default under a government concessional scheme. `;
+    }
+
     return {
       status: 'fail',
-      corporation,
-      unmet_criterion: 'prior_default',
-      explanation: 'Self-declared prior default under a government scheme disqualifies credit eligibility.',
-      can_still_see_feasibility: true
+      corporation: matchedCorpKey,
+      corporation_name: corpConfig.name,
+      unmet_criteria: unmetCriteria,
+      explanation: explanation.trim()
     };
   }
 
-  // 3. Check state / domicile requirement
-  if (state && matchingRule.domicile_requirement && state !== matchingRule.domicile_requirement) {
-    return {
-      status: 'fail',
-      corporation,
-      unmet_criterion: 'domicile_requirement',
-      explanation: `State domicile '${state}' does not match active SCA requirement '${matchingRule.domicile_requirement}'.`,
-      can_still_see_feasibility: true
-    };
-  }
-
-  // 4. Check family annual income ceiling
-  if (typeof family_income_annual === 'number' && family_income_annual > matchingRule.income_ceiling) {
-    return {
-      status: 'fail',
-      corporation,
-      unmet_criterion: 'income_ceiling',
-      explanation: `Declared annual family income (₹${family_income_annual.toLocaleString('en-IN')}) exceeds the ${corporation} income ceiling of ₹${matchingRule.income_ceiling.toLocaleString('en-IN')}/year.`,
-      can_still_see_feasibility: true
-    };
-  }
-
-  // PASS
   return {
     status: 'pass',
-    corporation,
-    matched_criteria: ['category', 'income', 'domicile', 'no_prior_default'],
-    rule_status: matchingRule.status || 'Verified',
-    source_url: matchingRule.source_url || null,
-    source_verified_date: matchingRule.source_verified_date || null
+    corporation: matchedCorpKey,
+    corporation_name: corpConfig.name,
+    sca_name: corpConfig.state_scas[state],
+    unmet_criteria: [],
+    explanation: `Qualified for concessional scheme financing under ${corpConfig.name} (${matchedCorpKey}) via ${corpConfig.state_scas[state]}.`
   };
 }

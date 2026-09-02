@@ -4,92 +4,83 @@ import { checkEligibility } from '../src/modules/eligibility.js';
 
 describe('Eligibility Module Tests (Deterministic)', () => {
   it('should PASS for valid Rekha SC persona (NSFDC, income <= ₹3,00,000, Bihar, no prior default)', () => {
-    const input = {
+    const applicant = {
       category: 'SC',
       family_income_annual: 60000,
       state: 'Bihar',
       prior_default: false
     };
 
-    const result = checkEligibility(input);
+    const result = checkEligibility(applicant);
 
     assert.equal(result.status, 'pass');
     assert.equal(result.corporation, 'NSFDC');
-    assert.deepEqual(result.matched_criteria, ['category', 'income', 'domicile', 'no_prior_default']);
-    assert.equal(result.rule_status, 'Verified');
+    assert.equal(result.sca_name, 'Bihar State Scheduled Castes Co-operative Development Corporation Limited (BSCCDCL)');
+    assert.deepEqual(result.unmet_criteria, []);
   });
 
   it('should FAIL when annual family income exceeds the ceiling of ₹3,00,000', () => {
-    const input = {
+    const applicant = {
       category: 'SC',
       family_income_annual: 350000,
       state: 'Bihar',
       prior_default: false
     };
 
-    const result = checkEligibility(input);
+    const result = checkEligibility(applicant);
 
     assert.equal(result.status, 'fail');
     assert.equal(result.corporation, 'NSFDC');
-    assert.equal(result.unmet_criterion, 'income_ceiling');
-    assert.equal(result.can_still_see_feasibility, true);
-    assert.match(result.explanation, /exceeds the NSFDC income ceiling/);
+    assert.ok(result.unmet_criteria.includes('family_income_annual'));
   });
 
   it('should FAIL when user self-declares a prior default under a government scheme', () => {
-    const input = {
+    const applicant = {
       category: 'SC',
       family_income_annual: 60000,
       state: 'Bihar',
       prior_default: true
     };
 
-    const result = checkEligibility(input);
+    const result = checkEligibility(applicant);
 
     assert.equal(result.status, 'fail');
-    assert.equal(result.corporation, 'NSFDC');
-    assert.equal(result.unmet_criterion, 'prior_default');
-    assert.equal(result.can_still_see_feasibility, true);
+    assert.ok(result.unmet_criteria.includes('prior_default'));
   });
 
   it('should FAIL when state domicile does not match the active SCA requirement', () => {
-    const input = {
+    const applicant = {
       category: 'SC',
       family_income_annual: 60000,
-      state: 'Maharashtra',
+      state: 'Uttar Pradesh',
       prior_default: false
     };
 
-    const result = checkEligibility(input);
+    const result = checkEligibility(applicant);
 
     assert.equal(result.status, 'fail');
-    assert.equal(result.corporation, 'NSFDC');
-    assert.equal(result.unmet_criterion, 'domicile_requirement');
+    assert.ok(result.unmet_criteria.includes('state'));
   });
 
-  it('should correctly handle NBCFDC & NSTFDC placeholder status rules', () => {
-    const inputOBC = {
+  it('should PASS for valid NBCFDC (OBC) and NSTFDC (ST) applicants', () => {
+    const obcApplicant = {
       category: 'OBC',
-      family_income_annual: 100000,
+      family_income_annual: 80000,
       state: 'Bihar',
       prior_default: false
     };
+    const obcResult = checkEligibility(obcApplicant);
+    assert.equal(obcResult.status, 'pass');
+    assert.equal(obcResult.corporation, 'NBCFDC');
 
-    const resultOBC = checkEligibility(inputOBC);
-    assert.equal(resultOBC.status, 'pass');
-    assert.equal(resultOBC.corporation, 'NBCFDC');
-    assert.equal(resultOBC.rule_status, 'Unverified_Placeholder');
-
-    const inputST = {
+    const stApplicant = {
       category: 'ST',
-      family_income_annual: 100000,
+      family_income_annual: 70000,
       state: 'Bihar',
       prior_default: false
     };
-
-    const resultST = checkEligibility(inputST);
-    assert.equal(resultST.status, 'pass');
-    assert.equal(resultST.corporation, 'NSTFDC');
-    assert.equal(resultST.rule_status, 'Unverified_Placeholder');
+    const stResult = checkEligibility(stApplicant);
+    assert.equal(stResult.status, 'pass');
+    assert.equal(stResult.corporation, 'NSTFDC');
   });
 });

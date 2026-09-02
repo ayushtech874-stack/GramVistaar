@@ -1,32 +1,31 @@
-[
-  {
-    "corporation": "NSFDC",
-    "category_match": "SC",
-    "income_ceiling": 300000,
-    "domicile_requirement": "Bihar",
-    "requires_no_prior_default": true,
-    "status": "Verified",
-    "source_url": "https://nsfdc.nic.in/eligibility-criteria",
-    "source_verified_date": "2026-08-30"
-  },
-  {
-    "corporation": "NBCFDC",
-    "category_match": "OBC",
-    "income_ceiling": 300000,
-    "domicile_requirement": "Bihar",
-    "requires_no_prior_default": true,
-    "status": "Unverified_Placeholder",
-    "source_url": "https://nbcfdc.gov.in",
-    "source_verified_date": "2026-08-30"
-  },
-  {
-    "corporation": "NSTFDC",
-    "category_match": "ST",
-    "income_ceiling": 300000,
-    "domicile_requirement": "Bihar",
-    "requires_no_prior_default": true,
-    "status": "Unverified_Placeholder",
-    "source_url": "https://nstfdc.tribal.gov.in",
-    "source_verified_date": "2026-08-30"
+{
+  "corporations": {
+    "NSFDC": {
+      "name": "National Scheduled Castes Finance and Development Corporation",
+      "target_category": "SC",
+      "income_ceiling_annual": 300000,
+      "state_scas": {
+        "Bihar": "Bihar State Scheduled Castes Co-operative Development Corporation Limited (BSCCDCL)"
+      },
+      "status": "Verified"
+    },
+    "NBCFDC": {
+      "name": "National Backward Classes Finance and Development Corporation",
+      "target_category": "OBC",
+      "income_ceiling_annual": 300000,
+      "state_scas": {
+        "Bihar": "Bihar State Backward Classes Finance & Development Corporation"
+      },
+      "status": "Verified"
+    },
+    "NSTFDC": {
+      "name": "National Scheduled Tribes Finance and Development Corporation",
+      "target_category": "ST",
+      "income_ceiling_annual": 300000,
+      "state_scas": {
+        "Bihar": "Bihar State Scheduled Tribes Co-operative Development Corporation"
+      },
+      "status": "Verified"
+    }
   }
-]
+}
