@@ -1,0 +1,110 @@
+{
+  "rekha_sc_dairy": {
+    "village_id": "229072",
+    "village_name": "Ratwara Bindwara Deoria",
+    "block": "Aurai",
+    "district": "Muzaffarpur",
+    "state": "Bihar",
+    "business_category": "dairy",
+    "available_capital": 100000,
+    "eligibility": {
+      "status": "pass",
+      "corporation": "NSFDC",
+      "corporation_name": "National Scheduled Castes Finance and Development Corporation",
+      "sca_name": "Bihar State Scheduled Castes Co-operative Development Corporation Limited (BSCCDCL)"
+    },
+    "financial": {
+      "project_cost": 1000000,
+      "loan_eligibility": 900000,
+      "scheme_name": "Term Loan Scheme",
+      "interest_rate": 0.08,
+      "tenure_years": 7,
+      "moratorium_months": 6,
+      "monthly_emi": 14818
+    },
+    "feasibility": {
+      "is_live_llm": true,
+      "swot": [
+        {
+          "type": "strength",
+          "text": "Strong rural consumer baseline in Ratwara Bindwara Deoria (Population: 22,386).",
+          "tag": "Verified"
+        },
+        {
+          "type": "weakness",
+          "text": "No village-level establishment breakdown available (558 firms in Aurai).",
+          "tag": "Insufficient Data"
+        },
+        {
+          "type": "opportunity",
+          "text": "90% concessional financing under NSFDC reduces initial capital requirement.",
+          "tag": "Derived"
+        },
+        {
+          "type": "threat",
+          "text": "Regional raw material and transport price fluctuations during monsoon.",
+          "tag": "AI-Estimated"
+        }
+      ],
+      "pricing_guidance": {
+        "text": "Estimated monthly revenue for a small-scale Dairy micro-enterprise in Aurai block is ~₹32,000 based on regional demand.",
+        "estimated_monthly_revenue": 32000,
+        "tag": "Derived"
+      }
+    }
+  },
+  "anita_obc_retail": {
+    "village_id": "229088",
+    "village_name": "Saghari Rampur",
+    "block": "Aurai",
+    "district": "Muzaffarpur",
+    "state": "Bihar",
+    "business_category": "retail",
+    "available_capital": 140000,
+    "eligibility": {
+      "status": "pass",
+      "corporation": "NBCFDC",
+      "corporation_name": "National Backward Classes Finance and Development Corporation",
+      "sca_name": "Bihar State Backward Classes Finance & Development Corporation"
+    },
+    "financial": {
+      "project_cost": 1400000,
+      "loan_eligibility": 1260000,
+      "scheme_name": "Term Loan Scheme",
+      "interest_rate": 0.08,
+      "tenure_years": 7,
+      "moratorium_months": 6,
+      "monthly_emi": 20745
+    },
+    "feasibility": {
+      "is_live_llm": true,
+      "swot": [
+        {
+          "type": "strength",
+          "text": "Central village location with 3,026 residents and 585 households.",
+          "tag": "Verified"
+        },
+        {
+          "type": "weakness",
+          "text": "No village-level establishment breakdown available (558 firms in Aurai).",
+          "tag": "Insufficient Data"
+        },
+        {
+          "type": "opportunity",
+          "text": "Concessional capital under NBCFDC enables full Kirana inventory stocking.",
+          "tag": "Derived"
+        },
+        {
+          "type": "threat",
+          "text": "Competition from unorganized local weekly market traders.",
+          "tag": "AI-Estimated"
+        }
+      ],
+      "pricing_guidance": {
+        "text": "Estimated monthly revenue for a retail Kirana store in Aurai block is ~₹45,000.",
+        "estimated_monthly_revenue": 45000,
+        "tag": "Derived"
+      }
+    }
+  }
+}

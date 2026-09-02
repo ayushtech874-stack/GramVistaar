@@ -18,7 +18,8 @@ const state = {
   familyIncome: 60000,
   stateName: 'Bihar',
   priorDefault: false,
-  assessmentData: null
+  assessmentData: null,
+  showFullEmiSchedule: false
 };
 
 // Language Dictionary (English & Hindi)
@@ -224,6 +225,7 @@ function resetAssessmentState() {
   state.assessmentData = null;
   state.selectedCategory = 'dairy';
   state.availableCapital = 100000;
+  state.showFullEmiSchedule = false;
   
   document.getElementById('capital-input').value = 100000;
   document.getElementById('capital-lakh-help').textContent = formatLakhHelper(100000);
@@ -257,6 +259,52 @@ function initEvents() {
   // Dashboard "New Assessment" button
   document.getElementById('reset-new-assessment-btn').addEventListener('click', () => {
     resetAssessmentState();
+  });
+
+  // Quick Persona Presets
+  document.getElementById('preset-rekha-btn').addEventListener('click', () => {
+    state.selectedCategory = 'dairy';
+    state.availableCapital = 100000;
+    document.getElementById('capital-input').value = 100000;
+    document.getElementById('capital-lakh-help').textContent = formatLakhHelper(100000);
+    document.getElementById('income-input').value = 60000;
+    document.getElementById('category-status').value = 'SC';
+    document.getElementById('prior-default-select').value = 'false';
+
+    const ratwara = state.villagesList.find(v => v.village_name.toLowerCase().includes('ratwara'));
+    if (ratwara) {
+      state.selectedVillage = ratwara;
+      document.getElementById('village-search-input').value = `${ratwara.village_name} (${ratwara.block})`;
+    }
+    document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+    document.querySelector('.cat-card[data-cat="dairy"]').classList.add('selected');
+  });
+
+  document.getElementById('preset-anita-btn').addEventListener('click', () => {
+    state.selectedCategory = 'retail';
+    state.availableCapital = 140000;
+    document.getElementById('capital-input').value = 140000;
+    document.getElementById('capital-lakh-help').textContent = formatLakhHelper(140000);
+    document.getElementById('income-input').value = 80000;
+    document.getElementById('category-status').value = 'OBC';
+    document.getElementById('prior-default-select').value = 'false';
+
+    const saghari = state.villagesList.find(v => v.village_name.toLowerCase().includes('saghari'));
+    if (saghari) {
+      state.selectedVillage = saghari;
+      document.getElementById('village-search-input').value = `${saghari.village_name} (${saghari.block})`;
+    }
+    document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+    document.querySelector('.cat-card[data-cat="retail"]').classList.add('selected');
+  });
+
+  // Full EMI Schedule Toggle Button
+  document.getElementById('toggle-full-emi-btn').addEventListener('click', () => {
+    state.showFullEmiSchedule = !state.showFullEmiSchedule;
+    document.getElementById('toggle-full-emi-btn').textContent = state.showFullEmiSchedule ? 'Show 12 Months' : 'Show Full Schedule';
+    if (state.assessmentData && state.assessmentData.financial) {
+      renderEmiTable(state.assessmentData.financial.emi_schedule);
+    }
   });
 
   // Export Summary Button (Screen 4 -> Screen 5)
@@ -555,7 +603,6 @@ function renderExportDocument() {
   document.getElementById('pdf-date').textContent = today;
   document.getElementById('pdf-ref-code').textContent = refCode;
 
-  // Applicant
   const catSel = document.getElementById('category-status');
   document.getElementById('pdf-cat-status').textContent = catSel.options[catSel.selectedIndex].text;
   document.getElementById('pdf-income').textContent = formatINR(document.getElementById('income-input').value) + ' / year';
@@ -587,7 +634,9 @@ function renderEmiTable(schedule) {
   tbody.innerHTML = '';
   if (!schedule) return;
 
-  schedule.slice(0, 12).forEach(row => {
+  const rowsToShow = state.showFullEmiSchedule ? schedule : schedule.slice(0, 12);
+
+  rowsToShow.forEach(row => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${state.language === 'hi' ? 'महीना' : 'Month'} ${row.period}</td>
