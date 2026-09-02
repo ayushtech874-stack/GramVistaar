@@ -1,0 +1,25 @@
+{
+  "name": "gram-vistaar",
+  "version": "1.0.0",
+  "description": "SIH26091 - GramVistaar: AI-Driven Hyper-Local Business Advisory & Financial Structuring Assistant",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test tests/**/*.test.js"
+  },
+  "keywords": [
+    "sih26091",
+    "gram-vistaar",
+    "financial-calculator",
+    "rural-advisory",
+    "mosje"
+  ],
+  "author": "GramVistaar Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}

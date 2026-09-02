@@ -1,0 +1,32 @@
+[
+  {
+    "corporation": "NSFDC",
+    "category_match": "SC",
+    "income_ceiling": 300000,
+    "domicile_requirement": "Bihar",
+    "requires_no_prior_default": true,
+    "status": "Verified",
+    "source_url": "https://nsfdc.nic.in/eligibility-criteria",
+    "source_verified_date": "2026-08-30"
+  },
+  {
+    "corporation": "NBCFDC",
+    "category_match": "OBC",
+    "income_ceiling": 300000,
+    "domicile_requirement": "Bihar",
+    "requires_no_prior_default": true,
+    "status": "Unverified_Placeholder",
+    "source_url": "https://nbcfdc.gov.in",
+    "source_verified_date": "2026-08-30"
+  },
+  {
+    "corporation": "NSTFDC",
+    "category_match": "ST",
+    "income_ceiling": 300000,
+    "domicile_requirement": "Bihar",
+    "requires_no_prior_default": true,
+    "status": "Unverified_Placeholder",
+    "source_url": "https://nstfdc.tribal.gov.in",
+    "source_verified_date": "2026-08-30"
+  }
+]

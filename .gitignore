@@ -1,0 +1,11 @@
+# Local jury presentation blueprint (not pushed to remote)
+sih_jury_blueprint.html
+sih_jury_blueprint_*
+
+# Dependencies & Build
+node_modules/
+.env
+.env.local
+dist/
+build/
+.DS_Store

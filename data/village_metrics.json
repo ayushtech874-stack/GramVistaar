@@ -1,0 +1,34 @@
+[
+  {
+    "village_id": "123456",
+    "village_name": "Saghari Rampur",
+    "block": "Aurai",
+    "district": "Muzaffarpur",
+    "state": "Bihar",
+    "population": 3026,
+    "households": null,
+    "establishments_dairy": null,
+    "establishments_retail": null,
+    "establishments_textiles": null,
+    "avg_monthly_consumption": null,
+    "data_source_population": "Census 2011 Village Directory",
+    "data_source_establishments": "SHRUG Economic Census (Pending Download)",
+    "last_verified_date": "2026-08-30"
+  },
+  {
+    "village_id": "654321",
+    "village_name": "Khandail",
+    "block": "Sherghati",
+    "district": "Gaya",
+    "state": "Bihar",
+    "population": 3040,
+    "households": 484,
+    "establishments_dairy": null,
+    "establishments_retail": null,
+    "establishments_textiles": null,
+    "avg_monthly_consumption": null,
+    "data_source_population": "Census 2011 Village Directory",
+    "data_source_establishments": "SHRUG Economic Census (Pending Download)",
+    "last_verified_date": "2026-08-30"
+  }
+]
