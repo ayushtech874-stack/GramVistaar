@@ -1,7 +1,7 @@
 /**
  * GramVistaar Frontend App - SIH26091 / Official Banking Advisory Portal
  * Single Page Application (SPA) with 5-Screen guided flow,
- * 202-village searchable type-ahead dropdown, cascading District->Block filter, 4-tier data tags,
+ * 202-village searchable type-ahead dropdown, cascading District->Block filter, 4-tier vector data tags,
  * interactive Scheme Guidelines pop-up modal, 84-Month Schedule pop-up modal with dedicated print support,
  * English & Hindi (Bhashini AI) translation support, and Screen 5 PDF Export summary hand-off.
  */
@@ -39,9 +39,9 @@ const translations = {
     stepGate: "Eligibility Gate",
     stepResults: "Advisory Plan",
     stepExport: "Export Document",
-    carbonTitle: "Rural Enterprise Assessment & Credit Planning",
-    carbonSub: "Evaluate local village demographics, NSFDC/NBCFDC concessional loan terms, and business feasibility before applying for credit.",
-    carbonCta: "Start Business Assessment →",
+    heroTitle: "Rural Enterprise Credit & Feasibility Advisory Portal",
+    heroSub: "Evaluate local village demographics, calculate 90% concessional loan terms, and assess business feasibility before applying for credit.",
+    heroCta: "Start Business Assessment →",
     feat1Title: "202 Verified Villages",
     feat1Sub: "Census 2011 population & household data grounded for Bihar blocks.",
     feat2Title: "Concessional Schemes",
@@ -70,11 +70,11 @@ const translations = {
     passTitle: "Eligibility Gate Passed",
     passSub: "You qualify for concessional scheme financing under",
     failTitle: "Concessional Scheme Criteria Unmet",
-    seeFeasibilityBtn: "View Village Business Feasibility Report Anyway →",
+    seeFeasibilityBtn: "View Village Business Feasibility Report",
     viewPlanBtn: "Proceed to Financial & Feasibility Advisory Plan →",
     dashTitle: "Business Credit & Feasibility Plan",
-    financialTitle: "CONCESSIONAL CREDIT PLAN",
-    feasibilityTitle: "VILLAGE FEASIBILITY SNAPSHOT",
+    financialTitle: "Concessional Credit Plan",
+    feasibilityTitle: "Village Feasibility Overview",
     projectCostLabel: "Project Cost Ceiling",
     loanEligibleLabel: "Loan Eligibility (90%)",
     matchedSchemeLabel: "Matched Scheme",
@@ -93,9 +93,9 @@ const translations = {
     estLabel: "Nearby Establishment Density",
     reachLabel: "Pricing & Monthly Revenue Guidance",
     swotHeader: "SWOT & Business Opportunity Analysis",
-    skippedTitle: "CREDIT PLAN GATED",
+    skippedTitle: "Credit Plan Gated",
     skippedSub: "Loan calculations are hidden when eligibility requirements are unmet to avoid presenting unsupportable credit terms. Village feasibility insights are shown on the right.",
-    exportBtn: "📄 Export Bank Summary →"
+    exportBtn: "Export Bank Summary"
   },
   hi: {
     brandTitle: "ग्राम विस्तार",
@@ -105,9 +105,9 @@ const translations = {
     stepGate: "पात्रता जाँच",
     stepResults: "सलाहकार योजना",
     stepExport: "निर्यात दस्तावेज़",
-    carbonTitle: "ग्रामीण उद्यम मूल्यांकन एवं ऋण योजना",
-    carbonSub: "ऋण के लिए आवेदन करने से पहले स्थानीय गाँव की जनसांख्यिकी, एनएसएफडीसी/एनबीसीएफडीसी रियायती ऋण शर्तों और व्यावसायिक व्यवहार्यता का मूल्यांकन करें।",
-    carbonCta: "उद्यम मूल्यांकन शुरू करें →",
+    heroTitle: "ग्रामीण उद्यम ऋण एवं व्यवहार्यता सलाहकार पोर्टल",
+    heroSub: "ऋण के लिए आवेदन करने से पहले स्थानीय गाँव की जनसांख्यिकी, 90% रियायती ऋण शर्तों और व्यावसायिक व्यवहार्यता का मूल्यांकन करें।",
+    heroCta: "उद्यम मूल्यांकन शुरू करें →",
     feat1Title: "202 सत्यापित गाँव",
     feat1Sub: "बिहार के ब्लॉकों के लिए 2011 जनगणना जनसंख्या एवं घरेलू डेटा।",
     feat2Title: "रियायती ऋण योजनाएं",
@@ -136,7 +136,7 @@ const translations = {
     passTitle: "पात्रता जाँच उत्तीर्ण (PASSED)",
     passSub: "आप इसके तहत रियायती ऋण के लिए पात्र हैं:",
     failTitle: "रियायती ऋण मापदंड अपूर्ण (UNMET)",
-    seeFeasibilityBtn: "फिर भी गाँव व्यवसाय व्यवहार्यता रिपोर्ट देखें →",
+    seeFeasibilityBtn: "फिर भी गाँव व्यवसाय व्यवहार्यता रिपोर्ट देखें",
     viewPlanBtn: "वित्तीय और व्यवहार्यता सलाहकार योजना देखें →",
     dashTitle: "व्यवसाय ऋण एवं व्यवहार्यता योजना",
     financialTitle: "आपकी रियायती ऋण योजना",
@@ -161,7 +161,7 @@ const translations = {
     swotHeader: "स्वाट एवं व्यवसाय अवसर विश्लेषण",
     skippedTitle: "ऋण योजना रोकी गई",
     skippedSub: "पात्रता मापदंड अपूर्ण होने पर अमान्य आंकड़ों से बचने के लिए ऋण गणना छिपाई गई है। गाँव की व्यवहार्यता दाईं ओर दिखाई गई है।",
-    exportBtn: "📄 बैंक सारांश निर्यात करें →"
+    exportBtn: "बैंक सारांश निर्यात करें"
   }
 };
 
@@ -435,21 +435,21 @@ function initEvents() {
     document.getElementById('modal-scheme-corp').textContent = g.agency;
 
     let html = `
-      <div style="margin-bottom: 1.25rem; background: var(--carbon-bg); padding: 1rem; border-radius: 6px; border-left: 4px solid var(--carbon-dark);">
+      <div style="margin-bottom: 1.25rem; background: var(--bg-main); padding: 1rem; border-radius: 6px; border-left: 4px solid var(--forest-dark);">
         <div><strong>Income Eligibility Ceiling:</strong> ${g.income_ceiling}</div>
         <div><strong>Govt. Concessional Assistance:</strong> ${g.assistance}</div>
         <div><strong>Promoter Contribution (Margin Money):</strong> ${g.promoter_contribution}</div>
       </div>
-      <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--carbon-text);">Concessional Scheme Tiers:</div>
+      <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--text-main);">Concessional Scheme Tiers:</div>
       <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
     `;
 
     g.schemes.forEach(s => {
       html += `
-        <div style="border: 1px solid var(--carbon-border); padding: 0.85rem; border-radius: 6px; background: #ffffff;">
-          <div style="font-weight: 700; color: var(--carbon-blue); font-size: 0.9rem;">${s.name}</div>
-          <div style="font-size: 0.8rem; color: var(--carbon-muted); margin-top: 0.25rem;">
-            Project Cost Limit: <strong>${s.cost}</strong> | Interest Rate: <strong>${s.rate}</strong> | Tenure: <strong>${s.tenure}</strong>
+        <div style="border: 1px solid var(--border-medium); padding: 0.85rem; border-radius: 6px; background: #ffffff;">
+          <div style="font-weight: 700; color: var(--forest-dark); font-size: 0.9rem;">${s.name}</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+            Project Cost Limit: <strong class="num-mono">${s.cost}</strong> | Interest Rate: <strong class="num-mono">${s.rate}</strong> | Tenure: <strong>${s.tenure}</strong>
           </div>
         </div>
       `;
@@ -457,9 +457,9 @@ function initEvents() {
 
     html += `
       </div>
-      <div style="font-size: 0.8rem; color: var(--carbon-muted); border-top: 1px solid var(--carbon-border); padding-top: 0.75rem;">
+      <div style="font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-light); padding-top: 0.75rem;">
         <div><strong>State Channelizing Agency (SCA) Bihar:</strong> ${g.sca_bihar}</div>
-        <div style="margin-top: 0.35rem;">Official Portal: <a href="${g.official_url}" target="_blank" style="color: var(--carbon-blue); font-weight: 700;">${g.official_url} ↗</a></div>
+        <div style="margin-top: 0.35rem;">Official Portal: <a href="${g.official_url}" target="_blank" style="color: var(--forest-dark); font-weight: 700;">${g.official_url} ↗</a></div>
       </div>
     `;
 
@@ -483,10 +483,10 @@ function initEvents() {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${state.language === 'hi' ? 'महीना' : 'Month'} ${row.period}</td>
-        <td>${formatINR(row.emi)}</td>
-        <td>${formatINR(row.interest_payment)}</td>
-        <td>${formatINR(row.principal_payment)}</td>
-        <td>${formatINR(row.remaining_balance)}</td>
+        <td class="num-mono">${formatINR(row.emi)}</td>
+        <td class="num-mono">${formatINR(row.interest_payment)}</td>
+        <td class="num-mono">${formatINR(row.principal_payment)}</td>
+        <td class="num-mono">${formatINR(row.remaining_balance)}</td>
         <td><em>${row.note}</em></td>
       `;
       tbody.appendChild(tr);
@@ -701,26 +701,26 @@ function renderEligibilityGate(eligibility) {
   }
 }
 
-// Helper: Render DataTag HTML Component
+// Helper: Render DataTag HTML Component with Vector SVG Icons (No Emoji)
 function renderDataTag(tagObj) {
   if (!tagObj) return '';
   const label = tagObj.tag || 'AI-Estimated';
   let className = 'ai';
-  let icon = '✨';
+  let svgIcon = `<svg class="tag-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
 
   if (label === 'Verified' || label === 'सत्यापित') {
     className = 'verified';
-    icon = '✓';
+    svgIcon = `<svg class="tag-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
   } else if (label === 'Derived' || label === 'व्युत्पन्न') {
     className = 'derived';
-    icon = '🧮';
+    svgIcon = `<svg class="tag-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>`;
   } else if (label === 'Insufficient Data' || label === 'डेटा अपर्याप्त') {
     className = 'insufficient';
-    icon = '⚠️';
+    svgIcon = `<svg class="tag-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
   }
 
   const sourceText = tagObj.source ? ` (${tagObj.source})` : (tagObj.reason ? ` (${tagObj.reason})` : '');
-  return `<span class="data-tag ${className}">${icon} ${label}${sourceText}</span>`;
+  return `<span class="data-tag ${className}">${svgIcon} ${label}${sourceText}</span>`;
 }
 
 // Render Results Dashboard
@@ -773,8 +773,8 @@ function renderResultsScreen(data) {
 
   if (feasibility) {
     const liveIndicator = feasibility.is_live_llm
-      ? `<span style="color:#198038; font-size:0.75rem; font-weight:700;">● Live API (${feasibility.latency_ms}ms)</span>`
-      : `<span style="color:#b45309; font-size:0.75rem; font-weight:700;">● Grounded Template</span>`;
+      ? `<span style="color:#059669; font-size:0.75rem; font-weight:700;">● Live API (${feasibility.latency_ms}ms)</span>`
+      : `<span style="color:#b45309; font-size:0.75rem; font-weight:700;">● Grounded Baseline</span>`;
 
     document.getElementById('res-village-header').innerHTML = `${feasibility.village_name}, ${feasibility.block} Block (${feasibility.district}) &nbsp;|&nbsp; ${liveIndicator}`;
 
@@ -787,31 +787,38 @@ function renderResultsScreen(data) {
     document.getElementById('res-est-val').textContent = feasibility.competitor_density.value ? feasibility.competitor_density.value : 'N/A';
     document.getElementById('res-est-tag').innerHTML = renderDataTag(feasibility.competitor_density);
 
-    // SPACIOUS COLOR-CODED SWOT RENDERING
+    // SPACIOUS COLOR-CODED SWOT QUADRANTS CONTAINER (NO EMOJI)
     const swotContainer = document.getElementById('res-swot-container');
     if (swotContainer) {
       swotContainer.innerHTML = '';
       if (feasibility.swot && feasibility.swot.length > 0) {
         feasibility.swot.forEach(item => {
           const type = (item.type || 'strength').toLowerCase();
-          let icon = '💪';
-          let title = 'STRENGTH';
-          if (type === 'weakness') { icon = '⚠️'; title = 'WEAKNESS'; }
-          else if (type === 'opportunity') { icon = '🚀'; title = 'OPPORTUNITY'; }
-          else if (type === 'threat') { icon = '🛡️'; title = 'THREAT'; }
+          let iconSvg = `<svg style="width:15px;height:15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+          let title = 'Strength';
+          if (type === 'weakness') {
+            iconSvg = `<svg style="width:15px;height:15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+            title = 'Weakness';
+          } else if (type === 'opportunity') {
+            iconSvg = `<svg style="width:15px;height:15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path></svg>`;
+            title = 'Opportunity';
+          } else if (type === 'threat') {
+            iconSvg = `<svg style="width:15px;height:15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`;
+            title = 'Threat';
+          }
 
           if (state.language === 'hi') {
-            if (type === 'strength') title = 'ताकत (STRENGTH)';
-            else if (type === 'weakness') title = 'कमजोरी (WEAKNESS)';
-            else if (type === 'opportunity') title = 'अवसर (OPPORTUNITY)';
-            else if (type === 'threat') title = 'जोखिम (THREAT)';
+            if (type === 'strength') title = 'ताकत (Strength)';
+            else if (type === 'weakness') title = 'कमजोरी (Weakness)';
+            else if (type === 'opportunity') title = 'अवसर (Opportunity)';
+            else if (type === 'threat') title = 'जोखिम (Threat)';
           }
 
           const card = document.createElement('div');
           card.className = `swot-card ${type}`;
           card.innerHTML = `
             <div class="swot-card-header">
-              <span class="swot-badge">${icon} ${title}</span>
+              <span class="swot-badge">${iconSvg} ${title}</span>
               ${renderDataTag(item)}
             </div>
             <div class="swot-card-text">${item.text}</div>
@@ -875,10 +882,10 @@ function renderEmiTable(schedule) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${state.language === 'hi' ? 'महीना' : 'Month'} ${row.period}</td>
-      <td>${formatINR(row.emi)}</td>
-      <td>${formatINR(row.interest_payment)}</td>
-      <td>${formatINR(row.principal_payment)}</td>
-      <td>${formatINR(row.remaining_balance)}</td>
+      <td class="num-mono">${formatINR(row.emi)}</td>
+      <td class="num-mono">${formatINR(row.interest_payment)}</td>
+      <td class="num-mono">${formatINR(row.principal_payment)}</td>
+      <td class="num-mono">${formatINR(row.remaining_balance)}</td>
       <td><em>${row.note}</em></td>
     `;
     tbody.appendChild(tr);
