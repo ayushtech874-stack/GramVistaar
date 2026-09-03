@@ -2,7 +2,7 @@
  * GramVistaar Frontend App - SIH26091 / Official Banking Advisory Portal
  * Single Page Application (SPA) with 5-Screen guided flow,
  * 202-village searchable type-ahead dropdown, cascading District->Block filter, 4-tier data tags,
- * interactive Scheme Guidelines pop-up modal, 84-Month Schedule pop-up modal with print support,
+ * interactive Scheme Guidelines pop-up modal, 84-Month Schedule pop-up modal with dedicated print support,
  * English & Hindi translation support, and Screen 5 PDF Export summary hand-off.
  */
 
@@ -502,8 +502,13 @@ function initEvents() {
     document.getElementById('emi-modal-overlay').style.display = 'none';
   });
 
+  // Dedicated EMI Schedule Print Action
   document.getElementById('print-modal-emi-btn').addEventListener('click', () => {
+    document.body.classList.add('printing-emi');
     window.print();
+    setTimeout(() => {
+      document.body.classList.remove('printing-emi');
+    }, 500);
   });
 
   // Export Summary Button (Screen 4 -> Screen 5)
@@ -517,8 +522,9 @@ function initEvents() {
     goToStep(4);
   });
 
-  // Print PDF Button
+  // Print PDF Button (Screen 5 Summary Document)
   document.getElementById('print-pdf-btn').addEventListener('click', () => {
+    document.body.classList.remove('printing-emi');
     window.print();
   });
 
@@ -832,7 +838,7 @@ function renderExportDocument() {
     document.getElementById('pdf-emi').textContent = formatINR(financial.monthly_emi) + ' / month';
 
     document.getElementById('pdf-why-scheme-text').textContent = 
-      `This proposal has been pre-screened against Census 2011 village demographics and concessional credit terms under ${financial.corporation}. The applicant's ${formatINR(financial.available_capital)} margin contribution supports a ${formatINR(financial.project_cost)} project ceiling. The ${financial.moratorium_months}-month moratorium allows initial business setup and revenue stabilization before full EMI servicing begins.`;
+      `This proposal has been pre-screened against Census 2011 village demographics and concessional scheme limits under ${financial.corporation}. The applicant's ${formatINR(financial.available_capital)} margin contribution supports a ${formatINR(financial.project_cost)} project ceiling. The ${financial.moratorium_months}-month moratorium allows initial business setup and revenue stabilization before full EMI servicing begins.`;
   }
 }
 

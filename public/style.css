@@ -120,6 +120,30 @@ body {
   background: rgba(255,255,255,0.2);
 }
 
+/* Prominent Action Button */
+.btn-action-primary {
+  background: var(--primary-dark);
+  color: #ffffff;
+  border: 1px solid var(--accent-gold);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-action-primary:hover {
+  background: var(--primary);
+  border-color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
 /* Stepper Bar */
 .stepper-bar {
   background: #ffffff;
@@ -888,30 +912,74 @@ input:focus, select:focus {
     color: #000000 !important;
   }
 
-  .app-header, .stepper-bar, .app-footer, .export-actions-bar, .modal-overlay {
+  /* Default print: Screen 5 Summary Document */
+  body:not(.printing-emi) .app-header,
+  body:not(.printing-emi) .stepper-bar,
+  body:not(.printing-emi) .app-footer,
+  body:not(.printing-emi) .export-actions-bar,
+  body:not(.printing-emi) .modal-overlay {
     display: none !important;
   }
 
-  .main-wrapper {
+  body:not(.printing-emi) .main-wrapper {
     margin: 0 !important;
     padding: 0 !important;
     max-width: 100% !important;
   }
 
-  .view-section {
+  body:not(.printing-emi) .view-section {
     display: none !important;
   }
 
-  #view-step-5 {
+  body:not(.printing-emi) #view-step-5 {
     display: block !important;
   }
 
-  .printable-doc {
+  body:not(.printing-emi) .printable-doc {
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
+  }
+
+  /* EMI Schedule Specific Print Mode */
+  body.printing-emi .app-header,
+  body.printing-emi .stepper-bar,
+  body.printing-emi .app-footer,
+  body.printing-emi .main-wrapper,
+  body.printing-emi #scheme-modal-overlay {
+    display: none !important;
+  }
+
+  body.printing-emi #emi-modal-overlay {
+    display: block !important;
+    position: static !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    animation: none !important;
+  }
+
+  body.printing-emi .modal-card {
+    max-width: 100% !important;
+    max-height: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  body.printing-emi .modal-close-btn,
+  body.printing-emi #print-modal-emi-btn {
+    display: none !important;
+  }
+
+  body.printing-emi .table-container {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.printing-emi .data-table {
+    width: 100% !important;
+    font-size: 0.85rem !important;
   }
 }
 
