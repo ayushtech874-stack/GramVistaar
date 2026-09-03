@@ -3,6 +3,7 @@
  * Express API serving Eligibility, Financial Calculator, Local Metrics, LLM Feasibility, and Assessment Endpoints.
  */
 
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
