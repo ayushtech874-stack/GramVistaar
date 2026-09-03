@@ -7,7 +7,8 @@
       "state_scas": {
         "Bihar": "Bihar State Scheduled Castes Co-operative Development Corporation Limited (BSCCDCL)"
       },
-      "status": "Verified"
+      "status": "Verified",
+      "citation": "NSFDC Official Scheme Guidelines (nsfdc.nic.in) — Annual family income ceiling ₹3,00,000 for rural and urban areas."
     },
     "NBCFDC": {
       "name": "National Backward Classes Finance and Development Corporation",
@@ -16,7 +17,8 @@
       "state_scas": {
         "Bihar": "Bihar State Backward Classes Finance & Development Corporation"
       },
-      "status": "Verified"
+      "status": "Unverified_Placeholder",
+      "citation": "NBCFDC specifies 'Double the Poverty Line (DPL)' family income criteria (nbcfdc.gov.in); exact state-level DPL rupee conversion pending official SCA notification."
     },
     "NSTFDC": {
       "name": "National Scheduled Tribes Finance and Development Corporation",
@@ -25,7 +27,8 @@
       "state_scas": {
         "Bihar": "Bihar State Scheduled Tribes Co-operative Development Corporation"
       },
-      "status": "Verified"
+      "status": "Unverified_Placeholder",
+      "citation": "NSTFDC specifies income eligibility criteria under concessional schemes (nstfdc.tribal.gov.in); exact current rupee ceiling pending official SCA notification."
     }
   }
 }
