@@ -2,6 +2,7 @@
  * GramVistaar Frontend App - SIH26091 / Official Banking Advisory Portal
  * Single Page Application (SPA) with 5-Screen guided flow,
  * 202-village searchable type-ahead dropdown, cascading District->Block filter, 4-tier data tags,
+ * interactive Scheme Guidelines pop-up modal, 84-Month Schedule pop-up modal with print support,
  * English & Hindi translation support, and Screen 5 PDF Export summary hand-off.
  */
 
@@ -159,6 +160,79 @@ const translations = {
     skippedTitle: "ऋण योजना रोकी गई",
     skippedSub: "पात्रता मापदंड अपूर्ण होने पर अमान्य आंकड़ों से बचने के लिए ऋण गणना छिपाई गई है। गाँव की व्यवहार्यता दाईं ओर दिखाई गई है।",
     exportBtn: "📄 बैंक सारांश निर्यात करें →"
+  }
+};
+
+// Scheme Guideline Content Dictionary
+const SCHEME_GUIDELINE_DATA = {
+  NSFDC: {
+    title: "National Scheduled Castes Finance & Development Corporation (NSFDC)",
+    agency: "Ministry of Social Justice and Empowerment, Govt. of India",
+    income_ceiling: "₹3,00,000 / year (Rural & Urban)",
+    assistance: "Up to 90% of Project Cost",
+    promoter_contribution: "10% Margin Money",
+    schemes: [
+      {
+        name: "Micro Finance Scheme",
+        cost: "Up to ₹1,40,000",
+        rate: "6.5% p.a. (Concessional)",
+        tenure: "3 Years (Includes 3-Month Moratorium)"
+      },
+      {
+        name: "Term Loan Scheme",
+        cost: "₹1,40,001 to ₹50,00,000",
+        rate: "8.0% p.a. (Concessional)",
+        tenure: "7 Years (Includes 6-Month Moratorium)"
+      }
+    ],
+    sca_bihar: "Bihar State Scheduled Castes Co-operative Development Corporation Limited (BSCCDCL)",
+    official_url: "https://nsfdc.nic.in"
+  },
+  NBCFDC: {
+    title: "National Backward Classes Finance & Development Corporation (NBCFDC)",
+    agency: "Ministry of Social Justice and Empowerment, Govt. of India",
+    income_ceiling: "Double the Poverty Line (DPL) Criteria",
+    assistance: "Up to 90% of Project Cost",
+    promoter_contribution: "10% Margin Money",
+    schemes: [
+      {
+        name: "Micro Finance Scheme",
+        cost: "Up to ₹1,40,000",
+        rate: "6.5% p.a. (Concessional)",
+        tenure: "3 Years (Includes 3-Month Moratorium)"
+      },
+      {
+        name: "General Term Loan Scheme",
+        cost: "Up to ₹15,00,000",
+        rate: "8.0% p.a. (Concessional)",
+        tenure: "7 Years (Includes 6-Month Moratorium)"
+      }
+    ],
+    sca_bihar: "Bihar State Backward Classes Finance & Development Corporation",
+    official_url: "http://www.nbcfdc.gov.in"
+  },
+  NSTFDC: {
+    title: "National Scheduled Tribes Finance & Development Corporation (NSTFDC)",
+    agency: "Ministry of Tribal Affairs, Govt. of India",
+    income_ceiling: "Family Income Eligibility Criteria",
+    assistance: "Up to 90% of Project Cost",
+    promoter_contribution: "10% Margin Money",
+    schemes: [
+      {
+        name: "Adivasi Samriddhi Yojana (Micro)",
+        cost: "Up to ₹1,40,000",
+        rate: "6.5% p.a. (Concessional)",
+        tenure: "3 Years (Includes 3-Month Moratorium)"
+      },
+      {
+        name: "Term Loan Scheme",
+        cost: "Up to ₹50,00,000",
+        rate: "8.0% p.a. (Concessional)",
+        tenure: "7 Years (Includes 6-Month Moratorium)"
+      }
+    ],
+    sca_bihar: "Bihar State Scheduled Tribes Co-operative Development Corporation",
+    official_url: "https://nstfdc.tribal.gov.in"
   }
 };
 
@@ -355,13 +429,81 @@ function initEvents() {
     document.querySelector('.cat-card[data-cat="retail"]').classList.add('selected');
   });
 
-  // Full EMI Schedule Toggle Button
+  // POP-UP MODAL 1: Scheme Guidelines Pop-up Modal
+  document.getElementById('open-scheme-modal-btn').addEventListener('click', () => {
+    const corpKey = (state.assessmentData?.eligibility?.corporation || document.getElementById('category-status').value || 'NSFDC').toUpperCase();
+    const g = SCHEME_GUIDELINE_DATA[corpKey] || SCHEME_GUIDELINE_DATA.NSFDC;
+
+    document.getElementById('modal-scheme-title').textContent = g.title;
+    document.getElementById('modal-scheme-corp').textContent = g.agency;
+
+    let html = `
+      <div style="margin-bottom: 1.25rem; background: var(--bg-cream); padding: 1rem; border-radius: 6px; border-left: 4px solid var(--primary-dark);">
+        <div><strong>Income Eligibility Ceiling:</strong> ${g.income_ceiling}</div>
+        <div><strong>Govt. Concessional Assistance:</strong> ${g.assistance}</div>
+        <div><strong>Promoter Contribution (Margin Money):</strong> ${g.promoter_contribution}</div>
+      </div>
+      <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--primary-dark);">Concessional Scheme Tiers:</div>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
+    `;
+
+    g.schemes.forEach(s => {
+      html += `
+        <div style="border: 1px solid var(--border-medium); padding: 0.85rem; border-radius: 6px; background: #ffffff;">
+          <div style="font-weight: 700; color: var(--primary); font-size: 0.9rem;">${s.name}</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+            Project Cost Limit: <strong>${s.cost}</strong> | Interest Rate: <strong>${s.rate}</strong> | Tenure: <strong>${s.tenure}</strong>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+      </div>
+      <div style="font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-light); padding-top: 0.75rem;">
+        <div><strong>State Channelizing Agency (SCA) Bihar:</strong> ${g.sca_bihar}</div>
+        <div style="margin-top: 0.35rem;">Official Portal: <a href="${g.official_url}" target="_blank" style="color: var(--blue); font-weight: 700;">${g.official_url} ↗</a></div>
+      </div>
+    `;
+
+    document.getElementById('modal-scheme-content').innerHTML = html;
+    document.getElementById('scheme-modal-overlay').style.display = 'flex';
+  });
+
+  document.getElementById('close-scheme-modal-btn').addEventListener('click', () => {
+    document.getElementById('scheme-modal-overlay').style.display = 'none';
+  });
+
+  // POP-UP MODAL 2: 84-Month EMI Schedule Pop-up Modal
   document.getElementById('toggle-full-emi-btn').addEventListener('click', () => {
-    state.showFullEmiSchedule = !state.showFullEmiSchedule;
-    document.getElementById('toggle-full-emi-btn').textContent = state.showFullEmiSchedule ? 'Show 12 Months' : 'Show Full Schedule';
-    if (state.assessmentData && state.assessmentData.financial) {
-      renderEmiTable(state.assessmentData.financial.emi_schedule);
-    }
+    if (!state.assessmentData || !state.assessmentData.financial || !state.assessmentData.financial.emi_schedule) return;
+
+    const schedule = state.assessmentData.financial.emi_schedule;
+    const tbody = document.getElementById('modal-emi-table-body');
+    tbody.innerHTML = '';
+
+    schedule.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${state.language === 'hi' ? 'महीना' : 'Month'} ${row.period}</td>
+        <td>${formatINR(row.emi)}</td>
+        <td>${formatINR(row.interest_payment)}</td>
+        <td>${formatINR(row.principal_payment)}</td>
+        <td>${formatINR(row.remaining_balance)}</td>
+        <td><em>${row.note}</em></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('emi-modal-overlay').style.display = 'flex';
+  });
+
+  document.getElementById('close-emi-modal-btn').addEventListener('click', () => {
+    document.getElementById('emi-modal-overlay').style.display = 'none';
+  });
+
+  document.getElementById('print-modal-emi-btn').addEventListener('click', () => {
+    window.print();
   });
 
   // Export Summary Button (Screen 4 -> Screen 5)
@@ -700,7 +842,7 @@ function renderEmiTable(schedule) {
   tbody.innerHTML = '';
   if (!schedule) return;
 
-  const rowsToShow = state.showFullEmiSchedule ? schedule : schedule.slice(0, 12);
+  const rowsToShow = schedule.slice(0, 12);
 
   rowsToShow.forEach(row => {
     const tr = document.createElement('tr');
