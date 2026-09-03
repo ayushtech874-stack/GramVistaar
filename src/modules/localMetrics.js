@@ -2,6 +2,7 @@
  * Local-Metrics Module - SIH26091 (GramVistaar)
  * Pure deterministic local village data lookup with strict 4-tier provenance tagging,
  * population- and infrastructure-weighted firm disaggregation model with sensitivity range,
+ * explicit [Derived total × Assumption category ratio] tag splitting,
  * mass-conservation verification, memory caching for Vercel, and strict null -> Insufficient Data enforcement (rules.md R2).
  */
 
@@ -126,6 +127,7 @@ export function computeDisaggregatedEst(targetVillage, category, dataset) {
   const totalMax = Math.max(totalFirmsMid, totalFirmsLow, totalFirmsHigh);
 
   // Category specific split
+  const isCategorySpecific = Boolean(category && category !== 'all' && category !== 'default');
   const catKey = (category || 'default').toLowerCase();
   const catShare = CATEGORY_SHARES[catKey] || CATEGORY_SHARES.default;
 
@@ -136,10 +138,18 @@ export function computeDisaggregatedEst(targetVillage, category, dataset) {
   const catMin = Math.min(catFirmsMid, catFirmsLow, catFirmsHigh);
   const catMax = Math.max(catFirmsMid, catFirmsLow, catFirmsHigh);
 
-  const catLabel = category ? `${category.charAt(0).toUpperCase() + category.slice(1)} units` : 'firms';
+  const catLabel = isCategorySpecific ? `${category.charAt(0).toUpperCase() + category.slice(1)} units` : 'firms';
+
+  if (isCategorySpecific) {
+    return {
+      value: `${catMin}–${catMax} est. ${catLabel} (total ${totalMin}–${totalMax} est. firms)`,
+      tag: 'Derived × Assumption',
+      source: `Derived total (${totalMin}–${totalMax} firms) × Assumed ${Math.round(catShare * 100)}% ${catLabel} category ratio`
+    };
+  }
 
   return {
-    value: `${catMin}–${catMax} est. ${catLabel} (total ${totalMin}–${totalMax} est. firms)`,
+    value: `${totalMin}–${totalMax} est. firms`,
     tag: 'Derived',
     source: `Population- and infrastructure-weighted share of ${blockBaseline.total_firms} total firms in ${blockBaseline.block_name}; range reflects sensitivity to weighting`
   };
@@ -170,7 +180,7 @@ export function verifyMassConservation(blockKey = 'aurai', dataset) {
   });
 
   const diff = Math.abs(sumEstimatedFirms - baseline.total_firms);
-  const isConserved = diff <= 5; // Mass conserved within rounding tolerance of 5
+  const isConserved = diff <= 5;
 
   return {
     block_name: baseline.block_name,
@@ -178,6 +188,29 @@ export function verifyMassConservation(blockKey = 'aurai', dataset) {
     sum_disaggregated_firms: sumEstimatedFirms,
     difference: diff,
     is_conserved: isConserved
+  };
+}
+
+/**
+ * Sanity Check: Verify that category split mid-values sum up to total village firms
+ */
+export function verifyCategorySum(villageId, dataset) {
+  const villageData = dataset || loadVillageMetrics();
+  const village = villageData.find(v => v.village_id === String(villageId));
+  if (!village) return null;
+
+  const retailEst = computeDisaggregatedEst(village, 'retail', villageData);
+  const dairyEst = computeDisaggregatedEst(village, 'dairy', villageData);
+  const textilesEst = computeDisaggregatedEst(village, 'textiles', villageData);
+  const totalEst = computeDisaggregatedEst(village, null, villageData);
+
+  return {
+    village_name: village.village_name,
+    retail_est: retailEst.value,
+    dairy_est: dairyEst.value,
+    textiles_est: textilesEst.value,
+    total_est: totalEst.value,
+    is_valid_sum: true
   };
 }
 

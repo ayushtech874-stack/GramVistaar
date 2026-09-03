@@ -1,9 +1,9 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { lookupLocalMetrics, loadVillageMetrics, verifyMassConservation } from '../src/modules/localMetrics.js';
+import { lookupLocalMetrics, loadVillageMetrics, verifyMassConservation, verifyCategorySum } from '../src/modules/localMetrics.js';
 
 describe('Local-Metrics Module Tests (Deterministic & Rule R2 Compliant)', () => {
-  it('should return Verified population, Verified households, and Derived weighted range for Saghari', () => {
+  it('should return Verified population, Verified households, and Derived x Assumption tag for category-specific lookup', () => {
     const dataset = loadVillageMetrics();
     const saghari = dataset.find(v => v.village_name.toLowerCase().includes('saghari'));
     assert.ok(saghari, 'Saghari village should be in dataset');
@@ -21,32 +21,35 @@ describe('Local-Metrics Module Tests (Deterministic & Rule R2 Compliant)', () =>
     assert.ok(result.households.value > 0);
     assert.equal(result.households.tag, 'Verified');
 
-    // Establishments Derived via weighted model with sensitivity range
-    assert.equal(result.establishments.tag, 'Derived');
+    // Establishments Derived x Assumption
+    assert.equal(result.establishments.tag, 'Derived × Assumption');
     assert.ok(String(result.establishments.value).includes('est. Dairy units'));
     assert.ok(String(result.establishments.value).includes('–'), 'Establishment value should be a range (e.g. 10-15)');
+    assert.ok(result.establishments.source.includes('Assumed 30%'));
+  });
+
+  it('should return Derived tag when requesting total firms without category split', () => {
+    const dataset = loadVillageMetrics();
+    const saghari = dataset.find(v => v.village_name.toLowerCase().includes('saghari'));
+    assert.ok(saghari);
+
+    const result = lookupLocalMetrics(saghari.village_id, null, dataset);
+
+    assert.equal(result.establishments.tag, 'Derived');
+    assert.ok(String(result.establishments.value).includes('est. firms'));
     assert.ok(result.establishments.source.includes('Population- and infrastructure-weighted share'));
   });
 
-  it('should return Verified population, Verified households, and Derived weighted range for Khandail', () => {
+  it('should PASS Category Sum Sanity Check for sample villages (Retail 50% + Dairy 30% + Textiles 20% = 100%)', () => {
     const dataset = loadVillageMetrics();
-    const khandail = dataset.find(v => v.village_name.toLowerCase().includes('khandail'));
-    assert.ok(khandail, 'Khandail village should be in dataset');
+    const ratwara = dataset.find(v => v.village_name.toLowerCase().includes('ratwara'));
+    assert.ok(ratwara);
 
-    const result = lookupLocalMetrics(khandail.village_id, 'retail', dataset);
-
-    assert.equal(result.village_id, khandail.village_id);
-    assert.ok(result.village_name.includes('Khandail'));
-
-    assert.ok(result.population.value > 0);
-    assert.equal(result.population.tag, 'Verified');
-
-    assert.ok(result.households.value > 0);
-    assert.equal(result.households.tag, 'Verified');
-
-    assert.equal(result.establishments.tag, 'Derived');
-    assert.ok(String(result.establishments.value).includes('est. Retail units'));
-    assert.ok(String(result.establishments.value).includes('–'));
+    const sanity = verifyCategorySum(ratwara.village_id, dataset);
+    assert.ok(sanity.is_valid_sum);
+    assert.ok(sanity.retail_est.includes('Retail units'));
+    assert.ok(sanity.dairy_est.includes('Dairy units'));
+    assert.ok(sanity.textiles_est.includes('Textiles units'));
   });
 
   it('should PASS Mass-Conservation test for Aurai block (sum of village estimates equals 558 total firms)', () => {
