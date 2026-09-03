@@ -1,7 +1,7 @@
 /**
  * Financial Calculator Module - SIH26091 (GramVistaar)
  * Pure deterministic financial structuring calculator with margin-money math,
- * tier routing, moratorium-aware EMI schedule, and source-tagged rates.
+ * tier routing, moratorium-aware EMI schedule, edge-case ceiling & floor validation, and source-tagged rates.
  */
 
 import fs from 'fs';
@@ -105,7 +105,7 @@ export function computeEmiSchedule(principal, annualRate, tenureYears, moratoriu
  * Calculate Financial Structuring Plan
  * @param {Object} input - { available_capital, corporation }
  * @param {Array} [terms] - Optional array of scheme term objects
- * @returns {Object} Financial plan per schema.md or EdgeCaseResponse on overflow
+ * @returns {Object} Financial plan per schema.md or EdgeCaseResponse on overflow/underflow
  */
 export function calculateFinancialPlan(input, terms) {
   const schemeTerms = terms || loadSchemeTerms();
@@ -124,6 +124,17 @@ export function calculateFinancialPlan(input, terms) {
   // 1. Calculate project cost ceiling (Capital = 10% Margin Money -> Project Cost = Capital / 0.10)
   const projectCost = Math.round(availableCapital / 0.10);
 
+  // Check floor boundary case (Project cost below minimum threshold of ₹10,000)
+  if (projectCost < 10000) {
+    return {
+      error: true,
+      code: 'BELOW_MINIMUM',
+      message: `Project cost of ₹${projectCost.toLocaleString('en-IN')} is below the minimum threshold of ₹10,000 for concessional schemes.`,
+      min_required_capital: 1000,
+      what_would_change: 'Increase available capital to at least ₹1,000.'
+    };
+  }
+
   // 2. Initial 90% loan eligibility
   let rawLoanEligibility = Math.round(projectCost * 0.90);
 
@@ -136,7 +147,7 @@ export function calculateFinancialPlan(input, terms) {
     s => projectCost >= s.min_project_cost && projectCost <= s.max_project_cost
   );
 
-  // Handle upper ceiling overflow
+  // Handle upper ceiling overflow (Project cost > ₹50,00,000)
   if (!matchedScheme) {
     const highestTier = schemeTerms.reduce((max, s) => (s.max_project_cost > max.max_project_cost ? s : max), schemeTerms[0]);
     return {
@@ -149,7 +160,7 @@ export function calculateFinancialPlan(input, terms) {
     };
   }
 
-  // Cap loan eligibility to tier max_loan_amount
+  // Cap-clamp case: Clamp loan eligibility to scheme's max_loan_amount
   const loanEligibility = Math.min(rawLoanEligibility, matchedScheme.max_loan_amount);
 
   // 4. Calculate Moratorium-Aware EMI Schedule
@@ -163,6 +174,8 @@ export function calculateFinancialPlan(input, terms) {
   return {
     project_cost: projectCost,
     loan_eligibility: loanEligibility,
+    is_cap_clamped: loanEligibility < rawLoanEligibility,
+    raw_unclamped_eligibility: rawLoanEligibility,
     scheme_id: matchedScheme.scheme_id,
     scheme_name: matchedScheme.scheme_name,
     corporation: matchedScheme.corporation,

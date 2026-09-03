@@ -2,7 +2,7 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { calculateFinancialPlan } from '../src/modules/financial.js';
 
-describe('Financial Calculator Module Tests (Deterministic)', () => {
+describe('Financial Calculator Module Edge Case Tests (Deterministic)', () => {
   it('should match the PS worked example (Capital ₹1,00,000 -> Project Cost ₹10,00,000 -> Loan ₹9,00,000, Term Loan Scheme)', () => {
     const input = {
       available_capital: 100000,
@@ -51,7 +51,39 @@ describe('Financial Calculator Module Tests (Deterministic)', () => {
     assert.equal(result.emi_schedule.length, 36);
   });
 
-  it('should handle tier boundary case (Project Cost exactly ₹1,40,000)', () => {
+  // EDGE CASE (a): Ceiling case: project cost > ₹50,00,000 -> returns COST_EXCEEDS_CEILING
+  it('Edge Case (a): should return COST_EXCEEDS_CEILING error when project cost > ₹50,00,000 (Capital ₹6,00,000)', () => {
+    const input = {
+      available_capital: 600000,
+      corporation: 'NSFDC'
+    };
+
+    const result = calculateFinancialPlan(input);
+
+    assert.equal(result.error, true);
+    assert.equal(result.code, 'COST_EXCEEDS_CEILING');
+    assert.equal(result.nearest_tier, 'Term Loan Scheme');
+    assert.ok(result.what_would_change);
+  });
+
+  // EDGE CASE (b): Floor case: capital too small (e.g. ₹500) -> returns BELOW_MINIMUM, no schedule
+  it('Edge Case (b): should return BELOW_MINIMUM error when capital is too small (Capital ₹500 -> Project Cost ₹5,000)', () => {
+    const input = {
+      available_capital: 500,
+      corporation: 'NSFDC'
+    };
+
+    const result = calculateFinancialPlan(input);
+
+    assert.equal(result.error, true);
+    assert.equal(result.code, 'BELOW_MINIMUM');
+    assert.equal(result.min_required_capital, 1000);
+    assert.ok(result.what_would_change);
+    assert.equal(result.emi_schedule, undefined);
+  });
+
+  // EDGE CASE (c): Cap-clamp case: loan eligibility hitting scheme max-loan cap before 90%
+  it('Edge Case (c): should clamp loan eligibility to scheme max-loan cap (Capital ₹14,000 -> Project Cost ₹1,40,000 -> 90% is ₹1,26,000, clamped to ₹1,25,000)', () => {
     const input = {
       available_capital: 14000,
       corporation: 'NSFDC'
@@ -60,7 +92,9 @@ describe('Financial Calculator Module Tests (Deterministic)', () => {
     const result = calculateFinancialPlan(input);
 
     assert.equal(result.project_cost, 140000);
-    assert.equal(result.loan_eligibility, 125000); // 90% of 1.40L = 1.26L, capped at max_loan_amount 1.25L
+    assert.equal(result.raw_unclamped_eligibility, 126000);
+    assert.equal(result.loan_eligibility, 125000); // Clamped to max_loan_amount
+    assert.equal(result.is_cap_clamped, true);
     assert.equal(result.scheme_name, 'Micro Finance Scheme');
   });
 
@@ -77,19 +111,5 @@ describe('Financial Calculator Module Tests (Deterministic)', () => {
     assert.equal(result.interest_rate, 0.08);
     assert.equal(result.tenure_years, 7);
     assert.equal(result.moratorium_months, 6);
-  });
-
-  it('should return COST_EXCEEDS_CEILING error when project cost > ₹50,00,000', () => {
-    const input = {
-      available_capital: 600000,
-      corporation: 'NSFDC'
-    };
-
-    const result = calculateFinancialPlan(input);
-
-    assert.equal(result.error, true);
-    assert.equal(result.code, 'COST_EXCEEDS_CEILING');
-    assert.equal(result.nearest_tier, 'Term Loan Scheme');
-    assert.ok(result.what_would_change);
   });
 });
