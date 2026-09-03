@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GramVistaar — Rural Credit & Advisory Portal</title>
+  <title>GramVistaar — Rural Enterprise Credit & Feasibility Advisory Portal</title>
   
   <!-- Favicon & Apple Touch Icon -->
   <link rel="icon" type="image/jpeg" href="logo.jpg">
@@ -19,30 +19,30 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Top App Navigation Header (Dribbble KYC Portal Style) -->
+  <!-- IBM Carbon Cloud Inspired Navigation Header -->
   <header class="app-header">
     <div class="header-container">
       <div class="brand-group" id="header-brand-logo" title="Return to Home">
         <img src="logo.jpg" alt="GramVistaar Emblem" class="brand-emblem">
         <div class="brand-text">
-          <div class="brand-title">GramVistaar <span class="badge-ver">v2.5 Live</span></div>
-          <div class="brand-sub">Rural Enterprise Credit & Feasibility Advisory</div>
+          <div class="brand-title">GramVistaar <span class="badge-ver">v2.5 Advisory</span></div>
+          <div class="brand-sub" data-i18n="brandSub">Rural Enterprise Credit & Feasibility Advisory Portal</div>
         </div>
       </div>
 
       <div class="header-actions">
         <button id="new-assessment-header-btn" class="btn-secondary-sm">↺ Reset Form</button>
-        <button id="lang-toggle-btn" class="lang-btn">हिंदी</button>
+        <button id="lang-toggle-btn" class="lang-btn">हिंदी (Bhashini AI)</button>
       </div>
     </div>
   </header>
 
-  <!-- Sleek Horizontal Progress Stepper -->
+  <!-- IBM Carbon Horizontal Progress Stepper -->
   <nav class="stepper-bar">
     <div class="stepper-container">
       <div class="step-item active" data-step="0">
@@ -63,7 +63,7 @@
       </div>
       <div class="step-item" data-step="5">
         <div class="step-num">5</div>
-        <span class="step-label" data-i18n="stepExport">Export Document</span>
+        <span class="step-label" data-i18n="stepExport">Export Summary</span>
       </div>
     </div>
   </nav>
@@ -71,33 +71,48 @@
   <!-- Main Application Body -->
   <main class="main-wrapper">
 
-    <!-- View 0: Sleek Compact Welcome Card (No Big Hero Text) -->
+    <!-- View 0: IBM Carbon Dashboard Home Layout (No Center Hero Text) -->
     <section id="view-step-0" class="view-section active">
-      <div class="portal-welcome-card">
-        <div class="welcome-header">
-          <div class="welcome-badge">🏛️ Official Government Advisory</div>
-          <h2 class="welcome-title">Rural Credit & Village Advisory Portal</h2>
-          <p class="welcome-sub">Structure margin capital, check Census 2011 village feasibility, and evaluate 90% concessional scheme financing in 2 minutes.</p>
+      <div class="carbon-dashboard-card">
+        
+        <!-- Top Section: Left Headings, Right Action Button -->
+        <div class="carbon-header-row">
+          <div class="header-left">
+            <h1 class="carbon-page-title" data-i18n="carbonTitle">Rural Enterprise Assessment & Credit Planning</h1>
+            <p class="carbon-page-sub" data-i18n="carbonSub">Evaluate local village demographics, NSFDC/NBCFDC concessional loan terms, and business feasibility before applying for credit.</p>
+          </div>
+          <div class="header-right">
+            <button id="hero-start-btn" class="btn-primary-carbon" data-i18n="carbonCta">Start Business Assessment →</button>
+          </div>
         </div>
 
-        <div class="welcome-actions">
-          <button id="hero-start-btn" class="btn-primary-lg">Start New Assessment →</button>
+        <!-- Separate Bottom Feature Strip -->
+        <div class="carbon-features-strip">
+          <div class="carbon-feature-card">
+            <div class="feat-header">
+              <span class="feat-icon">📍</span>
+              <strong data-i18n="feat1Title">202 Verified Villages</strong>
+            </div>
+            <p class="feat-desc" data-i18n="feat1Sub">Census 2011 population & household data grounded for Bihar blocks.</p>
+          </div>
+
+          <div class="carbon-feature-card">
+            <div class="feat-header">
+              <span class="feat-icon">🏛️</span>
+              <strong data-i18n="feat2Title">Concessional Schemes</strong>
+            </div>
+            <p class="feat-desc" data-i18n="feat2Sub">Exact 90% loan eligibility & 6-month moratorium schedule rules.</p>
+          </div>
+
+          <div class="carbon-feature-card">
+            <div class="feat-header">
+              <span class="feat-icon">🛡️</span>
+              <strong data-i18n="feat3Title">4-Tier Provenance</strong>
+            </div>
+            <p class="feat-desc" data-i18n="feat3Sub">Clear provenance badges ([Verified], [Derived], [AI-Estimated]) on every metric.</p>
+          </div>
         </div>
 
-        <div class="stats-pills-row">
-          <div class="stat-pill">
-            <span class="pill-icon">📍</span>
-            <div><strong>202 Villages</strong><span>Census 2011 Matched</span></div>
-          </div>
-          <div class="stat-pill">
-            <span class="pill-icon">🏛️</span>
-            <div><strong>NSFDC / NBCFDC</strong><span>Concessional Rates</span></div>
-          </div>
-          <div class="stat-pill">
-            <span class="pill-icon">⚡</span>
-            <div><strong>Live Groq AI</strong><span>Grounded Insights</span></div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -108,7 +123,7 @@
           <div class="panel-header">
             <div class="panel-badge">Step 2 of 5</div>
             <h2 class="panel-title" data-i18n="inputTitle">Entrepreneur Details & Location Selection</h2>
-            <p class="panel-sub">Select your target village and available margin capital to structure your loan and feasibility plan.</p>
+            <p class="panel-sub" data-i18n="inputSub">Select your target village and available margin capital to structure your loan and feasibility plan.</p>
           </div>
 
           <!-- Quick Demo Persona Presets Bar -->
@@ -192,7 +207,7 @@
             </div>
 
             <div class="form-group full-width">
-              <label data-i18n="defaultLabel">Prior Government Scheme Default Status</label>
+              <label data-i18n="defaultLabel">Prior Scheme Default Status</label>
               <select id="prior-default-select">
                 <option value="false" data-i18n="noDefault">No Prior Default (Declared)</option>
                 <option value="true" data-i18n="hasDefault">Has Prior Default</option>
@@ -201,7 +216,7 @@
           </div>
 
           <div class="form-actions">
-            <button type="submit" class="btn-primary-lg" data-i18n="submitBtn">Evaluate Eligibility & Generate Advisory Plan →</button>
+            <button type="submit" class="btn-primary-carbon" data-i18n="submitBtn">Evaluate Eligibility & Generate Advisory Plan →</button>
           </div>
         </div>
       </form>
@@ -221,7 +236,7 @@
             </div>
           </div>
           <div class="banner-cta" style="margin-top: 1.25rem;">
-            <button id="gate-continue-btn" class="btn-primary" data-i18n="viewPlanBtn">Proceed to Financial & Feasibility Advisory Plan →</button>
+            <button id="gate-continue-btn" class="btn-primary-carbon" data-i18n="viewPlanBtn">Proceed to Financial & Feasibility Advisory Plan →</button>
           </div>
         </div>
       </div>
@@ -249,7 +264,7 @@
           <div class="dashboard-sub" id="res-village-header"></div>
         </div>
         <div class="dash-actions">
-          <button id="go-to-export-btn" class="btn-primary" data-i18n="exportBtn">📄 Export Bank Summary →</button>
+          <button id="go-to-export-btn" class="btn-primary-carbon" data-i18n="exportBtn">📄 Export Bank Summary →</button>
           <button id="reset-new-assessment-btn" class="btn-secondary-sm">↺ New Assessment</button>
         </div>
       </div>
@@ -347,7 +362,7 @@
           <p class="skipped-sub" data-i18n="skippedSub">Loan calculations are hidden when eligibility requirements are unmet to avoid presenting unsupportable credit terms. Village feasibility insights are shown on the right.</p>
         </div>
 
-        <!-- RIGHT: Feasibility Card -->
+        <!-- RIGHT: Feasibility Card (Spacious SWOT Analysis Grid) -->
         <div id="feasibility-card-container" class="card-panel">
           <div class="panel-header">
             <h3 class="panel-card-title" data-i18n="feasibilityTitle">VILLAGE FEASIBILITY SNAPSHOT</h3>
@@ -379,13 +394,13 @@
             </div>
           </div>
 
-          <!-- SWOT List -->
+          <!-- SPACIOUS, COLOR-CODED SWOT QUADRANTS CONTAINER -->
           <div class="section-block">
-            <div class="section-heading" data-i18n="swotHeader">SWOT & Business Opportunity Analysis</div>
-            <ul id="res-swot-list" class="swot-list"></ul>
+            <div class="section-heading" data-i18n="swotHeader" style="margin-bottom: 0.85rem;">SWOT & Business Opportunity Analysis</div>
+            <div id="res-swot-container" class="swot-grid"></div>
           </div>
 
-          <!-- Pricing Guidance -->
+          <!-- Pricing Guidance Box -->
           <div class="pricing-box">
             <div class="section-heading" data-i18n="reachLabel">Pricing & Monthly Revenue Guidance</div>
             <p id="res-pricing-text" class="pricing-text"></p>
@@ -399,7 +414,7 @@
     <section id="view-step-5" class="view-section">
       <div class="export-actions-bar">
         <button id="back-to-results-btn" class="btn-secondary">← Back to Results</button>
-        <button id="print-pdf-btn" class="btn-primary-lg" style="background-color: var(--emerald-primary);">🖨️ Print / Save Bank Application PDF</button>
+        <button id="print-pdf-btn" class="btn-primary-carbon">🖨️ Print / Save Bank Application PDF</button>
       </div>
 
       <div id="pdf-printable-document" class="printable-doc">
@@ -469,7 +484,7 @@
 
         <!-- Section 5: Why This Scheme Note for Bank Officer -->
         <div class="doc-section note-box">
-          <div class="doc-section-title" style="color: var(--slate-dark);">5. ADVISORY NOTE FOR BANK / SCA OFFICER</div>
+          <div class="doc-section-title">5. ADVISORY NOTE FOR BANK / SCA OFFICER</div>
           <p class="note-text" id="pdf-why-scheme-text">
             This proposal has been pre-screened against Census 2011 village demographics and concessional scheme limits under NSFDC. The applicant's ₹1,00,000 margin contribution supports a ₹10,00,000 project ceiling. The 6-month moratorium allows initial revenue stabilization before full EMI servicing begins.
           </p>
@@ -477,7 +492,7 @@
 
         <!-- Document Footer -->
         <div class="doc-footer">
-          GramVistaar Auto-Generated Summary · Verified Census 2011 Data · Concessional Scheme Rules Tagged
+          GramVistaar Auto-Generated Summary · Verified Census 2011 Data · Bhashini AI Localized
         </div>
       </div>
     </section>
@@ -491,7 +506,7 @@
         <div style="display: flex; align-items: center; gap: 0.75rem;">
           <span style="font-size: 1.5rem;">🏛️</span>
           <div>
-            <h3 class="modal-title" id="modal-scheme-title">Government Concessional Scheme Guidelines</h3>
+            <h3 class="modal-title" id="modal-scheme-title">Concessional Scheme Guidelines</h3>
             <div class="modal-sub" id="modal-scheme-corp">National Concessional Finance Corporation</div>
           </div>
         </div>
@@ -512,7 +527,7 @@
           <div class="modal-sub">Reducing balance monthly breakdown including moratorium period</div>
         </div>
         <div style="display: flex; gap: 0.75rem; align-items: center;">
-          <button id="print-modal-emi-btn" class="btn-primary-lg" style="background-color: var(--emerald-primary); font-size: 0.8rem; padding: 0.4rem 0.85rem;">🖨️ Print EMI Schedule</button>
+          <button id="print-modal-emi-btn" class="btn-primary-carbon" style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">🖨️ Print EMI Schedule</button>
           <button id="close-emi-modal-btn" class="modal-close-btn">&times;</button>
         </div>
       </div>
@@ -539,7 +554,7 @@
   <!-- Official Footer -->
   <footer class="app-footer">
     <div class="footer-container">
-      <div>GramVistaar · Rural Enterprise Advisory Portal</div>
+      <div>GramVistaar · Rural Enterprise Advisory Portal &nbsp;|&nbsp; Bhashini AI Engine Enabled</div>
       <div class="footer-sub">Verified Census 2011 Data · Concessional Corporation Rules · Provenance Tagged</div>
     </div>
   </footer>

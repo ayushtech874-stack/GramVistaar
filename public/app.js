@@ -3,7 +3,7 @@
  * Single Page Application (SPA) with 5-Screen guided flow,
  * 202-village searchable type-ahead dropdown, cascading District->Block filter, 4-tier data tags,
  * interactive Scheme Guidelines pop-up modal, 84-Month Schedule pop-up modal with dedicated print support,
- * English & Hindi translation support, and Screen 5 PDF Export summary hand-off.
+ * English & Hindi (Bhashini AI) translation support, and Screen 5 PDF Export summary hand-off.
  */
 
 // Application State
@@ -29,26 +29,27 @@ const DISTRICT_BLOCK_MAP = {
   Gaya: ['Sherghati']
 };
 
-// Language Dictionary (English & Hindi)
+// Language Dictionary (English & Hindi Bhashini AI Engine)
 const translations = {
   en: {
     brandTitle: "GramVistaar",
     brandSub: "Rural Enterprise Credit & Feasibility Advisory Portal",
-    stepHome: "Home",
+    stepHome: "Start",
     stepInput: "Details & Location",
     stepGate: "Eligibility Gate",
     stepResults: "Advisory Plan",
-    stepExport: "Export Summary",
-    heroTitle: "Structured Credit Planning & Village Feasibility for Rural Entrepreneurs",
-    heroSub: "Evaluate enterprise feasibility against Census 2011 village metrics and calculate moratorium-aware scheme credit limits before applying.",
-    heroCta: "Start Business Assessment →",
+    stepExport: "Export Document",
+    carbonTitle: "Rural Enterprise Assessment & Credit Planning",
+    carbonSub: "Evaluate local village demographics, NSFDC/NBCFDC concessional loan terms, and business feasibility before applying for credit.",
+    carbonCta: "Start Business Assessment →",
     feat1Title: "202 Verified Villages",
-    feat1Sub: "Census 2011 population & household data",
+    feat1Sub: "Census 2011 population & household data grounded for Bihar blocks.",
     feat2Title: "Concessional Schemes",
-    feat2Sub: "Exact NSFDC term loan & micro finance rates",
-    feat3Title: "4-Tier Data Trust",
-    feat3Sub: "Clear provenance badges on every figure",
+    feat2Sub: "Exact 90% loan eligibility & 6-month moratorium schedule rules.",
+    feat3Title: "4-Tier Provenance",
+    feat3Sub: "Clear provenance badges ([Verified], [Derived], [AI-Estimated]) on every metric.",
     inputTitle: "Entrepreneur Details & Location Selection",
+    inputSub: "Select your target village and available margin capital to structure your loan and feasibility plan.",
     districtLabel: "District",
     blockLabel: "Block",
     villageLabel: "Village Name (Search over 202 Villages)",
@@ -62,7 +63,7 @@ const translations = {
     scLabel: "Social Category",
     incomeLabel: "Annual Family Income (₹)",
     incomeHelp: "Concessional ceiling: ₹3,00,000 / year",
-    defaultLabel: "Prior Government Scheme Default Status",
+    defaultLabel: "Prior Scheme Default Status",
     noDefault: "No Prior Default (Declared)",
     hasDefault: "Has Prior Default",
     submitBtn: "Evaluate Eligibility & Generate Advisory Plan →",
@@ -99,26 +100,27 @@ const translations = {
   hi: {
     brandTitle: "ग्राम विस्तार",
     brandSub: "ग्रामीण उद्यम ऋण एवं व्यवहार्यता सलाहकार पोर्टल",
-    stepHome: "मुख्य पृष्ठ",
+    stepHome: "प्रारंभ",
     stepInput: "विवरण एवं स्थान",
     stepGate: "पात्रता जाँच",
     stepResults: "सलाहकार योजना",
-    stepExport: "निर्यात सारांश",
-    heroTitle: "ग्रामीण उद्यमियों के लिए संरचित ऋण योजना एवं गाँव व्यवहार्यता",
-    heroSub: "आवेदन करने से पहले 2011 जनगणना गाँव डेटा के विरुद्ध व्यवहार्यता जांचें और रियायती ऋण सीमा की गणना करें।",
-    heroCta: "उद्यम मूल्यांकन शुरू करें →",
+    stepExport: "निर्यात दस्तावेज़",
+    carbonTitle: "ग्रामीण उद्यम मूल्यांकन एवं ऋण योजना",
+    carbonSub: "ऋण के लिए आवेदन करने से पहले स्थानीय गाँव की जनसांख्यिकी, एनएसएफडीसी/एनबीसीएफडीसी रियायती ऋण शर्तों और व्यावसायिक व्यवहार्यता का मूल्यांकन करें।",
+    carbonCta: "उद्यम मूल्यांकन शुरू करें →",
     feat1Title: "202 सत्यापित गाँव",
-    feat1Sub: "2011 जनगणना जनसंख्या और घरेलू डेटा",
+    feat1Sub: "बिहार के ब्लॉकों के लिए 2011 जनगणना जनसंख्या एवं घरेलू डेटा।",
     feat2Title: "रियायती ऋण योजनाएं",
-    feat2Sub: "सटीक एनएसएफडीसी टर्म लोन और माइक्रो फाइनेंस दरें",
+    feat2Sub: "सटीक 90% ऋण पात्रता और 6 महीने की मोरेटोरियम अवधि के नियम।",
     feat3Title: "4-स्तरीय डेटा भरोसा",
-    feat3Sub: "हर आंकड़े पर स्पष्ट डेटा स्रोत टैग",
+    feat3Sub: "प्रत्येक आंकड़े पर स्पष्ट डेटा स्रोत टैग ([सत्यापित], [व्युत्पन्न], [एआई-अनुमानित])।",
     inputTitle: "उद्यमी विवरण और स्थान चयन",
+    inputSub: "अपनी ऋण और व्यवहार्यता योजना तैयार करने के लिए अपना लक्षित गाँव और उपलब्ध मार्जिन पूंजी चुनें।",
     districtLabel: "जिला",
     blockLabel: "ब्लॉक",
     villageLabel: "गाँव का नाम (202 गाँवों में खोजें)",
     villagePlaceholder: "गाँव का नाम लिखें (जैसे सघारी, रतवारा, खंडैल)...",
-    capitalLabel: "उपलब्ध पूंजी (₹)",
+    capitalLabel: "उपलब्ध मार्जिन पूंजी (₹)",
     capitalHelp: "रियायती ऋण शर्तों के तहत आपका 10% अंशदान।",
     categoryLabel: "प्रस्तावित व्यवसाय श्रेणी",
     catDairy: "डेयरी / दुग्ध इकाई",
@@ -127,7 +129,7 @@ const translations = {
     scLabel: "सामाजिक श्रेणी",
     incomeLabel: "वार्षिक पारिवारिक आय (₹)",
     incomeHelp: "रियायती आय सीमा: ₹3,00,000 / वर्ष",
-    defaultLabel: "पूर्व सरकारी योजना डिफ़ॉल्ट स्थिति",
+    defaultLabel: "पूर्व योजना डिफ़ॉल्ट स्थिति",
     noDefault: "कोई पूर्व डिफ़ॉल्ट नहीं (घोषित)",
     hasDefault: "पूर्व डिफ़ॉल्ट मौजूद है",
     submitBtn: "पात्रता जांचें और योजना तैयार करें →",
@@ -287,7 +289,6 @@ function updateDistrictBlockCascade() {
   const selectedDist = distSelect.value || 'Muzaffarpur';
   const allowedBlocks = DISTRICT_BLOCK_MAP[selectedDist] || ['Aurai'];
 
-  // Update block options
   blockSelect.innerHTML = '';
   allowedBlocks.forEach(b => {
     const opt = document.createElement('option');
@@ -362,22 +363,18 @@ function resetAssessmentState() {
 
 // Event Handlers
 function initEvents() {
-  // Brand Header Click -> Reset to Home
   document.getElementById('header-brand-logo').addEventListener('click', () => {
     resetAssessmentState();
   });
 
-  // Header "New Assessment" button
   document.getElementById('new-assessment-header-btn').addEventListener('click', () => {
     resetAssessmentState();
   });
 
-  // Dashboard "New Assessment" button
   document.getElementById('reset-new-assessment-btn').addEventListener('click', () => {
     resetAssessmentState();
   });
 
-  // District & Block Cascading Dropdowns
   document.getElementById('district-select').addEventListener('change', () => {
     updateDistrictBlockCascade();
   });
@@ -438,20 +435,20 @@ function initEvents() {
     document.getElementById('modal-scheme-corp').textContent = g.agency;
 
     let html = `
-      <div style="margin-bottom: 1.25rem; background: var(--bg-cream); padding: 1rem; border-radius: 6px; border-left: 4px solid var(--primary-dark);">
+      <div style="margin-bottom: 1.25rem; background: var(--carbon-bg); padding: 1rem; border-radius: 6px; border-left: 4px solid var(--carbon-dark);">
         <div><strong>Income Eligibility Ceiling:</strong> ${g.income_ceiling}</div>
         <div><strong>Govt. Concessional Assistance:</strong> ${g.assistance}</div>
         <div><strong>Promoter Contribution (Margin Money):</strong> ${g.promoter_contribution}</div>
       </div>
-      <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--primary-dark);">Concessional Scheme Tiers:</div>
+      <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--carbon-text);">Concessional Scheme Tiers:</div>
       <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem;">
     `;
 
     g.schemes.forEach(s => {
       html += `
-        <div style="border: 1px solid var(--border-medium); padding: 0.85rem; border-radius: 6px; background: #ffffff;">
-          <div style="font-weight: 700; color: var(--primary); font-size: 0.9rem;">${s.name}</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+        <div style="border: 1px solid var(--carbon-border); padding: 0.85rem; border-radius: 6px; background: #ffffff;">
+          <div style="font-weight: 700; color: var(--carbon-blue); font-size: 0.9rem;">${s.name}</div>
+          <div style="font-size: 0.8rem; color: var(--carbon-muted); margin-top: 0.25rem;">
             Project Cost Limit: <strong>${s.cost}</strong> | Interest Rate: <strong>${s.rate}</strong> | Tenure: <strong>${s.tenure}</strong>
           </div>
         </div>
@@ -460,9 +457,9 @@ function initEvents() {
 
     html += `
       </div>
-      <div style="font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-light); padding-top: 0.75rem;">
+      <div style="font-size: 0.8rem; color: var(--carbon-muted); border-top: 1px solid var(--carbon-border); padding-top: 0.75rem;">
         <div><strong>State Channelizing Agency (SCA) Bihar:</strong> ${g.sca_bihar}</div>
-        <div style="margin-top: 0.35rem;">Official Portal: <a href="${g.official_url}" target="_blank" style="color: var(--blue); font-weight: 700;">${g.official_url} ↗</a></div>
+        <div style="margin-top: 0.35rem;">Official Portal: <a href="${g.official_url}" target="_blank" style="color: var(--carbon-blue); font-weight: 700;">${g.official_url} ↗</a></div>
       </div>
     `;
 
@@ -531,7 +528,7 @@ function initEvents() {
   // Language Toggle
   document.getElementById('lang-toggle-btn').addEventListener('click', async () => {
     state.language = state.language === 'en' ? 'hi' : 'en';
-    document.getElementById('lang-toggle-btn').textContent = state.language === 'en' ? 'हिंदी' : 'English';
+    document.getElementById('lang-toggle-btn').textContent = state.language === 'en' ? 'हिंदी (Bhashini AI)' : 'English';
     renderLanguageText();
 
     if (state.assessmentData && state.selectedVillage) {
@@ -711,13 +708,13 @@ function renderDataTag(tagObj) {
   let className = 'ai';
   let icon = '✨';
 
-  if (label === 'Verified') {
+  if (label === 'Verified' || label === 'सत्यापित') {
     className = 'verified';
     icon = '✓';
-  } else if (label === 'Derived') {
+  } else if (label === 'Derived' || label === 'व्युत्पन्न') {
     className = 'derived';
     icon = '🧮';
-  } else if (label === 'Insufficient Data') {
+  } else if (label === 'Insufficient Data' || label === 'डेटा अपर्याप्त') {
     className = 'insufficient';
     icon = '⚠️';
   }
@@ -776,8 +773,8 @@ function renderResultsScreen(data) {
 
   if (feasibility) {
     const liveIndicator = feasibility.is_live_llm
-      ? `<span style="color:#15803d; font-size:0.75rem; font-weight:700;">● Live API (${feasibility.latency_ms}ms)</span>`
-      : `<span style="color:#c59b27; font-size:0.75rem; font-weight:700;">● Grounded Template</span>`;
+      ? `<span style="color:#198038; font-size:0.75rem; font-weight:700;">● Live API (${feasibility.latency_ms}ms)</span>`
+      : `<span style="color:#b45309; font-size:0.75rem; font-weight:700;">● Grounded Template</span>`;
 
     document.getElementById('res-village-header').innerHTML = `${feasibility.village_name}, ${feasibility.block} Block (${feasibility.district}) &nbsp;|&nbsp; ${liveIndicator}`;
 
@@ -790,14 +787,38 @@ function renderResultsScreen(data) {
     document.getElementById('res-est-val').textContent = feasibility.competitor_density.value ? feasibility.competitor_density.value : 'N/A';
     document.getElementById('res-est-tag').innerHTML = renderDataTag(feasibility.competitor_density);
 
-    const swotContainer = document.getElementById('res-swot-list');
-    swotContainer.innerHTML = '';
-    if (feasibility.swot) {
-      feasibility.swot.forEach(item => {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${item.type.toUpperCase()}:</strong> ${item.text} ${renderDataTag(item)}`;
-        swotContainer.appendChild(li);
-      });
+    // SPACIOUS COLOR-CODED SWOT RENDERING
+    const swotContainer = document.getElementById('res-swot-container');
+    if (swotContainer) {
+      swotContainer.innerHTML = '';
+      if (feasibility.swot && feasibility.swot.length > 0) {
+        feasibility.swot.forEach(item => {
+          const type = (item.type || 'strength').toLowerCase();
+          let icon = '💪';
+          let title = 'STRENGTH';
+          if (type === 'weakness') { icon = '⚠️'; title = 'WEAKNESS'; }
+          else if (type === 'opportunity') { icon = '🚀'; title = 'OPPORTUNITY'; }
+          else if (type === 'threat') { icon = '🛡️'; title = 'THREAT'; }
+
+          if (state.language === 'hi') {
+            if (type === 'strength') title = 'ताकत (STRENGTH)';
+            else if (type === 'weakness') title = 'कमजोरी (WEAKNESS)';
+            else if (type === 'opportunity') title = 'अवसर (OPPORTUNITY)';
+            else if (type === 'threat') title = 'जोखिम (THREAT)';
+          }
+
+          const card = document.createElement('div');
+          card.className = `swot-card ${type}`;
+          card.innerHTML = `
+            <div class="swot-card-header">
+              <span class="swot-badge">${icon} ${title}</span>
+              ${renderDataTag(item)}
+            </div>
+            <div class="swot-card-text">${item.text}</div>
+          `;
+          swotContainer.appendChild(card);
+        });
+      }
     }
 
     if (feasibility.pricing_guidance) {
