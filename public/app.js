@@ -1,7 +1,7 @@
 /**
  * GramVistaar Frontend App - SIH26091 / Official Banking Advisory Portal
  * Single Page Application (SPA) with 5-Screen guided flow,
- * 202-village searchable type-ahead dropdown, 4-tier data tags,
+ * 202-village searchable type-ahead dropdown, cascading District->Block filter, 4-tier data tags,
  * English & Hindi translation support, and Screen 5 PDF Export summary hand-off.
  */
 
@@ -20,6 +20,12 @@ const state = {
   priorDefault: false,
   assessmentData: null,
   showFullEmiSchedule: false
+};
+
+// District -> Block Mapping
+const DISTRICT_BLOCK_MAP = {
+  Muzaffarpur: ['Aurai'],
+  Gaya: ['Sherghati']
 };
 
 // Language Dictionary (English & Hindi)
@@ -191,12 +197,50 @@ async function fetchVillages() {
     if (data && data.villages) {
       state.villagesList = data.villages;
       state.filteredVillages = data.villages;
-      if (data.villages.length > 0) {
-        state.selectedVillage = data.villages[0];
-      }
+      updateDistrictBlockCascade();
     }
   } catch (err) {
     console.error('Failed to fetch villages list:', err);
+  }
+}
+
+// Cascading District -> Block Handler
+function updateDistrictBlockCascade() {
+  const distSelect = document.getElementById('district-select');
+  const blockSelect = document.getElementById('block-select');
+  if (!distSelect || !blockSelect) return;
+
+  const selectedDist = distSelect.value || 'Muzaffarpur';
+  const allowedBlocks = DISTRICT_BLOCK_MAP[selectedDist] || ['Aurai'];
+
+  // Update block options
+  blockSelect.innerHTML = '';
+  allowedBlocks.forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b;
+    opt.textContent = `${b} Block`;
+    blockSelect.appendChild(opt);
+  });
+  blockSelect.value = allowedBlocks[0];
+
+  filterVillagesByDistrictBlock();
+}
+
+function filterVillagesByDistrictBlock() {
+  const selectedDist = document.getElementById('district-select').value;
+  const selectedBlock = document.getElementById('block-select').value;
+
+  state.filteredVillages = state.villagesList.filter(v =>
+    v.district.toLowerCase() === selectedDist.toLowerCase() &&
+    v.block.toLowerCase() === selectedBlock.toLowerCase()
+  );
+
+  if (state.filteredVillages.length > 0) {
+    state.selectedVillage = state.filteredVillages[0];
+    document.getElementById('village-search-input').value = `${state.selectedVillage.village_name} (${state.selectedVillage.block})`;
+  } else {
+    state.selectedVillage = null;
+    document.getElementById('village-search-input').value = '';
   }
 }
 
@@ -227,16 +271,14 @@ function resetAssessmentState() {
   state.availableCapital = 100000;
   state.showFullEmiSchedule = false;
   
+  document.getElementById('district-select').value = 'Muzaffarpur';
+  updateDistrictBlockCascade();
+
   document.getElementById('capital-input').value = 100000;
   document.getElementById('capital-lakh-help').textContent = formatLakhHelper(100000);
   document.getElementById('income-input').value = 60000;
   document.getElementById('category-status').value = 'SC';
   document.getElementById('prior-default-select').value = 'false';
-
-  if (state.villagesList.length > 0) {
-    state.selectedVillage = state.villagesList[0];
-    document.getElementById('village-search-input').value = '';
-  }
 
   document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
   document.querySelector('.cat-card[data-cat="dairy"]').classList.add('selected');
@@ -261,8 +303,20 @@ function initEvents() {
     resetAssessmentState();
   });
 
+  // District & Block Cascading Dropdowns
+  document.getElementById('district-select').addEventListener('change', () => {
+    updateDistrictBlockCascade();
+  });
+
+  document.getElementById('block-select').addEventListener('change', () => {
+    filterVillagesByDistrictBlock();
+  });
+
   // Quick Persona Presets
   document.getElementById('preset-rekha-btn').addEventListener('click', () => {
+    document.getElementById('district-select').value = 'Muzaffarpur';
+    updateDistrictBlockCascade();
+
     state.selectedCategory = 'dairy';
     state.availableCapital = 100000;
     document.getElementById('capital-input').value = 100000;
@@ -281,6 +335,9 @@ function initEvents() {
   });
 
   document.getElementById('preset-anita-btn').addEventListener('click', () => {
+    document.getElementById('district-select').value = 'Muzaffarpur';
+    updateDistrictBlockCascade();
+
     state.selectedCategory = 'retail';
     state.availableCapital = 140000;
     document.getElementById('capital-input').value = 140000;
@@ -360,18 +417,27 @@ function initEvents() {
   const typeaheadResults = document.getElementById('typeahead-results');
 
   villageInput.addEventListener('focus', () => {
-    renderTypeaheadResults(state.villagesList);
+    const currentDist = document.getElementById('district-select').value;
+    const currentBlock = document.getElementById('block-select').value;
+    const list = state.villagesList.filter(v =>
+      v.district.toLowerCase() === currentDist.toLowerCase() &&
+      v.block.toLowerCase() === currentBlock.toLowerCase()
+    );
+    renderTypeaheadResults(list);
     typeaheadResults.classList.add('active');
   });
 
   villageInput.addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase().trim();
-    state.filteredVillages = state.villagesList.filter(v =>
-      v.village_name.toLowerCase().includes(query) ||
-      v.block.toLowerCase().includes(query) ||
-      v.district.toLowerCase().includes(query)
+    const currentDist = document.getElementById('district-select').value;
+    const currentBlock = document.getElementById('block-select').value;
+
+    const list = state.villagesList.filter(v =>
+      v.district.toLowerCase() === currentDist.toLowerCase() &&
+      v.block.toLowerCase() === currentBlock.toLowerCase() &&
+      (v.village_name.toLowerCase().includes(query) || v.block.toLowerCase().includes(query))
     );
-    renderTypeaheadResults(state.filteredVillages);
+    renderTypeaheadResults(list);
     typeaheadResults.classList.add('active');
   });
 
@@ -397,7 +463,7 @@ function renderTypeaheadResults(list) {
   const container = document.getElementById('typeahead-results');
   container.innerHTML = '';
   if (list.length === 0) {
-    container.innerHTML = `<div class="typeahead-item">No matching villages found</div>`;
+    container.innerHTML = `<div class="typeahead-item">No matching villages found in selected district/block</div>`;
     return;
   }
 

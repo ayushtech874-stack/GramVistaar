@@ -106,11 +106,7 @@ Translate for interface text.
 pick based on whichever the Data/Database owner is fastest with.
 
 ---
-## Not yet decided (raise before building, don't assume)
-- Exact affordability-flag thresholds (tech-spec.md §2.5) — set during testing against
-  realistic revenue numbers for the chosen district/category, not fixed in advance.
-- Second demo language — depends on the chosen district's dominant regional language
-  (implementation-plan.md Phase 0).
-- Whether the PDF export uses a library-generated PDF or a styled print-to-PDF HTML view —
-  pick whichever the Frontend owner can ship fastest without compromising the layout in
-  design.md §5.
+## D15 — Voice/text free-input, deferred, with implementation constraint if built later
+**Context:** Rural, low-literacy users may find typed dropdown search harder than speaking. Genuine accessibility motivation, not scope creep.
+**Decision:** Deferred past this build. If added later: speech-to-text (external API) transcribes to plain text, which is then matched against the existing closed lists (202 village names, fixed categories, amount regex) via fuzzy matching — the same mechanism the type-ahead dropdown already uses. This must NOT become a chatbot, NER pipeline, or trained intent classifier — it still resolves to the same fixed form fields, just via a second input method. No conversation state, no memory.
+**Status:** Decided, deferred. Revisit only after Screens 1-5 are fully working.
