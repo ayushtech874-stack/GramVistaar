@@ -55,6 +55,11 @@ const translations = {
     feat3Sub: "Clear provenance badges ([Verified], [Derived], [AI-Estimated]) on every metric.",
     inputTitle: "Entrepreneur Details & Location Selection",
     inputSub: "Select your target village and available margin capital to structure your loan and feasibility plan.",
+    nameLabel: "Applicant Full Name",
+    ageLabel: "Applicant Age (Years)",
+    occupationLabel: "Current Primary Occupation",
+    familyMembersLabel: "Family Members (Total Count)",
+    earningMembersLabel: "Earning Members in Household",
     districtLabel: "District",
     blockLabel: "Block",
     villageLabel: "Village Name (Search over 202 Villages)",
@@ -121,6 +126,11 @@ const translations = {
     feat3Sub: "प्रत्येक आंकड़े पर स्पष्ट डेटा स्रोत टैग ([सत्यापित], [व्युत्पन्न], [एआई-अनुमानित])।",
     inputTitle: "उद्यमी विवरण और स्थान चयन",
     inputSub: "अपनी ऋण और व्यवहार्यता योजना तैयार करने के लिए अपना लक्षित गाँव और उपलब्ध मार्जिन पूंजी चुनें।",
+    nameLabel: "आवेदक का पूरा नाम",
+    ageLabel: "आवेदक की आयु (वर्ष)",
+    occupationLabel: "वर्तमान प्राथमिक व्यवसाय",
+    familyMembersLabel: "परिवार के कुल सदस्य संख्या",
+    earningMembersLabel: "परिवार में कमाने वाले सदस्य",
     districtLabel: "जिला",
     blockLabel: "ब्लॉक",
     villageLabel: "गाँव का नाम (202 गाँवों में खोजें)",
@@ -337,6 +347,27 @@ function renderLanguageText() {
   if (searchInput) {
     searchInput.placeholder = t.villagePlaceholder;
   }
+
+  const nameInput = document.getElementById('applicant-name-input');
+  if (nameInput) nameInput.placeholder = state.language === 'hi' ? 'उदा. रेखा देवी' : 'e.g. Rekha Devi';
+
+  const ageInput = document.getElementById('applicant-age-input');
+  if (ageInput) ageInput.placeholder = state.language === 'hi' ? 'उदा. 34' : 'e.g. 34';
+
+  const occInput = document.getElementById('applicant-occupation-input');
+  if (occInput) occInput.placeholder = state.language === 'hi' ? 'उदा. कृषि मजदूर, खुदरा विक्रेता, कारीगर' : 'e.g. Agricultural Labourer, Retailer, Artisan';
+
+  const famInput = document.getElementById('family-members-input');
+  if (famInput) famInput.placeholder = state.language === 'hi' ? 'उदा. 5' : 'e.g. 5';
+
+  const earnInput = document.getElementById('earning-members-input');
+  if (earnInput) earnInput.placeholder = state.language === 'hi' ? 'उदा. 2' : 'e.g. 2';
+
+  const capInput = document.getElementById('capital-input');
+  if (capInput) capInput.placeholder = state.language === 'hi' ? 'उदा. 100000' : 'e.g. 100000';
+
+  const incInput = document.getElementById('income-input');
+  if (incInput) incInput.placeholder = state.language === 'hi' ? 'उदा. 60000' : 'e.g. 60000';
 
   if (state.assessmentData) {
     renderEligibilityGate(state.assessmentData.eligibility);
