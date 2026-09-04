@@ -581,7 +581,7 @@ function initEvents() {
   // Language Toggle
   document.getElementById('lang-toggle-btn').addEventListener('click', async () => {
     state.language = state.language === 'en' ? 'hi' : 'en';
-    document.getElementById('lang-toggle-btn').textContent = state.language === 'en' ? 'हिंदी (Bhashini AI)' : 'English';
+    document.getElementById('lang-toggle-btn').textContent = state.language === 'en' ? 'हिंदी' : 'English';
     renderLanguageText();
 
     if (state.assessmentData && state.selectedVillage) {
