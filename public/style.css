@@ -288,15 +288,30 @@ label {
 
 /* Board Body Canvas */
 .board-body-canvas {
-  padding: 2rem 1.75rem;
+  padding: 1.75rem 2rem;
   background: #ffffff;
-  min-height: 480px;
+}
+
+/* Remove Double Card Layering & Redundant White Gaps inside Master Board */
+.board-body-canvas .card-hero-panel,
+.board-body-canvas .card-panel {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+}
+
+.board-body-canvas .panel-header {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
 /* Main Layout */
 .main-wrapper {
   max-width: 1150px;
-  margin: 1.75rem auto;
+  margin: 1.5rem auto;
   padding: 0 1rem;
   min-height: calc(100vh - 250px);
 }
@@ -314,8 +329,7 @@ label {
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
   border: 1px solid #e2e8f0;
   border-radius: 16px;
-  padding: 2.75rem 2.5rem;
-  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+  padding: 0;
 }
 
 .hero-header-row {
