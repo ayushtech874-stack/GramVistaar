@@ -490,15 +490,36 @@
 
         <!-- Section 1: Applicant Persona & Location -->
         <div class="doc-section">
-          <div class="doc-section-title">1. Applicant Personal & Household Details</div>
+          <div class="doc-section-title">1. Applicant Personal &amp; Household Details</div>
           <div class="doc-grid-2">
-            <div><strong>Applicant Full Name:</strong> <span id="pdf-applicant-name">Rekha Devi</span></div>
-            <div><strong>Age & Occupation:</strong> <span id="pdf-applicant-age-occ">34 Years · Agricultural Labourer</span></div>
-            <div><strong>Household Composition:</strong> <span id="pdf-household-info">5 Family Members (2 Earning)</span></div>
-            <div><strong>Social Category:</strong> <span id="pdf-cat-status">Scheduled Castes (SC)</span></div>
-            <div><strong>Target Village:</strong> <span id="pdf-village-name">Ratwara Bindwara Deoria</span></div>
-            <div><strong>Block & District:</strong> <span id="pdf-block-dist">Aurai, Muzaffarpur (Bihar)</span></div>
-            <div><strong>Declared Annual Income:</strong> <span id="pdf-income" class="num-mono">₹60,000 / year</span></div>
+            <div class="doc-field">
+              <span class="doc-label">Applicant Full Name</span>
+              <span id="pdf-applicant-name" class="doc-val">Rekha Devi</span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Age &amp; Occupation</span>
+              <span id="pdf-applicant-age-occ" class="doc-val">34 Years · Agricultural Labourer</span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Household Composition</span>
+              <span id="pdf-household-info" class="doc-val">5 Family Members (2 Earning)</span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Declared Annual Income</span>
+              <span id="pdf-income" class="doc-val num-mono">₹60,000 / year</span>
+            </div>
+            <div class="doc-field full-width">
+              <span class="doc-label">Social Category</span>
+              <span id="pdf-cat-status" class="doc-val">Scheduled Castes (SC)</span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Target Village</span>
+              <span id="pdf-village-name" class="doc-val">Ratwara Bindwara Deoria</span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Block &amp; District</span>
+              <span id="pdf-block-dist" class="doc-val">Aurai, Muzaffarpur (Bihar)</span>
+            </div>
           </div>
         </div>
 
@@ -506,23 +527,53 @@
         <div class="doc-section">
           <div class="doc-section-title">2. Concessional Financial Plan Summary</div>
           <div class="doc-grid-2">
-            <div><strong>Project Cost Ceiling:</strong> <span id="pdf-project-cost" class="num-mono">₹10,00,000</span> [Derived]</div>
-            <div><strong>Loan Eligibility (90%):</strong> <span id="pdf-loan-elig" class="num-mono">₹9,00,000</span> [Derived]</div>
-            <div><strong>Matched Corporation:</strong> <span id="pdf-corp">NSFDC Term Loan Scheme</span> [Verified]</div>
-            <div><strong>Concessional Rate:</strong> <span id="pdf-rate" class="num-mono">8.0% p.a.</span> [Verified]</div>
-            <div><strong>Tenure & Moratorium:</strong> <span id="pdf-tenure">7 Years (6-Month Moratorium)</span> [Verified]</div>
-            <div><strong>Monthly EMI:</strong> <span id="pdf-emi" class="num-mono">₹14,818 / month</span></div>
+            <div class="doc-field">
+              <span class="doc-label">Project Cost Ceiling</span>
+              <span class="doc-val"><span id="pdf-project-cost" class="num-mono">₹10,00,000</span> <span class="doc-tag">[Derived]</span></span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Loan Eligibility (90%)</span>
+              <span class="doc-val"><span id="pdf-loan-elig" class="num-mono">₹9,00,000</span> <span class="doc-tag">[Derived]</span></span>
+            </div>
+            <div class="doc-field full-width">
+              <span class="doc-label">Matched Scheme &amp; Corp</span>
+              <span class="doc-val"><span id="pdf-corp">NSFDC Term Loan Scheme</span> <span class="doc-tag">[Verified]</span></span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Concessional Rate</span>
+              <span class="doc-val"><span id="pdf-rate" class="num-mono">8.0% p.a.</span> <span class="doc-tag">[Verified]</span></span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Tenure &amp; Moratorium</span>
+              <span class="doc-val"><span id="pdf-tenure">7 Years (6-Month Moratorium)</span> <span class="doc-tag">[Verified]</span></span>
+            </div>
+            <div class="doc-field full-width highlight-emi">
+              <span class="doc-label">Monthly Repayment EMI</span>
+              <span id="pdf-emi" class="doc-val num-mono emi-highlight-val">₹14,818 / month</span>
+            </div>
           </div>
         </div>
 
         <!-- Section 3: Village Feasibility Baseline -->
         <div class="doc-section">
-          <div class="doc-section-title">3. Village Feasibility & Revenue Baseline</div>
+          <div class="doc-section-title">3. Village Feasibility &amp; Revenue Baseline</div>
           <div class="doc-grid-2">
-            <div><strong>Village Population:</strong> <span id="pdf-pop" class="num-mono">22,386</span> [Verified, Census 2011]</div>
-            <div><strong>Households:</strong> <span id="pdf-hh" class="num-mono">4,633</span> [Verified, Census 2011]</div>
-            <div><strong>Est. Setup Cost:</strong> <span id="pdf-setup-cost" class="num-mono">₹80,000–₹1,50,000</span> [AI-Estimated]</div>
-            <div><strong>Est. Monthly Revenue:</strong> <span id="pdf-est-rev" class="num-mono">₹32,000 / month</span> [Derived]</div>
+            <div class="doc-field">
+              <span class="doc-label">Village Population</span>
+              <span class="doc-val"><span id="pdf-pop" class="num-mono">22,386</span> <span class="doc-tag">[Verified, Census 2011]</span></span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Village Households</span>
+              <span class="doc-val"><span id="pdf-hh" class="num-mono">4,633</span> <span class="doc-tag">[Verified, Census 2011]</span></span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Est. Setup Cost</span>
+              <span class="doc-val"><span id="pdf-setup-cost" class="num-mono">₹80,000–₹1,50,000</span> <span class="doc-tag ai">[AI-Estimated]</span></span>
+            </div>
+            <div class="doc-field">
+              <span class="doc-label">Est. Monthly Revenue</span>
+              <span class="doc-val"><span id="pdf-est-rev" class="num-mono">₹32,000 / month</span> <span class="doc-tag">[Derived]</span></span>
+            </div>
           </div>
         </div>
 
@@ -530,10 +581,10 @@
         <div class="doc-section">
           <div class="doc-section-title">4. Mandatory Document Checklist for Bank Application</div>
           <div class="checklist-grid">
-            <div class="checklist-item"><span class="checkbox">☐</span> 1. Aadhaar Card & PAN Card Copy (Self-Attested)</div>
+            <div class="checklist-item"><span class="checkbox">☐</span> 1. Aadhaar Card &amp; PAN Card Copy (Self-Attested)</div>
             <div class="checklist-item"><span class="checkbox">☐</span> 2. Caste / Social Category Certificate (SC/ST/OBC)</div>
             <div class="checklist-item"><span class="checkbox">☐</span> 3. Bank Account Passbook (Aadhaar Seeded)</div>
-            <div class="checklist-item"><span class="checkbox">☐</span> 4. GramVistaar Business Setup & Feasibility Report</div>
+            <div class="checklist-item"><span class="checkbox">☐</span> 4. GramVistaar Business Setup &amp; Feasibility Report</div>
             <div class="checklist-item"><span class="checkbox">☐</span> 5. Domicile / Residence Certificate (State of Bihar)</div>
             <div class="checklist-item"><span class="checkbox">☐</span> 6. Affidavit of No Prior Scheme Default</div>
           </div>
