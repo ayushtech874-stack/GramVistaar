@@ -1,6 +1,6 @@
 /* GramVistaar Master Style - Trustworthy Financial & Credit Advisory Design System */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap');
 
 :root {
   --forest-dark: #16332a;      /* High-Trust Government Forest */
@@ -46,6 +46,36 @@ body {
   color: var(--text-main);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Web App Headings & Subheaders - High Contrast Bold Differentiation */
+h1, h2, h3, h4, h5, h6,
+.page-headline,
+.section-title,
+.panel-title,
+.card-title,
+.dashboard-title,
+.panel-card-title,
+.banner-title,
+.table-title,
+.doc-title,
+.doc-section-title,
+.modal-title,
+.feature-title,
+.section-heading,
+.swot-badge,
+.affordability-header,
+.preset-label,
+.cat-name,
+.meta-label {
+  font-weight: 800 !important;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+label {
+  font-weight: 800 !important;
+  color: #1e293b !important;
 }
 
 /* Tabular Monospace Figures for Aligning Financial Currency Columns */
@@ -196,55 +226,110 @@ body {
 
 /* Hero Panel (Screen 0 Home) */
 .card-hero-panel {
-  background: #ffffff;
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 2.25rem;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 2.75rem 2.5rem;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
 }
 
 .hero-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--border-light);
-  margin-bottom: 2rem;
+  padding-bottom: 2.25rem;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 2.25rem;
+}
+
+.hero-text-block {
+  max-width: 820px;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(15, 76, 58, 0.07);
+  border: 1px solid rgba(15, 76, 58, 0.16);
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  margin-bottom: 1.25rem;
+}
+
+.eyebrow-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ffffff;
+  background: var(--forest-dark);
+  padding: 0.15rem 0.55rem;
+  border-radius: 12px;
+  letter-spacing: 0.05em;
+}
+
+.eyebrow-text {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--forest-dark);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .page-headline {
-  font-size: 1.65rem;
-  font-weight: 700;
-  color: var(--text-main);
-  letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.22;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
 }
 
 .page-subtext {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  max-width: 720px;
-  line-height: 1.6;
+  font-size: 1.08rem;
+  font-weight: 400;
+  color: #475569;
+  max-width: 760px;
+  line-height: 1.65;
+  margin-bottom: 2rem;
 }
 
-/* Single Primary CTA Button with Arrow */
+.hero-cta-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Single Primary CTA Button with Distinct Styling */
 .btn-primary-cta {
-  background: var(--forest-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  background: linear-gradient(135deg, #0f4c3a 0%, #166534 100%);
   color: #ffffff !important;
-  border: 1px solid var(--forest-dark);
-  padding: 0.85rem 1.65rem;
-  border-radius: 6px;
-  font-size: 0.92rem;
-  font-weight: 600;
+  border: none;
+  padding: 0.95rem 2.25rem;
+  border-radius: 10px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 16px rgba(15, 76, 58, 0.3);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
 }
 
 .btn-primary-cta:hover {
-  background: #0d211b;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #0b3a2c 0%, #14532d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 76, 58, 0.42);
+}
+
+.btn-arrow-icon {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.btn-primary-cta:hover .btn-arrow-icon {
+  transform: translateX(4px);
 }
 
 .btn-secondary {
@@ -280,7 +365,7 @@ body {
   background: #0d211b;
 }
 
-/* Separate Feature Strip with Inline SVG Line Icons */
+/* Feature Strip with Lucide Line Icon Badges */
 .features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -288,32 +373,59 @@ body {
 }
 
 .feature-card {
-  background: var(--bg-main);
-  border: 1px solid var(--border-light);
-  border-radius: 8px;
-  padding: 1.25rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.35rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.2s ease;
 }
 
-.feature-header {
+.feature-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  transform: translateY(-1px);
+}
+
+.feature-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 0.4rem;
-}
-
-.feature-svg-icon {
-  width: 20px;
-  height: 20px;
-  color: var(--forest-dark);
+  justify-content: center;
   flex-shrink: 0;
 }
 
+.feature-icon-badge.green {
+  background: rgba(15, 76, 58, 0.08);
+  color: #0f4c3a;
+  border: 1px solid rgba(15, 76, 58, 0.16);
+}
+
+.feature-icon-badge.gold {
+  background: rgba(180, 83, 9, 0.08);
+  color: #b45309;
+  border: 1px solid rgba(180, 83, 9, 0.16);
+}
+
+.feature-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.feature-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
 .feature-body {
-  font-size: 0.82rem;
-  color: var(--text-muted);
+  font-size: 0.83rem;
+  color: #64748b;
   line-height: 1.5;
 }
 
@@ -753,7 +865,10 @@ input:focus, select:focus {
   color: #ffffff;
   padding: 0.65rem;
   text-align: left;
-  font-weight: 600;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
 }
 
 .data-table td {
@@ -778,9 +893,9 @@ input:focus, select:focus {
 }
 
 .section-heading {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text-main);
+  font-size: 0.95rem;
+  font-weight: 800 !important;
+  color: #0f172a;
   margin-bottom: 0.75rem;
 }
 
