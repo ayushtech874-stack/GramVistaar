@@ -1289,21 +1289,143 @@ input:focus, select:focus {
   line-height: 1.6;
 }
 
-/* Print Optimization Styles */
+/* Print Optimization Styles - Single Page A4 Bank Hand-off Document */
+@page {
+  size: A4 portrait;
+  margin: 6mm 8mm;
+}
+
 @media print {
-  body { background: #ffffff !important; color: #000000 !important; }
+  /* Hide all non-document UI elements including Board Header Strip & Inline Stepper */
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   body:not(.printing-emi) .app-header,
+  body:not(.printing-emi) .board-header-strip,
   body:not(.printing-emi) .stepper-bar,
+  body:not(.printing-emi) .stepper-bar-inline,
   body:not(.printing-emi) .app-footer,
   body:not(.printing-emi) .export-actions-bar,
-  body:not(.printing-emi) .modal-overlay { display: none !important; }
-  body:not(.printing-emi) .main-wrapper { margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
-  body:not(.printing-emi) .view-section { display: none !important; }
-  body:not(.printing-emi) #view-step-5 { display: block !important; }
-  body:not(.printing-emi) .printable-doc { border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; width: 100% !important; }
+  body:not(.printing-emi) .modal-overlay {
+    display: none !important;
+  }
+
+  body:not(.printing-emi) .master-workspace-board {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body:not(.printing-emi) .board-body-canvas {
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  body:not(.printing-emi) .main-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  body:not(.printing-emi) .view-section {
+    display: none !important;
+  }
+
+  body:not(.printing-emi) #view-step-5 {
+    display: block !important;
+  }
+
+  /* Single Page Document Layout Adjustments */
+  body:not(.printing-emi) .printable-doc {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  body:not(.printing-emi) .doc-header {
+    border-bottom: 2px solid #16332a !important;
+    padding-bottom: 0.4rem !important;
+    margin-bottom: 0.6rem !important;
+  }
+
+  body:not(.printing-emi) .doc-logo {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  body:not(.printing-emi) .doc-title {
+    font-size: 1.15rem !important;
+    color: #16332a !important;
+  }
+
+  body:not(.printing-emi) .doc-sub {
+    font-size: 0.72rem !important;
+  }
+
+  body:not(.printing-emi) .doc-meta {
+    font-size: 0.72rem !important;
+  }
+
+  body:not(.printing-emi) .doc-section {
+    margin-bottom: 0.6rem !important;
+    page-break-inside: avoid !important;
+  }
+
+  body:not(.printing-emi) .doc-section-title {
+    font-size: 0.8rem !important;
+    font-weight: 800 !important;
+    padding-bottom: 0.2rem !important;
+    margin-bottom: 0.4rem !important;
+    border-bottom: 1px solid #cbd5e1 !important;
+  }
+
+  body:not(.printing-emi) .doc-grid-2 {
+    font-size: 0.78rem !important;
+    gap: 0.35rem 1rem !important;
+  }
+
+  body:not(.printing-emi) .checklist-grid {
+    font-size: 0.74rem !important;
+    gap: 0.25rem 0.75rem !important;
+  }
+
+  body:not(.printing-emi) .note-box {
+    padding: 0.5rem 0.75rem !important;
+    margin-top: 0.4rem !important;
+    background: #f8fafc !important;
+    border-left: 3px solid #16332a !important;
+  }
+
+  body:not(.printing-emi) .note-text {
+    font-size: 0.74rem !important;
+    line-height: 1.35 !important;
+  }
+
+  body:not(.printing-emi) .doc-footer {
+    margin-top: 0.5rem !important;
+    padding-top: 0.35rem !important;
+    font-size: 0.68rem !important;
+    border-top: 1px solid #e2e8f0 !important;
+  }
 
   /* EMI Schedule Specific Print Mode */
   body.printing-emi .app-header,
+  body.printing-emi .board-header-strip,
   body.printing-emi .stepper-bar,
   body.printing-emi .app-footer,
   body.printing-emi .main-wrapper,
@@ -1313,7 +1435,7 @@ input:focus, select:focus {
   body.printing-emi .modal-close-btn,
   body.printing-emi #print-modal-emi-btn { display: none !important; }
   body.printing-emi .table-container { max-height: none !important; overflow: visible !important; }
-  body.printing-emi .data-table { width: 100% !important; font-size: 0.85rem !important; }
+  body.printing-emi .data-table { width: 100% !important; font-size: 0.82rem !important; }
 }
 
 /* Footer */
