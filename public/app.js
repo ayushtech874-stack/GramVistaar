@@ -17,6 +17,11 @@ const state = {
   availableCapital: 100000,
   categoryStatus: 'SC',
   familyIncome: 60000,
+  applicantName: 'Rekha Devi',
+  applicantAge: 34,
+  applicantOccupation: 'Agricultural Labourer / Dairy Worker',
+  familyMembersCount: 5,
+  earningMembersCount: 2,
   stateName: 'Bihar',
   priorDefault: false,
   assessmentData: null,
@@ -395,6 +400,11 @@ function initEvents() {
     document.getElementById('income-input').value = 60000;
     document.getElementById('category-status').value = 'SC';
     document.getElementById('prior-default-select').value = 'false';
+    if (document.getElementById('applicant-name-input')) document.getElementById('applicant-name-input').value = 'Rekha Devi';
+    if (document.getElementById('applicant-age-input')) document.getElementById('applicant-age-input').value = '34';
+    if (document.getElementById('applicant-occupation-input')) document.getElementById('applicant-occupation-input').value = 'Agricultural Labourer / Dairy Worker';
+    if (document.getElementById('family-members-input')) document.getElementById('family-members-input').value = '5';
+    if (document.getElementById('earning-members-input')) document.getElementById('earning-members-input').value = '2';
 
     const ratwara = state.villagesList.find(v => v.village_name.toLowerCase().includes('ratwara'));
     if (ratwara) {
@@ -416,6 +426,11 @@ function initEvents() {
     document.getElementById('income-input').value = 80000;
     document.getElementById('category-status').value = 'OBC';
     document.getElementById('prior-default-select').value = 'false';
+    if (document.getElementById('applicant-name-input')) document.getElementById('applicant-name-input').value = 'Anita Kumari';
+    if (document.getElementById('applicant-age-input')) document.getElementById('applicant-age-input').value = '29';
+    if (document.getElementById('applicant-occupation-input')) document.getElementById('applicant-occupation-input').value = 'Retail / Kirana Store Owner';
+    if (document.getElementById('family-members-input')) document.getElementById('family-members-input').value = '4';
+    if (document.getElementById('earning-members-input')) document.getElementById('earning-members-input').value = '2';
 
     const saghari = state.villagesList.find(v => v.village_name.toLowerCase().includes('saghari'));
     if (saghari) {
@@ -848,6 +863,22 @@ function renderExportDocument() {
   const catSel = document.getElementById('category-status');
   document.getElementById('pdf-cat-status').textContent = catSel.options[catSel.selectedIndex].text;
   document.getElementById('pdf-income').textContent = formatINR(document.getElementById('income-input').value) + ' / year';
+
+  const appName = document.getElementById('applicant-name-input')?.value || 'Rekha Devi';
+  const appAge = document.getElementById('applicant-age-input')?.value || '34';
+  const appOcc = document.getElementById('applicant-occupation-input')?.value || 'Agricultural Labourer / Dairy Worker';
+  const famCount = document.getElementById('family-members-input')?.value || '5';
+  const earnCount = document.getElementById('earning-members-input')?.value || '2';
+
+  if (document.getElementById('pdf-applicant-name')) {
+    document.getElementById('pdf-applicant-name').textContent = appName;
+  }
+  if (document.getElementById('pdf-applicant-age-occ')) {
+    document.getElementById('pdf-applicant-age-occ').textContent = `${appAge} Years · ${appOcc}`;
+  }
+  if (document.getElementById('pdf-household-info')) {
+    document.getElementById('pdf-household-info').textContent = `${famCount} Family Members (${earnCount} Earning)`;
+  }
 
   if (feasibility) {
     document.getElementById('pdf-village-name').textContent = feasibility.village_name;

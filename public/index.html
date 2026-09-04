@@ -132,6 +132,32 @@
           </div>
           
           <div class="form-grid">
+            <!-- Applicant Personal & Household Details -->
+            <div class="form-group">
+              <label data-i18n="nameLabel">Applicant Full Name</label>
+              <input type="text" id="applicant-name-input" value="Rekha Devi" placeholder="e.g. Rekha Devi">
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="ageLabel">Applicant Age (Years)</label>
+              <input type="number" id="applicant-age-input" value="34" min="18" max="70" step="1">
+            </div>
+
+            <div class="form-group full-width">
+              <label data-i18n="occupationLabel">Current Primary Occupation</label>
+              <input type="text" id="applicant-occupation-input" value="Agricultural Labourer / Dairy Worker" placeholder="e.g. Agricultural Labourer, Retailer, Artisan">
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="familyMembersLabel">Family Members (Total Count)</label>
+              <input type="number" id="family-members-input" value="5" min="1" max="20" step="1">
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="earningMembersLabel">Earning Members in Household</label>
+              <input type="number" id="earning-members-input" value="2" min="1" max="10" step="1">
+            </div>
+
             <!-- District & Block -->
             <div class="form-group">
               <label data-i18n="districtLabel">District</label>
@@ -198,7 +224,7 @@
 
             <div class="form-group">
               <label data-i18n="incomeLabel">Annual Family Income (₹)</label>
-              <input type="number" id="income-input" value="60000" step="5000">
+              <input type="number" id="income-input" value="60000" step="1">
               <span class="field-hint" data-i18n="incomeHelp">Concessional ceiling: ₹3,00,000 / year</span>
             </div>
 
@@ -435,8 +461,11 @@
 
         <!-- Section 1: Applicant Persona & Location -->
         <div class="doc-section">
-          <div class="doc-section-title">1. Applicant & Location Details</div>
+          <div class="doc-section-title">1. Applicant Personal & Household Details</div>
           <div class="doc-grid-2">
+            <div><strong>Applicant Full Name:</strong> <span id="pdf-applicant-name">Rekha Devi</span></div>
+            <div><strong>Age & Occupation:</strong> <span id="pdf-applicant-age-occ">34 Years · Agricultural Labourer</span></div>
+            <div><strong>Household Composition:</strong> <span id="pdf-household-info">5 Family Members (2 Earning)</span></div>
             <div><strong>Social Category:</strong> <span id="pdf-cat-status">Scheduled Castes (SC)</span></div>
             <div><strong>Target Village:</strong> <span id="pdf-village-name">Ratwara Bindwara Deoria</span></div>
             <div><strong>Block & District:</strong> <span id="pdf-block-dist">Aurai, Muzaffarpur (Bihar)</span></div>
