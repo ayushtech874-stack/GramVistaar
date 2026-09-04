@@ -678,6 +678,15 @@ function renderTypeaheadResults(list) {
   });
 }
 
+// Step Metadata Map for Master Board Context
+const stepMetaMap = {
+  0: { badge: 'STEP 1 OF 5 · ADVISORY OVERVIEW', title: 'Rural Enterprise Credit & Feasibility Advisory Portal' },
+  2: { badge: 'STEP 2 OF 5 · APPLICANT & LOCATION DETAILS', title: 'Entrepreneur Profile & Location Setup' },
+  3: { badge: 'STEP 3 OF 5 · ELIGIBILITY CHECK', title: 'MoSJE Concessional Scheme Gate' },
+  4: { badge: 'STEP 4 OF 5 · ADVISORY & FEASIBILITY PLAN', title: 'Hyper-Local Feasibility & Loan Plan' },
+  5: { badge: 'STEP 5 OF 5 · EXPORT DOCUMENT', title: 'Bank-Ready Hand-Off Summary' }
+};
+
 // Switch Navigation Step
 function goToStep(step) {
   state.currentStep = step;
@@ -685,6 +694,13 @@ function goToStep(step) {
   document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
   const targetView = document.getElementById(`view-step-${step}`);
   if (targetView) targetView.classList.add('active');
+
+  // Update Board Header Context
+  const meta = stepMetaMap[step] || stepMetaMap[0];
+  const badgeEl = document.getElementById('board-step-badge');
+  const titleEl = document.getElementById('board-title-text');
+  if (badgeEl) badgeEl.textContent = meta.badge;
+  if (titleEl) titleEl.textContent = meta.title;
 
   document.querySelectorAll('.step-item').forEach(item => {
     const s = Number(item.getAttribute('data-step'));

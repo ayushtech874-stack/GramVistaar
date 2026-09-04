@@ -42,39 +42,55 @@
     </div>
   </header>
 
-  <!-- Step Progress Indicator (1 Start -> 2 Details & Location -> 3 Eligibility Gate -> 4 Advisory Plan -> 5 Export Document) -->
-  <nav class="stepper-bar">
-    <div class="stepper-container">
-      <div class="step-item active" data-step="0">
-        <div class="step-num">1</div>
-        <span class="step-label" data-i18n="stepHome">Start</span>
-      </div>
-      <div class="step-item" data-step="2">
-        <div class="step-num">2</div>
-        <span class="step-label" data-i18n="stepInput">Details & Location</span>
-      </div>
-      <div class="step-item" data-step="3">
-        <div class="step-num">3</div>
-        <span class="step-label" data-i18n="stepGate">Eligibility Gate</span>
-      </div>
-      <div class="step-item" data-step="4">
-        <div class="step-num">4</div>
-        <span class="step-label" data-i18n="stepResults">Advisory Plan</span>
-      </div>
-      <div class="step-item" data-step="5">
-        <div class="step-num">5</div>
-        <span class="step-label" data-i18n="stepExport">Export Document</span>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Application Body -->
+  <!-- Main Application Body: All 5 Steps Load Inside This Master Workspace Board -->
   <main class="main-wrapper">
 
-    <!-- View 0: Home Section -->
-    <section id="view-step-0" class="view-section active">
-      <div class="card-hero-panel">
-        <div class="hero-header-row">
+    <!-- Master Workspace Board Shell -->
+    <div class="master-workspace-board">
+
+      <!-- Board Header Strip with Integrated Stepper -->
+      <div class="board-header-strip">
+        <div class="board-brand-context">
+          <div class="board-status-badge">
+            <span class="pulse-dot"></span>
+            <span id="board-step-badge">STEP 1 OF 5 · ADVISORY OVERVIEW</span>
+          </div>
+          <h2 class="board-title" id="board-title-text">Rural Enterprise Credit &amp; Feasibility Advisory Portal</h2>
+        </div>
+
+        <!-- Master Stepper Bar Integrated Directly Into Board Header -->
+        <nav class="stepper-bar-inline">
+          <div class="stepper-container">
+            <div class="step-item active" data-step="0">
+              <div class="step-num">1</div>
+              <span class="step-label" data-i18n="stepHome">Start</span>
+            </div>
+            <div class="step-item" data-step="2">
+              <div class="step-num">2</div>
+              <span class="step-label" data-i18n="stepInput">Details &amp; Location</span>
+            </div>
+            <div class="step-item" data-step="3">
+              <div class="step-num">3</div>
+              <span class="step-label" data-i18n="stepGate">Eligibility Gate</span>
+            </div>
+            <div class="step-item" data-step="4">
+              <div class="step-num">4</div>
+              <span class="step-label" data-i18n="stepResults">Advisory Plan</span>
+            </div>
+            <div class="step-item" data-step="5">
+              <div class="step-num">5</div>
+              <span class="step-label" data-i18n="stepExport">Export Document</span>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Board Body Canvas: Steps 1, 2, 3, 4, and 5 load dynamically on this board canvas -->
+      <div class="board-body-canvas">
+
+        <!-- View 0: Home Section -->
+        <section id="view-step-0" class="view-section active">
+          <div class="hero-header-row">
           <div class="hero-text-block">
             <div class="hero-eyebrow">
               <span class="eyebrow-badge">MoSJE SCHEME ADVISORY</span>
@@ -537,6 +553,9 @@
         </div>
       </div>
     </section>
+
+      </div> <!-- End .board-body-canvas -->
+    </div> <!-- End .master-workspace-board -->
 
   </main>
 
