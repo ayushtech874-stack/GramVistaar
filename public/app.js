@@ -14,14 +14,14 @@ const state = {
   filteredVillages: [],
   selectedVillage: null,
   selectedCategory: 'dairy',
-  availableCapital: 100000,
+  availableCapital: null,
   categoryStatus: 'SC',
-  familyIncome: 60000,
-  applicantName: 'Rekha Devi',
-  applicantAge: 34,
-  applicantOccupation: 'Agricultural Labourer / Dairy Worker',
-  familyMembersCount: 5,
-  earningMembersCount: 2,
+  familyIncome: null,
+  applicantName: '',
+  applicantAge: null,
+  applicantOccupation: '',
+  familyMembersCount: null,
+  earningMembersCount: null,
   stateName: 'Bihar',
   priorDefault: false,
   assessmentData: null,
@@ -348,20 +348,27 @@ function renderLanguageText() {
 function resetAssessmentState() {
   state.assessmentData = null;
   state.selectedCategory = 'dairy';
-  state.availableCapital = 100000;
+  state.availableCapital = null;
+  state.familyIncome = null;
   state.showFullEmiSchedule = false;
   
   document.getElementById('district-select').value = 'Muzaffarpur';
   updateDistrictBlockCascade();
 
-  document.getElementById('capital-input').value = 100000;
-  document.getElementById('capital-lakh-help').textContent = formatLakhHelper(100000);
-  document.getElementById('income-input').value = 60000;
+  document.getElementById('capital-input').value = '';
+  document.getElementById('capital-lakh-help').textContent = '(Enter capital in ₹)';
+  document.getElementById('income-input').value = '';
   document.getElementById('category-status').value = 'SC';
   document.getElementById('prior-default-select').value = 'false';
 
+  if (document.getElementById('applicant-name-input')) document.getElementById('applicant-name-input').value = '';
+  if (document.getElementById('applicant-age-input')) document.getElementById('applicant-age-input').value = '';
+  if (document.getElementById('applicant-occupation-input')) document.getElementById('applicant-occupation-input').value = '';
+  if (document.getElementById('family-members-input')) document.getElementById('family-members-input').value = '';
+  if (document.getElementById('earning-members-input')) document.getElementById('earning-members-input').value = '';
+  if (document.getElementById('village-search-input')) document.getElementById('village-search-input').value = '';
+
   document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
-  document.querySelector('.cat-card[data-cat="dairy"]').classList.add('selected');
 
   goToStep(0);
 }
