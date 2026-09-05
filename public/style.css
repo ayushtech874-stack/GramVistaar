@@ -635,6 +635,27 @@ input:focus, select:focus {
   box-shadow: 0 0 0 3px rgba(22, 51, 42, 0.12);
 }
 
+/* Field Error and Banner Validation Styles */
+.field-error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+.form-error-banner {
+  background-color: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  padding: 0.85rem 1.15rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
 .input-with-help {
   display: flex;
   align-items: center;

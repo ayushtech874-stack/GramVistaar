@@ -382,6 +382,7 @@ function resetAssessmentState() {
   state.availableCapital = null;
   state.familyIncome = null;
   state.showFullEmiSchedule = false;
+  state.selectedVillage = null;
   
   document.getElementById('district-select').value = 'Muzaffarpur';
   updateDistrictBlockCascade();
@@ -399,7 +400,13 @@ function resetAssessmentState() {
   if (document.getElementById('earning-members-input')) document.getElementById('earning-members-input').value = '';
   if (document.getElementById('village-search-input')) document.getElementById('village-search-input').value = '';
 
+  document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+  const errorBanner = document.getElementById('form-error-banner');
+  if (errorBanner) errorBanner.style.display = 'none';
+
   document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+  const defaultCat = document.querySelector('.cat-card[data-cat="dairy"]');
+  if (defaultCat) defaultCat.classList.add('selected');
 
   goToStep(0);
 }
@@ -428,6 +435,10 @@ function initEvents() {
 
   // Quick Persona Presets
   document.getElementById('preset-rekha-btn').addEventListener('click', () => {
+    document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+    const banner = document.getElementById('form-error-banner');
+    if (banner) banner.style.display = 'none';
+
     document.getElementById('district-select').value = 'Muzaffarpur';
     updateDistrictBlockCascade();
 
@@ -454,6 +465,10 @@ function initEvents() {
   });
 
   document.getElementById('preset-anita-btn').addEventListener('click', () => {
+    document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+    const banner = document.getElementById('form-error-banner');
+    if (banner) banner.style.display = 'none';
+
     document.getElementById('district-select').value = 'Muzaffarpur';
     updateDistrictBlockCascade();
 
@@ -477,6 +492,26 @@ function initEvents() {
     }
     document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
     document.querySelector('.cat-card[data-cat="retail"]').classList.add('selected');
+  });
+
+  // Attach Stepper Bar Click Navigation
+  document.querySelectorAll('.step-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const step = Number(item.getAttribute('data-step'));
+      goToStep(step);
+    });
+  });
+
+  // Attach Clear Error Listeners On Input Fields
+  ['applicant-name-input', 'applicant-age-input', 'applicant-occupation-input', 'village-search-input', 'capital-input', 'income-input'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => {
+        el.classList.remove('field-error');
+        const banner = document.getElementById('form-error-banner');
+        if (banner) banner.style.display = 'none';
+      });
+    }
   });
 
   // POP-UP MODAL 1: Scheme Guidelines Pop-up Modal
@@ -673,6 +708,8 @@ function renderTypeaheadResults(list) {
       state.selectedVillage = v;
       document.getElementById('village-search-input').value = `${v.village_name} (${v.block})`;
       container.classList.remove('active');
+      const villageInput = document.getElementById('village-search-input');
+      if (villageInput) villageInput.classList.remove('field-error');
     });
     container.appendChild(div);
   });
@@ -689,6 +726,14 @@ const stepMetaMap = {
 
 // Switch Navigation Step
 function goToStep(step) {
+  if ((step === 3 || step === 4 || step === 5) && !state.assessmentData) {
+    const msg = state.language === 'hi'
+      ? 'कृपया सलाह रिपोर्ट देखने से पहले चरण 2 में उद्यमी विवरण भरें और मूल्यांकन पूरा करें।'
+      : 'Please complete and evaluate the Entrepreneur Details form in Step 2 first before proceeding to the Advisory Plan or Export Document.';
+    alert(msg);
+    step = 2;
+  }
+
   state.currentStep = step;
 
   document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
@@ -714,19 +759,93 @@ function goToStep(step) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Validate Form Inputs Before Execution
+function validateFormInputs() {
+  let isValid = true;
+  let firstInvalidElement = null;
+
+  const nameInput = document.getElementById('applicant-name-input');
+  const ageInput = document.getElementById('applicant-age-input');
+  const occInput = document.getElementById('applicant-occupation-input');
+  const villageInput = document.getElementById('village-search-input');
+  const capitalInput = document.getElementById('capital-input');
+  const incomeInput = document.getElementById('income-input');
+
+  [nameInput, ageInput, occInput, villageInput, capitalInput, incomeInput].forEach(el => {
+    if (el) el.classList.remove('field-error');
+  });
+
+  if (!nameInput || !nameInput.value.trim()) {
+    if (nameInput) nameInput.classList.add('field-error');
+    isValid = false;
+    if (!firstInvalidElement) firstInvalidElement = nameInput;
+  }
+
+  const ageVal = Number(ageInput?.value);
+  if (!ageInput || !ageInput.value || isNaN(ageVal) || ageVal < 18 || ageVal > 70) {
+    if (ageInput) ageInput.classList.add('field-error');
+    isValid = false;
+    if (!firstInvalidElement) firstInvalidElement = ageInput;
+  }
+
+  if (!occInput || !occInput.value.trim()) {
+    if (occInput) occInput.classList.add('field-error');
+    isValid = false;
+    if (!firstInvalidElement) firstInvalidElement = occInput;
+  }
+
+  if (!state.selectedVillage || !villageInput || !villageInput.value.trim()) {
+    if (villageInput) villageInput.classList.add('field-error');
+    isValid = false;
+    if (!firstInvalidElement) firstInvalidElement = villageInput;
+  }
+
+  const capVal = Number(capitalInput?.value);
+  if (!capitalInput || !capitalInput.value || isNaN(capVal) || capVal <= 0) {
+    if (capitalInput) capitalInput.classList.add('field-error');
+    isValid = false;
+    if (!firstInvalidElement) firstInvalidElement = capitalInput;
+  }
+
+  const incVal = Number(incomeInput?.value);
+  if (!incomeInput || incomeInput.value === '' || isNaN(incVal) || incVal < 0) {
+    if (incomeInput) incomeInput.classList.add('field-error');
+    isValid = false;
+    if (!firstInvalidElement) firstInvalidElement = incomeInput;
+  }
+
+  const errorBanner = document.getElementById('form-error-banner');
+  if (!isValid) {
+    const msg = state.language === 'hi' 
+      ? 'कृपया सलाह योजना बनाने से पहले सभी आवश्यक उद्यमी विवरण (नाम, आयु, व्यवसाय, गाँव, उपलब्ध पूंजी, और वार्षिक आय) भरें।' 
+      : 'Please fill in all required entrepreneur details (Name, Age, Occupation, Village, Margin Capital, and Annual Income) before generating the advisory plan.';
+    
+    if (errorBanner) {
+      errorBanner.textContent = msg;
+      errorBanner.style.display = 'flex';
+    } else {
+      alert(msg);
+    }
+    if (firstInvalidElement) firstInvalidElement.focus();
+  } else {
+    if (errorBanner) errorBanner.style.display = 'none';
+  }
+
+  return isValid;
+}
+
 // Run Full Assessment via API
 async function runAssessment() {
-  if (!state.selectedVillage) {
-    alert('Please select a village from the dropdown search list.');
+  if (!validateFormInputs()) {
     return;
   }
 
   const payload = {
     category: document.getElementById('category-status').value,
-    family_income_annual: Number(document.getElementById('income-input').value) || 60000,
+    family_income_annual: Number(document.getElementById('income-input').value),
     state: 'Bihar',
     prior_default: document.getElementById('prior-default-select').value === 'true',
-    available_capital: Number(document.getElementById('capital-input').value) || 100000,
+    available_capital: Number(document.getElementById('capital-input').value),
     village_id: state.selectedVillage.village_id,
     business_category: state.selectedCategory,
     language: state.language
