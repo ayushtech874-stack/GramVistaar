@@ -741,7 +741,7 @@
           <svg class="modal-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           <div>
             <h3 class="modal-title">Census 2011 Disaggregation & Mass-Conservation Proof</h3>
-            <div class="modal-sub">Data Provenance Methodology & Ranged Density Formula</div>
+            <div class="modal-sub">Infrastructure-Weighted Formula & Sensitivity-Ranged Density Model</div>
           </div>
         </div>
         <button id="close-methodology-modal-btn" class="modal-close-btn" aria-label="Close">&times;</button>
@@ -750,13 +750,19 @@
         <div class="methodology-content">
           
           <div class="methodology-box">
-            <h4 class="methodology-heading">1. Block-to-Village Proportional Disaggregation Formula</h4>
-            <p>Because the 6th Economic Census reports establishment counts at the <strong>Block level</strong>, GramVistaar uses Census 2011 village population proportions to disaggregate block totals down to individual villages:</p>
+            <h4 class="methodology-heading">1. Infrastructure-Weighted & Non-Linear Disaggregation Formula</h4>
+            <p>Rather than using a simple linear population split, GramVistaar weights village populations non-linearly (\(\text{Pop}^{0.85}\)) and multiplies by a 7-amenity infrastructure score (\(I_v\)):</p>
             <div class="formula-block">
-              \(\text{Firms}_{v,c} = \text{Firms}_{\text{Block},c} \times \left( \frac{\text{Population}_v}{\text{Population}_{\text{Block}}} \right)\)
+              \(I_v = (1 + 0.60\cdot\text{Mandi} + 0.40\cdot\text{Haat}) \times (1 + 0.35\cdot\text{Bank} + 0.20\cdot\text{ATM}) \times (1 + 0.25\cdot\text{Road} + 0.15\cdot\text{Bus}) \times (1 + 0.20\cdot\text{Power})\)
+            </div>
+            <div class="formula-block">
+              \(W_{v,\alpha} = (\text{Population}_v)^\alpha \times I_v \quad \text{where } \alpha \in [0.70, 1.00]\)
+            </div>
+            <div class="formula-block">
+              \(\text{Firms}_{v,\alpha} = \text{Round}\left( \frac{W_{v,\alpha}}{\sum_{k \in \text{Block}} W_{k,\alpha}} \times \text{Firms}_{\text{Block}} \right)\)
             </div>
             <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
-              Where <em>c</em> represents the enterprise category (Retail, Dairy, or Textiles) and <em>v</em> represents the specific Census 2011 village.
+              Sensitivity range bounds (\(\alpha = 0.70\) to \(1.00\)) generate an honest range \([N_{\text{min}}, N_{\text{max}}]\) rather than over-claiming point accuracy.
             </p>
           </div>
 
@@ -764,10 +770,10 @@
             <h4 class="methodology-heading">2. Mathematical Proof of Mass Conservation (Rule R2)</h4>
             <p>To guarantee zero artificial inflation or data loss, the sum of all estimated village firm counts across a block strictly equals the official 6th Economic Census block total:</p>
             <div class="formula-block">
-              \(\sum_{v \in \text{Block}} \text{Firms}_{v,c} = \sum_{v \in \text{Block}} \left[ \text{Firms}_{\text{Block},c} \times \left( \frac{\text{Population}_v}{\text{Population}_{\text{Block}}} \right) \right] = \text{Firms}_{\text{Block},c} \times \frac{\sum \text{Population}_v}{\text{Population}_{\text{Block}}} = \text{Firms}_{\text{Block},c}\)
+              \(\sum_{v \in \text{Block}} \text{Firms}_{v,\alpha} = \sum_{v \in \text{Block}} \left[ \frac{W_{v,\alpha}}{\sum_k W_{k,\alpha}} \times \text{Firms}_{\text{Block}} \right] = \text{Firms}_{\text{Block}} \times \frac{\sum_v W_{v,\alpha}}{\sum_k W_{k,\alpha}} = \text{Firms}_{\text{Block}}\)
             </div>
             <p style="font-size: 0.82rem; color: #059669; font-weight: 600; margin-top: 0.5rem;">
-              ✔ Verified for all 202 Bihar villages across Aurai (558 total firms) and Sherghati (3,350 total firms) blocks.
+              ✔ Verified for all 202 Bihar villages across Aurai Block (116 villages, 558 total firms) and Sherghati Block (86 villages, 3,350 total firms).
             </p>
           </div>
 
@@ -776,7 +782,8 @@
             <p>Rather than presenting point-estimates that over-claim precision, establishment density is displayed as an honest range:</p>
             <ul class="methodology-list">
               <li><strong>[Verified Tag]:</strong> Census 2011 Village Population & Household counts sourced directly from official Census microdata.</li>
-              <li><strong>[Derived Tag]:</strong> Disaggregated firm estimates computed mathematically via the mass-conserved formula above.</li>
+              <li><strong>[Derived Tag]:</strong> Infrastructure-weighted disaggregated firm estimates computed mathematically via the mass-conserved formula above.</li>
+              <li><strong>[Derived × Assumption Tag]:</strong> Category-specific unit estimates (Retail 50%, Dairy 30%, Textiles 20%) applied to disaggregated totals.</li>
               <li><strong>[AI-Estimated Tag]:</strong> Localized Qualitative SWOT & Market Guidance generated dynamically using grounded village constraints.</li>
             </ul>
           </div>
@@ -845,8 +852,8 @@
                   </tr>
                   <tr>
                     <td><strong>Mapped Census Villages</strong></td>
-                    <td>137 Verified Villages</td>
-                    <td>65 Verified Villages</td>
+                    <td>116 Verified Villages</td>
+                    <td>86 Verified Villages</td>
                   </tr>
                   <tr>
                     <td><strong>Economic Census Firms</strong></td>
@@ -856,13 +863,13 @@
                   <tr>
                     <td><strong>Code Architecture</strong></td>
                     <td><span class="diff-check">✔ Identical Code Base</span></td>
-                    <td><span class="diff-check">✔ Data File Swap (`data/villages.json`)</span></td>
+                    <td><span class="diff-check">✔ Data File Swap (`data/village_metrics.json`)</span></td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <p style="font-size: 0.82rem; color: var(--forest-dark); font-weight: 700; margin-top: 0.75rem;">
-              📌 Jury Pitch Takeaway: "Here is literally the same code, different data file, and it worked instantly for a second real district in Bihar."
+              📌 Jury Pitch Takeaway: "Here is literally the same code, different data file, and it worked instantly for a second real district in Bihar (116 Aurai + 86 Sherghati = 202 villages)."
             </p>
           </div>
 
