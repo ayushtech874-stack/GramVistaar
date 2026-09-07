@@ -763,6 +763,21 @@ function initEvents() {
       }
     });
   }
+
+  // POP-UP MODAL 5: Presentation & Jury Defense Blueprint Modal
+  const openPresentationBtn = document.getElementById('open-presentation-modal-btn');
+  if (openPresentationBtn) {
+    openPresentationBtn.addEventListener('click', () => {
+      document.getElementById('presentation-modal-overlay').style.display = 'flex';
+    });
+  }
+
+  const closePresentationBtn = document.getElementById('close-presentation-modal-btn');
+  if (closePresentationBtn) {
+    closePresentationBtn.addEventListener('click', () => {
+      document.getElementById('presentation-modal-overlay').style.display = 'none';
+    });
+  }
 }
 
 // Render Typeahead Results

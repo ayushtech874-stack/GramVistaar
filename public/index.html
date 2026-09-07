@@ -804,11 +804,126 @@
     </div>
   </div>
 
+  <!-- POP-UP MODAL 5: Presentation & Jury Defense Blueprint (Tier 3) -->
+  <div id="presentation-modal-overlay" class="modal-overlay" style="display: none;">
+    <div class="modal-card modal-large" style="max-width: 1050px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <svg class="modal-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+          <div>
+            <h3 class="modal-title">🏆 Hackathon Jury Presentation & Defense Blueprint</h3>
+            <div class="modal-sub">Tier 3 Strategic Pitch Alignment, Concrete Scalability Proof, & Rapid-Fire Q&A Defense</div>
+          </div>
+        </div>
+        <button id="close-presentation-modal-btn" class="modal-close-btn" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="methodology-content">
+
+          <!-- Pillar 1: Concrete Scalability Proof -->
+          <div class="methodology-box" style="border-left: 4px solid var(--forest-dark);">
+            <h4 class="methodology-heading" style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="badge-ver" style="background: var(--forest-dark); color: #fff; padding: 0.2rem 0.6rem;">PILLAR 1</span>
+              Concrete Scalability Proof: District #1 vs. District #2
+            </h4>
+            <p>Rather than claiming aspirational scalability, GramVistaar proves instant multi-district scaling by swapping data files without changing a single line of application code:</p>
+            
+            <div class="diff-table-wrapper" style="margin-top: 0.85rem;">
+              <table class="diff-table">
+                <thead>
+                  <tr>
+                    <th>Scaling Attribute</th>
+                    <th>District #1: Muzaffarpur (Aurai Block)</th>
+                    <th>District #2: Gaya (Sherghati Block)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Target Geography</strong></td>
+                    <td>Muzaffarpur District, Aurai Block</td>
+                    <td>Gaya District, Sherghati Block</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Mapped Census Villages</strong></td>
+                    <td>137 Verified Villages</td>
+                    <td>65 Verified Villages</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Economic Census Firms</strong></td>
+                    <td>558 Total Micro-Enterprises</td>
+                    <td>3,350 Total Micro-Enterprises</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Code Architecture</strong></td>
+                    <td><span class="diff-check">✔ Identical Code Base</span></td>
+                    <td><span class="diff-check">✔ Data File Swap (`data/villages.json`)</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--forest-dark); font-weight: 700; margin-top: 0.75rem;">
+              📌 Jury Pitch Takeaway: "Here is literally the same code, different data file, and it worked instantly for a second real district in Bihar."
+            </p>
+          </div>
+
+          <!-- Pillar 2: One-Slide Honesty Summary -->
+          <div class="methodology-box" style="border-left: 4px solid var(--gold-accent);">
+            <h4 class="methodology-heading" style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="badge-ver" style="background: var(--gold-accent); color: #fff; padding: 0.2rem 0.6rem;">PILLAR 2</span>
+              One-Slide Honesty Summary: Proactive Transparency Framing
+            </h4>
+            <p>By stating data baselines and ceilings upfront, we turn potential audit vulnerabilities into our strongest technical asset:</p>
+            <ul class="methodology-list">
+              <li><strong>Census 2011 Baseline:</strong> Population & household numbers are grounded directly from official Census 2011 village microdata.</li>
+              <li><strong>SHRUG 2013 Economic Census Ceiling:</strong> Establishment totals are strictly bounded by official block-level Economic Census totals.</li>
+              <li><strong>4-Tier Vector Provenance:</strong> Clear badges (<code>[Verified]</code>, <code>[Derived]</code>, <code>[AI-Estimated]</code>, <code>[Insufficient Data]</code>) disclose exact data sources on every single metric before judges ask.</li>
+            </ul>
+          </div>
+
+          <!-- Pillar 3: Three Core "Why" Answers for Jury Q&A Cold Mastery -->
+          <div class="methodology-box" style="border-left: 4px solid #2563eb;">
+            <h4 class="methodology-heading" style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="badge-ver" style="background: #2563eb; color: #fff; padding: 0.2rem 0.6rem;">PILLAR 3</span>
+              Rapid-Fire Jury Defense: Cold Mastery of the 3 Core "Why" Questions
+            </h4>
+            
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 0.85rem;">
+              <div style="background: #ffffff; padding: 0.95rem; border-radius: 6px; border: 1px solid #cbd5e1;">
+                <div style="font-weight: 800; color: #1e3a8a; font-size: 0.9rem;">Q1: Why a 7-Year Tenure with a 6-Month Moratorium?</div>
+                <div style="font-size: 0.84rem; color: var(--text-main); margin-top: 0.35rem; line-height: 1.5;">
+                  <strong>Defense Answer:</strong> MoSJE concessional term loan guidelines explicitly mandate setup time before principal repayment begins. The 6-month moratorium protects initial cash flow while the rural enterprise achieves revenue stabilization.
+                </div>
+              </div>
+
+              <div style="background: #ffffff; padding: 0.95rem; border-radius: 6px; border: 1px solid #cbd5e1;">
+                <div style="font-weight: 800; color: #1e3a8a; font-size: 0.9rem;">Q2: Why a 10x Capital-to-Project Ceiling Ratio (10% Margin Money)?</div>
+                <div style="font-size: 0.84rem; color: var(--text-main); margin-top: 0.35rem; line-height: 1.5;">
+                  <strong>Defense Answer:</strong> Government concessional credit schemes (NSFDC / NBCFDC / NSTFDC) require only a 10% promoter margin contribution, providing 90% loan assistance. Thus, ₹10,000 margin capital enables a ₹1,00,000 project ceiling.
+                </div>
+              </div>
+
+              <div style="background: #ffffff; padding: 0.95rem; border-radius: 6px; border: 1px solid #cbd5e1;">
+                <div style="font-weight: 800; color: #1e3a8a; font-size: 0.9rem;">Q3: Why Rule-Based Scheme Selection over Black-Box AI Recommendations?</div>
+                <div style="font-size: 0.84rem; color: var(--text-main); margin-top: 0.35rem; line-height: 1.5;">
+                  <strong>Defense Answer:</strong> Black-box AI recommendation engines risk suggesting unsupportable business ideas or violating state corporation rules. GramVistaar uses strict eligibility routing based on social category (SC → NSFDC, OBC → NBCFDC, ST → NSTFDC) and cost thresholds (Micro Finance ≤ ₹1.4 Lakhs vs. Term Loan ≤ ₹50 Lakhs).
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Official Footer -->
   <footer class="app-footer">
     <div class="footer-container">
       <div>GramVistaar · Rural Enterprise Advisory Portal &nbsp;|&nbsp; Multilingual Engine Enabled</div>
       <div class="footer-sub">Verified Census 2011 Data · Concessional Corporation Rules · Provenance Tagged</div>
+      <div style="margin-top: 0.85rem;">
+        <button id="open-presentation-modal-btn" class="btn-presentation-blueprint">🏆 Jury Presentation & Defense Blueprint ↗</button>
+      </div>
     </div>
   </footer>
 
