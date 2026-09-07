@@ -278,6 +278,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initEvents();
   fetchVillages();
   renderLanguageText();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(err => {
+      console.log('SW registration skipped:', err);
+    });
+  }
 });
 
 // Fetch Villages List
@@ -689,6 +695,74 @@ function initEvents() {
   // Gate CTAs
   document.getElementById('gate-continue-btn').addEventListener('click', () => goToStep(4));
   document.getElementById('gate-feasibility-only-btn').addEventListener('click', () => goToStep(4));
+
+  // POP-UP MODAL 3: Disaggregation Methodology Drawer Modal
+  const openMethodologyBtn = document.getElementById('open-methodology-btn');
+  if (openMethodologyBtn) {
+    openMethodologyBtn.addEventListener('click', () => {
+      document.getElementById('methodology-modal-overlay').style.display = 'flex';
+    });
+  }
+
+  const closeMethodologyBtn = document.getElementById('close-methodology-modal-btn');
+  if (closeMethodologyBtn) {
+    closeMethodologyBtn.addEventListener('click', () => {
+      document.getElementById('methodology-modal-overlay').style.display = 'none';
+    });
+  }
+
+  // POP-UP MODAL 4: Side-by-Side Category Comparison Modal
+  const compareCategoriesBtn = document.getElementById('compare-categories-btn');
+  if (compareCategoriesBtn) {
+    compareCategoriesBtn.addEventListener('click', async () => {
+      await runCategoryComparison();
+    });
+  }
+
+  const closeCompareBtn = document.getElementById('close-compare-modal-btn');
+  if (closeCompareBtn) {
+    closeCompareBtn.addEventListener('click', () => {
+      document.getElementById('category-compare-modal-overlay').style.display = 'none';
+    });
+  }
+
+  // Web Speech Audio Read-Aloud Controls
+  const ttsPlayBtn = document.getElementById('tts-play-btn');
+  if (ttsPlayBtn) {
+    ttsPlayBtn.addEventListener('click', () => {
+      speakAdvisoryReport();
+    });
+  }
+
+  const ttsStopBtn = document.getElementById('tts-stop-btn');
+  if (ttsStopBtn) {
+    ttsStopBtn.addEventListener('click', () => {
+      stopAdvisorySpeech();
+    });
+  }
+
+  // PWA Install Prompt Event Handling
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    state.deferredInstallPrompt = e;
+    const pwaBtn = document.getElementById('pwa-install-btn');
+    if (pwaBtn) pwaBtn.style.display = 'inline-flex';
+  });
+
+  const pwaInstallBtn = document.getElementById('pwa-install-btn');
+  if (pwaInstallBtn) {
+    pwaInstallBtn.addEventListener('click', async () => {
+      if (state.deferredInstallPrompt) {
+        state.deferredInstallPrompt.prompt();
+        const { outcome } = await state.deferredInstallPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('User accepted PWA installation');
+        }
+        state.deferredInstallPrompt = null;
+        pwaInstallBtn.style.display = 'none';
+      }
+    });
+  }
 }
 
 // Render Typeahead Results
@@ -913,6 +987,8 @@ function renderDataTag(tagObj) {
 
 // Render Results Dashboard
 function renderResultsScreen(data) {
+  renderConfidenceSummary(data);
+
   const financialCard = document.getElementById('financial-card-container');
   const financialSkippedCard = document.getElementById('financial-skipped-card');
 
@@ -1094,4 +1170,259 @@ function renderEmiTable(schedule) {
     `;
     tbody.appendChild(tr);
   });
+}
+
+// Render Data Tag Confidence Summary Bar
+function renderConfidenceSummary(data) {
+  const bar = document.getElementById('res-confidence-summary-bar');
+  if (!bar || !data) return;
+
+  let verifiedCount = 0;
+  let derivedCount = 0;
+  let aiCount = 0;
+  let insufficientCount = 0;
+
+  function tallyTag(tagObj) {
+    if (!tagObj) return;
+    const label = tagObj.tag || 'AI-Estimated';
+    if (label === 'Verified' || label === 'सत्यापित') verifiedCount++;
+    else if (label === 'Derived' || label === 'व्युत्पन्न') derivedCount++;
+    else if (label === 'Insufficient Data' || label === 'डेटा अपर्याप्त') insufficientCount++;
+    else aiCount++;
+  }
+
+  if (data.financial) {
+    tallyTag(data.financial.interest_rate_tag);
+    tallyTag({ tag: 'Derived', source: 'Capital / 0.10' });
+    tallyTag({ tag: 'Derived', source: '90% of Project Cost' });
+    tallyTag({ tag: 'Verified', source: data.financial.corporation });
+  }
+
+  if (data.feasibility) {
+    tallyTag(data.feasibility.market_reach);
+    tallyTag(data.feasibility.households);
+    tallyTag(data.feasibility.competitor_density);
+    if (data.feasibility.pricing_guidance) tallyTag(data.feasibility.pricing_guidance);
+    if (data.feasibility.swot) {
+      data.feasibility.swot.forEach(item => tallyTag(item));
+    }
+  }
+
+  const titleText = state.language === 'hi'
+    ? 'डेटा भरोसा एवं स्रोत स्नैपशॉट:'
+    : 'Data Provenance Confidence:';
+
+  const verText = state.language === 'hi' ? `${verifiedCount} सत्यापित` : `${verifiedCount} Verified`;
+  const derText = state.language === 'hi' ? `${derivedCount} व्युत्पन्न` : `${derivedCount} Derived`;
+  const aiText = state.language === 'hi' ? `${aiCount} एआई-अनुमानित` : `${aiCount} AI-Estimated`;
+  const insText = state.language === 'hi' ? `${insufficientCount} अपर्याप्त` : `${insufficientCount} Insufficient`;
+
+  bar.innerHTML = `
+    <div class="confidence-header-title">
+      <svg style="width:18px;height:18px;color:var(--forest-dark);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      ${titleText}
+    </div>
+    <div class="confidence-pills">
+      <span class="confidence-pill ver"><svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> ${verText}</span>
+      <span class="confidence-pill der"><svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="2" width="16" height="20" rx="2"></rect></svg> ${derText}</span>
+      <span class="confidence-pill ai"><svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> ${aiText}</span>
+      ${insufficientCount > 0 ? `<span class="confidence-pill ins">${insText}</span>` : ''}
+    </div>
+  `;
+  bar.style.display = 'flex';
+}
+
+// Web Speech API Text-to-Speech Output
+function speakAdvisoryReport() {
+  if (!('speechSynthesis' in window)) {
+    alert(state.language === 'hi' ? 'आपका ब्राउज़र ऑडियो रीड-आउट का समर्थन नहीं करता है।' : 'Your browser does not support Speech Synthesis audio readout.');
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const playBtn = document.getElementById('tts-play-btn');
+  const stopBtn = document.getElementById('tts-stop-btn');
+
+  if (playBtn.classList.contains('playing')) {
+    stopAdvisorySpeech();
+    return;
+  }
+
+  const appName = document.getElementById('applicant-name-input')?.value || (state.language === 'hi' ? 'रेखा देवी' : 'Rekha Devi');
+  const villageName = state.assessmentData?.feasibility?.village_name || '';
+  const corp = state.assessmentData?.financial?.corporation || 'NSFDC';
+  const loan = state.assessmentData?.financial?.loan_eligibility ? formatINR(state.assessmentData.financial.loan_eligibility) : '';
+  const emi = state.assessmentData?.financial?.monthly_emi ? formatINR(state.assessmentData.financial.monthly_emi) : '';
+  const pop = state.assessmentData?.feasibility?.market_reach?.value ? Number(state.assessmentData.feasibility.market_reach.value).toLocaleString('en-IN') : '';
+
+  let text = '';
+  if (state.language === 'hi') {
+    text = `ग्राम विस्तार सलाहकारी रिपोर्ट। आवेदक का नाम ${appName}। लक्षित गाँव ${villageName}। आप ${corp} रियायती ऋण योजना के लिए पात्र हैं। नब्बे प्रतिशत ऋण राशि ${loan}। छह महीने की मोरेटोरियम अवधि के साथ मासिक ईएमआई ${emi} रुपये। गाँव की कुल जनसंख्या ${pop}। व्यवसाय व्यवहार्यता विश्लेषण पूर्ण है।`;
+  } else {
+    text = `GramVistaar Advisory Report for ${appName}. Target Village: ${villageName}. You qualify for concessional financing under ${corp}. 90 percent Loan Eligibility is ${loan}. Monthly EMI with a 6-month moratorium is ${emi}. Village population is ${pop}. Business feasibility analysis is complete.`;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = state.language === 'hi' ? 'hi-IN' : 'en-IN';
+  utterance.rate = 0.95;
+
+  const voices = window.speechSynthesis.getVoices();
+  if (state.language === 'hi') {
+    const hiVoice = voices.find(v => v.lang.includes('hi') || v.name.toLowerCase().includes('hindi') || v.name.toLowerCase().includes('google'));
+    if (hiVoice) utterance.voice = hiVoice;
+  }
+
+  utterance.onstart = () => {
+    playBtn.classList.add('playing');
+    playBtn.querySelector('span').textContent = state.language === 'hi' ? 'चल रहा है...' : 'Speaking...';
+    if (stopBtn) stopBtn.style.display = 'inline-flex';
+  };
+
+  utterance.onend = utterance.onerror = () => {
+    playBtn.classList.remove('playing');
+    playBtn.querySelector('span').textContent = state.language === 'hi' ? 'ऑडियो सुनें' : 'Read Aloud';
+    if (stopBtn) stopBtn.style.display = 'none';
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function stopAdvisorySpeech() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+  const playBtn = document.getElementById('tts-play-btn');
+  const stopBtn = document.getElementById('tts-stop-btn');
+  if (playBtn) {
+    playBtn.classList.remove('playing');
+    playBtn.querySelector('span').textContent = state.language === 'hi' ? 'ऑडियो सुनें' : 'Read Aloud';
+  }
+  if (stopBtn) stopBtn.style.display = 'none';
+}
+
+// Side-by-Side Multi-Category Comparison Engine
+async function runCategoryComparison() {
+  if (!state.selectedVillage) {
+    alert(state.language === 'hi' ? 'कृपया पहले गाँव चुनें।' : 'Please select a village first.');
+    return;
+  }
+
+  const capital = Number(document.getElementById('capital-input').value) || 100000;
+  const income = Number(document.getElementById('income-input').value) || 60000;
+  const status = document.getElementById('category-status').value || 'SC';
+  const priorDefault = document.getElementById('prior-default-select').value === 'true';
+
+  const categories = ['dairy', 'retail', 'textiles'];
+  
+  const modalBody = document.getElementById('compare-modal-body');
+  const subEl = document.getElementById('compare-modal-sub');
+  if (subEl) {
+    subEl.textContent = state.language === 'hi'
+      ? `${state.selectedVillage.village_name} गाँव (${formatINR(capital)} मार्जिन पूंजी) के लिए डेयरी, किराना, एवं कपड़ा व्यवसाय का समानांतर मूल्यांकन:`
+      : `Parallel Feasibility for Dairy, Retail, & Textiles in ${state.selectedVillage.village_name} (${formatINR(capital)} Margin Capital):`;
+  }
+
+  modalBody.innerHTML = `
+    <div style="text-align: center; padding: 3rem; color: var(--forest-dark); font-weight: 700;">
+      <div class="pulse-dot" style="margin: 0 auto 1rem auto; width:12px; height:12px;"></div>
+      ${state.language === 'hi' ? 'डेयरी, किराना, एवं कपड़ा व्यवसाय के आंकड़ों की समानांतर गणना की जा रही है...' : 'Computing parallel assessment for Dairy, Retail, and Textiles...'}
+    </div>
+  `;
+  document.getElementById('category-compare-modal-overlay').style.display = 'flex';
+
+  try {
+    const promises = categories.map(cat =>
+      fetch('/api/assess', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          category: status,
+          family_income_annual: income,
+          state: 'Bihar',
+          prior_default: priorDefault,
+          available_capital: capital,
+          village_id: state.selectedVillage.village_id,
+          business_category: cat,
+          language: state.language
+        })
+      }).then(res => res.json())
+    );
+
+    const results = await Promise.all(promises);
+    renderCategoryComparisonModal(results);
+  } catch (err) {
+    console.error('Failed to run category comparison:', err);
+    modalBody.innerHTML = `<div style="color:#ef4444; padding:1.5rem; text-align:center;">Failed to compute category comparisons. Please check API server.</div>`;
+  }
+}
+
+function renderCategoryComparisonModal(results) {
+  const modalBody = document.getElementById('compare-modal-body');
+  if (!modalBody || !results) return;
+
+  const catInfoMap = {
+    dairy: { title: state.language === 'hi' ? 'डेयरी / दुग्ध इकाई' : 'Dairy / Milk Unit', icon: `<svg class="cat-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8v4H8z"></path><path d="M6 6h12l1 16H5L6 6z"></path><line x1="9" y1="11" x2="15" y2="11"></line></svg>` },
+    retail: { title: state.language === 'hi' ? 'किराना / खुदरा दुकान' : 'Retail / Kirana', icon: `<svg class="cat-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>` },
+    textiles: { title: state.language === 'hi' ? 'कपड़ा / सिलाई केंद्र' : 'Textiles / Tailoring', icon: `<svg class="cat-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>` }
+  };
+
+  let gridHtml = `<div class="compare-grid">`;
+
+  results.forEach(item => {
+    const catKey = item.feasibility?.business_category || 'dairy';
+    const info = catInfoMap[catKey] || catInfoMap.dairy;
+    const isSelected = catKey === state.selectedCategory;
+    const activeClass = isSelected ? 'compare-col active-cat' : 'compare-col';
+
+    const cost = item.financial ? formatINR(item.financial.project_cost) : 'N/A';
+    const loan = item.financial ? formatINR(item.financial.loan_eligibility) : 'N/A';
+    const emi = item.financial ? formatINR(item.financial.monthly_emi) + ' / mo' : 'N/A';
+    const density = item.feasibility?.competitor_density?.value || 'N/A';
+    const topStrength = item.feasibility?.swot?.find(s => s.type === 'strength')?.text || 'Strong local demand';
+    const topOpp = item.feasibility?.swot?.find(s => s.type === 'opportunity')?.text || 'Market expansion';
+
+    gridHtml += `
+      <div class="${activeClass}">
+        <div class="compare-col-header">
+          ${info.icon}
+          <div class="compare-cat-title">${info.title}</div>
+          ${isSelected ? `<span style="font-size:0.72rem; background:var(--forest-dark); color:#fff; padding:0.15rem 0.5rem; border-radius:10px; font-weight:700;">${state.language === 'hi' ? 'चयनित श्रेणी' : 'Active Selection'}</span>` : ''}
+        </div>
+
+        <div class="compare-metric-row">
+          <span class="compare-metric-label">${state.language === 'hi' ? 'परियोजना लागत' : 'Project Cost Ceiling'}</span>
+          <span class="compare-metric-val num-mono">${cost}</span>
+        </div>
+
+        <div class="compare-metric-row">
+          <span class="compare-metric-label">${state.language === 'hi' ? '90% ऋण पात्रता' : '90% Loan Eligibility'}</span>
+          <span class="compare-metric-val num-mono" style="color:var(--forest-dark);">${loan}</span>
+        </div>
+
+        <div class="compare-metric-row">
+          <span class="compare-metric-label">${state.language === 'hi' ? 'मासिक ईएमआई' : 'Monthly EMI (6-Mo Moratorium)'}</span>
+          <span class="compare-metric-val num-mono">${emi}</span>
+        </div>
+
+        <div class="compare-metric-row">
+          <span class="compare-metric-label">${state.language === 'hi' ? 'आस-पास व्यावसायिक घनत्व' : 'Nearby Establishment Density'}</span>
+          <span class="compare-metric-val">${density}</span>
+        </div>
+
+        <div class="compare-metric-row" style="background:#f8fafc; padding:0.65rem; border-radius:6px; border-left:3px solid #059669;">
+          <span class="compare-metric-label" style="color:#059669;">${state.language === 'hi' ? 'मुख्य ताकत' : 'Top Strength'}</span>
+          <span style="font-size:0.8rem; color:var(--text-main); font-weight:600;">${topStrength}</span>
+        </div>
+
+        <div class="compare-metric-row" style="background:#f8fafc; padding:0.65rem; border-radius:6px; border-left:3px solid #b45309;">
+          <span class="compare-metric-label" style="color:#b45309;">${state.language === 'hi' ? 'प्राथमिक अवसर' : 'Primary Opportunity'}</span>
+          <span style="font-size:0.8rem; color:var(--text-main); font-weight:600;">${topOpp}</span>
+        </div>
+      </div>
+    `;
+  });
+
+  gridHtml += `</div>`;
+  modalBody.innerHTML = gridHtml;
 }

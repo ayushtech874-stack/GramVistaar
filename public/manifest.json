@@ -1,0 +1,24 @@
+{
+  "name": "GramVistaar — Rural Enterprise Advisory Portal",
+  "short_name": "GramVistaar",
+  "description": "Rural Enterprise Credit & Feasibility Advisory Portal for Bihar villages.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#16332a",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
